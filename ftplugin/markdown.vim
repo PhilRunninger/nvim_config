@@ -1,6 +1,6 @@
 setlocal wrap linebreak nonumber spell
 
-if !executable("grip")
+if !executable("grip") || exists('g:started_by_firenvim')
     finish
 endif
 

@@ -36,6 +36,8 @@ packadd! unicode.vim           " git@github.com:chrisbra/unicode.vim.git
 packadd! Recover.vim           " git@github.com:chrisbra/Recover.vim.git
 packadd! scratch.vim           " git@github.com:mtth/scratch.vim
 packadd! tabline.vim           " git@github.com:mkitt/tabline.vim.git
+" Firefox extension to embed Neovim.
+packadd! firenvim              " git@github.com:glacambre/firenvim.git
 
 " Must come AFTER the :packadd! calls above; otherwise, the contents of package 'ftdetect'
 " directories won't be evaluated.
