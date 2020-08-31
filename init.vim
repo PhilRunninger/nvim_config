@@ -7,6 +7,11 @@ let $VIMHOME=expand('<sfile>:p:h')
 "                  or here:
 " Coding / Development
 packadd! coc.nvim              " git@github.com:neoclide/coc.nvim.git
+    " My extensions. Use :CocInstall to install them.
+    "  coc-vimlsp  coc-omnisharp  coc-angular  coc-erlang_ls  coc-tsserver
+    "  coc-json  coc-html  coc-css
+    "  coc-snippets
+    "  coc-explorer
 packadd! vim-fugitive          " git@github.com:tpope/vim-fugitive
 packadd! vim-gitgutter         " git@github.com:airblade/vim-gitgutter
 packadd! vim-commentary        " git@github.com:tpope/vim-commentary.git
