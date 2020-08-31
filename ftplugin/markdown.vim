@@ -13,8 +13,8 @@ augroup END
 
 function! s:CleanUp()
     try
-        call job_stop(getbufvar(str2nr("<abuf>"), "job"))
-        call delete(getbufvar(str2nr("<abuf>"), "tempfile"))
+        call jobstop(b:job)
+        call delete(b:tempfile)
     catch
     endtry
     autocmd! markdownPreview * <afile>
@@ -30,15 +30,15 @@ function! OpenMarkdownPreview() abort
             let b:tempfile = tempname()
             call s:Refresh()
         endif
-        if !exists("b:job") || job_status(b:job) !=? "run"
+        if !exists("b:job") || jobwait([b:job],0)[0] == -1
             let b:port = system("lsof -s tcp:listen -i :40500-40800 | awk -F ' *|:' '{ print $10 }' | sort -n | tail -n1") + 1
             if b:port == 1
                 let b:port = 40500
             endif
             if exists("$GRIP_TOKEN")
-                let b:job = job_start('grip --pass ' . $GRIP_TOKEN . ' --title=' . escape(expand('%:t'),' ') . ' ' . b:tempfile . ' ' . b:port)
+                let b:job = jobstart('grip --pass ' . $GRIP_TOKEN . ' --title=' . escape(expand('%:t'),' ') . ' ' . b:tempfile . ' ' . b:port)
             else
-                let b:job = job_start('grip --title=' . escape(expand('%:t'),' ') . ' ' . b:tempfile . ' ' . b:port)
+                let b:job = jobstart('grip --title=' . escape(expand('%:t'),' ') . ' ' . b:tempfile . ' ' . b:port)
             endif
 
             let l:start = reltime()
