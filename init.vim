@@ -2,16 +2,9 @@
 
 let $VIMHOME=expand('<sfile>:p:h')
 
-" Plugin Management  {{{1
-" Packages are cloned here: ~/.local/share/nvim/site/pack/*/opt
-"                  or here:
+" Plugin Management (Comment a line to temporarily disable a plugin.)  {{{1
 " Coding / Development
 packadd! coc.nvim              " git@github.com:neoclide/coc.nvim.git
-    " My extensions. Use :CocInstall to install them.
-    "  coc-vimlsp  coc-omnisharp  coc-angular  coc-erlang_ls  coc-tsserver
-    "  coc-json  coc-html  coc-css
-    "  coc-snippets
-    "  coc-explorer
 packadd! vim-fugitive          " git@github.com:tpope/vim-fugitive
 packadd! vim-gitgutter         " git@github.com:airblade/vim-gitgutter
 packadd! vim-commentary        " git@github.com:tpope/vim-commentary.git
@@ -43,6 +36,20 @@ packadd! firenvim              " git@github.com:glacambre/firenvim.git
 " directories won't be evaluated.
 filetype indent plugin on
 syntax on                           " Turn syntax highlighting on.
+
+" Make sure all my CoC extension are installed.
+augroup InstallCocExtensions
+    autocmd!
+    autocmd VimEnter *
+      \ let installed = map(CocAction('extensionStats'), {_,v -> v.id}) |
+      \ for ext in ['coc-vimlsp', 'coc-omnisharp', 'coc-angular', 'coc-erlang_ls', 'coc-tsserver',
+      \             'coc-json', 'coc-html', 'coc-css',
+      \             'coc-snippets', 'coc-explorer'] |
+      \     if index(installed,ext) == -1 |
+      \         execute 'CocInstall '.ext |
+      \     endif |
+      \ endfor
+augroup END
 
 " Miscellaneous settings   {{{1
 set path+=**                        " search recursively for files with :find
