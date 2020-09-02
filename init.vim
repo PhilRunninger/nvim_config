@@ -1,7 +1,5 @@
 " vim: foldmethod=marker
 
-let $VIMHOME=expand('<sfile>:p:h')
-
 " Plugin Management (Comment a line to temporarily disable a plugin.)  {{{1
 " Coding / Development
 packadd! coc.nvim              " git@github.com:neoclide/coc.nvim.git
@@ -99,14 +97,12 @@ set fillchars=stl:\ ,stlnc:\ ,vert:\                    " characters to use for 
 set laststatus=2                                        " tells when last window has status line
 
 " Undo/Backup/Swap file settings   {{{1
-set undolevels=500 undofile undodir=$VIMHOME/cache/undo//
-if !isdirectory(&undodir) | call mkdir(&undodir, 'p') | endif
-
-set directory=$VIMHOME/cache/swapfiles//
-if !isdirectory(&directory) | call mkdir(&directory, 'p') | endif
-
-set nobackup backupdir=$VIMHOME/cache/backups//
+execute 'set   undodir='.fnamemodify($MYVIMRC,':p:h').'/cache/undo//      undofile undolevels=500'
+execute 'set backupdir='.fnamemodify($MYVIMRC,':p:h').'/cache/backups//   nobackup'
+execute 'set directory='.fnamemodify($MYVIMRC,':p:h').'/cache/swapfiles//'
+if !isdirectory(&undodir)   | call mkdir(&undodir, 'p') | endif
 if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p') | endif
+if !isdirectory(&directory) | call mkdir(&directory, 'p') | endif
 
 " Disable the bells (audible and visual).   {{{1
 set noerrorbells visualbell t_vb=
@@ -402,7 +398,7 @@ augroup END
     " Scratch   {{{2
     let g:scratch_insert_autohide = 0
     let g:scratch_no_mappings = 1
-    let g:scratch_persistence_file = $VIMHOME.'/cache/scratch.txt'
+    let g:scratch_persistence_file = fnamemodify($MYVIMRC,':p:h').'/cache/scratch.txt'
     nnoremap gs :Scratch<CR>
     nnoremap gS :Scratch!<CR>
     xnoremap gs :ScratchSelection<CR>
