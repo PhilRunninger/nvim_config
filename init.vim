@@ -33,7 +33,6 @@ packadd! firenvim              " git@github.com:glacambre/firenvim.git
 " Must come AFTER the :packadd! calls above; otherwise, the contents of package 'ftdetect'
 " directories won't be evaluated.
 filetype indent plugin on
-syntax on                           " Turn syntax highlighting on.
 
 " Make sure all my CoC extension are installed.
 augroup InstallCocExtensions
@@ -70,7 +69,7 @@ let g:loaded_netrwPlugin = 1
 let g:markdown_folding = 1
 let g:markdown_fenced_languages = ['vim']
 
-" Searching settings   {{{2
+" Searching settings (See plugin/better_search.vim for new * mapping)   {{{2
 set hlsearch incsearch
 set ignorecase smartcase
 runtime macros/matchit.vim
@@ -93,8 +92,8 @@ set showcmd         " show (partial) command in last line of screen
 set noshowmode      " [no] message on status line show current mode
 set showmatch       " briefly jump to matching bracket if inserting one
 set number          " print the line number in front of each line
-set fillchars=stl:\ ,stlnc:\ ,vert:\                    " characters to use for displaying special items
-set laststatus=2                                        " tells when last window has status line
+set fillchars=stl:\ ,stlnc:\ ,vert:\  " characters to use for displaying special items
+set laststatus=2                      " tells when last window has status line
 
 " Undo/Backup/Swap file settings   {{{1
 execute 'set   undodir='.fnamemodify($MYVIMRC,':p:h').'/cache/undo//      undofile undolevels=500'
@@ -125,7 +124,7 @@ nnoremap <silent> <S-Right> <C-W>>
 nnoremap <silent> <S-Left> <C-W><
 nnoremap <silent> <leader>x <C-W>_<C-W>\|
 
-" Navigate Windows and Tabs
+" Switch Between Windows and Tabs
 function! WinTabSwitch(direction)
     let info = getwininfo(win_getid())[0]
     let wincol = win_screenpos(winnr())[1]
@@ -142,8 +141,6 @@ nnoremap <silent> <C-h> :call WinTabSwitch('h')<CR>
 nnoremap <silent> <C-j> :call WinTabSwitch('j')<CR>
 nnoremap <silent> <C-k> :call WinTabSwitch('k')<CR>
 nnoremap <silent> <C-l> :call WinTabSwitch('l')<CR>
-
-" Make similar mappings for terminal mode.
 tnoremap <silent> <C-h> <C-\><C-n>:call WinTabSwitch('h')<CR>
 tnoremap <silent> <C-j> <C-\><C-n>:call WinTabSwitch('j')<CR>
 tnoremap <silent> <C-k> <C-\><C-n>:call WinTabSwitch('k')<CR>
@@ -179,43 +176,37 @@ inoremap Dt =strftime("%-m/%-d/%y %-H:%M:%S")<CR><Space>
 inoremap Dd =strftime("%-m/%-d/%y")<CR><Space>
 inoremap Tt =strftime("%-H:%M:%S")<CR><Space>
 
-" Make an easier redo mapping. Who uses U anyway? {{{2
+" Make an easier redo mapping. Who uses U anyway?   {{{2
 nnoremap U <C-R>
 
-" Open a terminal in a split window
+" Open a terminal in a split window   {{{2
 nnoremap <leader>t :split<BAR>terminal<CR>
 
 " Auto-command Definitions   {{{1
-augroup removeTrailingWhiteespace   " Remove trailing whitespace on save {{{2
+augroup trailingWhitespace   " Remove, display/hide trailing whitespace   {{{2
     autocmd!
     autocmd BufWrite * %s/\s\+$//ce
+    autocmd InsertEnter * :set listchars-=trail:■
+    autocmd InsertLeave * :set listchars+=trail:■
 augroup END
+set list listchars=tab:●·,extends:→,precedes:←,trail:■
 
-" Turn off line numbers in Terminal windows.   {{{2
-augroup terminalSettings
+augroup terminalSettings     " Turn off line numbers in Terminal windows.   {{{2
     autocmd!
     autocmd TermOpen * setlocal nonumber | startinsert
 augroup END
 
-set list listchars=tab:●·,extends:→,precedes:←,trail:■  " characters for displaying in list mode
-augroup trailingSpaces         " Turn off trailing space indicator in Insert mode   {{{2
-    autocmd!
-    autocmd InsertEnter * :set listchars-=trail:■
-    autocmd InsertLeave * :set listchars+=trail:■
-augroup END
-
-if !&diff                      " Keep cursor in original position when switching buffers   {{{2
-    augroup bufferEvents
+if !&diff                    " Keep cursor in original position when switching buffers   {{{2
+    augroup saveAndRestoreView
         autocmd!
         autocmd BufLeave * let b:winview = winsaveview()
         autocmd BufEnter * if exists('b:winview') | call winrestview(b:winview) | endif
     augroup END
 endif
 
-if !has('gui_running')         " terminal mode hack for autoread option   {{{2
-    augroup checkTime
+if !has('gui_running')       " make autoread work better in the terminal   {{{2
+    augroup autoreadHelperForTerminal
         autocmd!
-        "silent! necessary; otherwise, throws errors when using command line window.
         autocmd BufEnter        * silent! checktime
         autocmd CursorHold      * silent! checktime
         autocmd CursorHoldI     * silent! checktime
@@ -410,12 +401,13 @@ augroup END
     inoremap <C-K> <Esc>:UnicodeSearch!<space>
 
 " Color Settings   {{{1
+syntax on                           " Turn syntax highlighting on.
 
 augroup tweakColorScheme
     autocmd!
-    autocmd ColorScheme * highlight Normal                               ctermbg=NONE " Use terminal's Background color setting
+    autocmd ColorScheme * highlight Normal                               ctermbg=none " Use terminal's Background color setting
     autocmd ColorScheme * highlight Folded         cterm=none ctermfg=8  ctermbg=234  " Gray on Almost Black
-    autocmd ColorScheme * highlight MatchParen     cterm=bold ctermfg=1  ctermbg=none " Red
+    autocmd ColorScheme * highlight MatchParen     cterm=bold ctermfg=15 ctermbg=124  " White on Red
     autocmd ColorScheme * highlight WildMenu       cterm=none ctermfg=16 ctermbg=178  " Black on Gold
     autocmd ColorScheme * highlight GitBranch      cterm=none ctermfg=12 ctermbg=17   " Blue on Dark Blue
     autocmd ColorScheme * highlight StatusLine     cterm=none ctermfg=16 ctermbg=40   " Black on Green
