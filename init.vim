@@ -410,16 +410,6 @@ augroup END
     inoremap <C-K> <Esc>:UnicodeSearch!<space>
 
 " Color Settings   {{{1
-function! s:StatuslineColor(insertMode)
-    exec 'highlight! link StatusLine ' . (a:insertMode ? 'Insert' : (&modified ? 'NormalModified' : 'NormalNoMods'))
-endfunction
-
-augroup setStatuslineColor    " Change statusline color, depending on mode.
-    autocmd!
-    autocmd ColorScheme * call <SID>StatuslineColor(0)
-    autocmd InsertEnter,InsertChange,TextChangedI * call <SID>StatuslineColor(1)
-    autocmd VimEnter,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
-augroup END
 
 augroup tweakColorScheme
     autocmd!
@@ -428,13 +418,16 @@ augroup tweakColorScheme
     autocmd ColorScheme * highlight MatchParen     cterm=bold ctermfg=1  ctermbg=none " Red
     autocmd ColorScheme * highlight WildMenu       cterm=none ctermfg=16 ctermbg=178  " Black on Gold
     autocmd ColorScheme * highlight GitBranch      cterm=none ctermfg=12 ctermbg=17   " Blue on Dark Blue
-    autocmd ColorScheme * highlight Insert         cterm=none ctermfg=15 ctermbg=27   " White on Blue
-    autocmd ColorScheme * highlight NormalModified cterm=none ctermfg=15 ctermbg=124  " White on Red
-    autocmd ColorScheme * highlight NormalNoMods   cterm=none ctermfg=16 ctermbg=40   " Black on Green
+    autocmd ColorScheme * highlight StatusLine     cterm=none ctermfg=16 ctermbg=40   " Black on Green
     autocmd ColorScheme * highlight StatusLineTerm cterm=none ctermfg=16 ctermbg=208  " Black on Gold
     autocmd ColorScheme * highlight! link Session WildMenu
-    autocmd ColorScheme * highlight! link StatusLineTermNC StatusLineNC
     autocmd ColorScheme * highlight! link VertSplit StatusLineNC
+    autocmd TermOpen,WinEnter *
+           \ if &buftype=='terminal' |
+           \     setlocal winhighlight=StatusLine:StatusLineTerm|
+           \ else |
+           \     setlocal winhighlight= |
+           \ endif
 augroup END
 colorscheme gruvbox
 
