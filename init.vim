@@ -168,9 +168,6 @@ nnoremap <silent> \| :set cursorcolumn!<CR>
 " Change cwd to current buffer's directory   {{{2
 nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
-" Show what highlighting is used under the cursor {{{2
-nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-
 " Fold-related mappings {{{2
 " Don't allow o to work on a fold.
 nnoremap <expr> o foldclosed('.')==-1 ? "o" : ""
