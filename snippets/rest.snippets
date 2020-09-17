@@ -1,0 +1,19 @@
+snippet rest "Template for REST Query Workbook"
+// Global Definitions
+https://${1:host}/
+//--verbose
+--fail
+--silent
+--show-error
+
+//Accept: application/json
+//Token: foobar-snafu-42
+
+// End Global Definitions
+--
+// Query blocks start with -- or a non-global host.
+https://www.google.com
+GET /
+
+--
+GET ${2:weatherforecast}
