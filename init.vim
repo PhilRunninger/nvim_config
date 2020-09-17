@@ -3,6 +3,7 @@
 " Plugin Management (Comment a line to temporarily disable a plugin.)  {{{1
 " Coding / Development
 packadd! coc.nvim              " git@github.com:neoclide/coc.nvim.git
+packadd! bufselect.vim         " git@github.com:PhilRunninger/bufselect.vim.git
 packadd! vim-fugitive          " git@github.com:tpope/vim-fugitive
 packadd! vim-gitgutter         " git@github.com:airblade/vim-gitgutter
 packadd! vim-commentary        " git@github.com:tpope/vim-commentary.git
@@ -359,7 +360,9 @@ augroup END
 
     "Explorer
     nnoremap <leader>o :CocCommand explorer<CR>
-    nnoremap <leader>b :CocCommand explorer --sources:buffers+,files-<CR>
+
+    " BufSelect   {{{2
+    nnoremap <leader>b :ShowBufferList<CR>
 
     " ANSIEsc   {{{2
     nnoremap <leader>a :AnsiEsc<CR>
