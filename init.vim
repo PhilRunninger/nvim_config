@@ -367,11 +367,7 @@ augroup END
 
     " REST Console   {{{2
     let g:vrc_show_command = 1
-    augroup RESTConsole
-        autocmd!
-        autocmd FileType rest nunmap <buffer> <C-J>
-        autocmd FileType rest nnoremap <buffer> <silent> <leader>r :call VrcQuery()<CR>
-    augroup END
+    let g:vrc_trigger = '<leader>r'
 
     " Undotree   {{{2
     nnoremap <silent> <leader>u :UndotreeShow<CR>
