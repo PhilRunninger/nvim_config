@@ -176,6 +176,10 @@ inoremap Dt =strftime("%-m/%-d/%y %-H:%M:%S")<CR><Space>
 inoremap Dd =strftime("%-m/%-d/%y")<CR><Space>
 inoremap Tt =strftime("%-H:%M:%S")<CR><Space>
 
+" Fix the closest prior misspelling {{{2
+inoremap <F2> 😀<Esc>[s1z=/😀<CR>s
+nnoremap <F2> i😀<Esc>[s1z=/😀<CR>x
+
 " Make an easier redo mapping. Who uses U anyway?   {{{2
 nnoremap U <C-R>
 
