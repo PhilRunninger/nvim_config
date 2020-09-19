@@ -359,10 +359,11 @@ augroup END
     nnoremap <silent><nowait> <leader><space>p  :<C-u>CocListResume<CR>
 
     "Explorer
-    nnoremap <leader>o :CocCommand explorer<CR>
+    nnoremap <leader>o :CocCommand explorer --sources=buffer-,file+<CR>
+    nnoremap <leader>b :CocCommand explorer --sources=file-,buffer+<CR>
 
     " BufSelect   {{{2
-    nnoremap <leader>b :ShowBufferList<CR>
+    " nnoremap <leader>b :ShowBufferList<CR>
 
     " ANSIEsc   {{{2
     nnoremap <leader>a :AnsiEsc<CR>

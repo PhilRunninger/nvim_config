@@ -15,5 +15,6 @@
         "v": "open:vsplit"
     },
     "explorer.quitOnOpen": true,
-    "snippets.convertToSnippetsAction": "~/.config/nvim/snippets"
+    "explorer.file.autoReveal": false,
+    "snippets.userSnippetsDirectory": "~/.config/nvim/snippets"
 }
