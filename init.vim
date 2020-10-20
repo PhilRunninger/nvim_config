@@ -28,6 +28,7 @@ packadd! unicode.vim           " git@github.com:chrisbra/unicode.vim.git
 packadd! Recover.vim           " git@github.com:chrisbra/Recover.vim.git
 packadd! scratch.vim           " git@github.com:mtth/scratch.vim
 packadd! tabline.vim           " git@github.com:mkitt/tabline.vim.git
+packadd! presenting.vim        " git@github.com:sotte/presenting.vim.git
 " Firefox extension to embed Neovim.
 packadd! firenvim              " git@github.com:glacambre/firenvim.git
 
@@ -362,8 +363,10 @@ augroup END
     nnoremap <leader>o :CocCommand explorer --sources=buffer-,file+<CR>
     nnoremap <leader>b :CocCommand explorer --sources=file-,buffer+<CR>
 
-    " BufSelect   {{{2
-    " nnoremap <leader>b :ShowBufferList<CR>
+    " Presenting   {{{2
+    let g:presenting_quit = '<Esc>'
+    let g:presenting_next = '<Right>'
+    let g:presenting_prev = '<Left>'
 
     " ANSIEsc   {{{2
     nnoremap <leader>a :AnsiEsc<CR>

@@ -67,3 +67,6 @@
 [submodule "pack/bundle/opt/firenvim"]
 	path = pack/bundle/opt/firenvim
 	url = git@github.com:glacambre/firenvim.git
+[submodule "pack/bundle/opt/presenting.vim"]
+	path = pack/bundle/opt/presenting.vim
+	url = git@github.com:sotte/presenting.vim.git
