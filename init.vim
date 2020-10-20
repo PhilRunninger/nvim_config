@@ -106,7 +106,7 @@ if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p') | endif
 if !isdirectory(&directory) | call mkdir(&directory, 'p') | endif
 
 " Disable the bells (audible and visual).   {{{1
-set noerrorbells visualbell t_vb=
+set noerrorbells visualbell
 
 " Window behavior and commands   {{{1
 set splitbelow splitright          " new window is put below or right of the current one
@@ -360,8 +360,9 @@ augroup END
     nnoremap <silent><nowait> <leader><space>p  :<C-u>CocListResume<CR>
 
     "Explorer
-    nnoremap <leader>o :CocCommand explorer --sources=buffer-,file+<CR>
-    nnoremap <leader>b :CocCommand explorer --sources=file-,buffer+<CR>
+    nnoremap <silent> <leader>o :CocCommand explorer --position floating --sources=file+ <C-R>=getcwd()<CR><CR>
+    nnoremap <silent> <leader>f :CocCommand explorer --position floating --sources=file+ <C-R>=expand('%:p:h')<CR><CR>
+    nnoremap <silent> <leader>b :CocCommand explorer --position floating --sources= buffer+<CR>
 
     " Presenting   {{{2
     let g:presenting_quit = '<Esc>'
@@ -419,6 +420,7 @@ augroup tweakColorScheme
     autocmd ColorScheme * highlight GitBranch      cterm=none ctermfg=12 ctermbg=17   " Blue on Dark Blue
     autocmd ColorScheme * highlight StatusLine     cterm=none ctermfg=16 ctermbg=40   " Black on Green
     autocmd ColorScheme * highlight StatusLineTerm cterm=none ctermfg=16 ctermbg=208  " Black on Gold
+    autocmd ColorScheme * highlight CocExplorerNormalFloat               ctermbg=233  " Almost Black
     autocmd ColorScheme * highlight! link Session WildMenu
     autocmd ColorScheme * highlight! link VertSplit StatusLineNC
     autocmd TermOpen,WinEnter *
