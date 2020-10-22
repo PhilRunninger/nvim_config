@@ -8,13 +8,5 @@
         "yaml",
         "json"
     ],
-    "explorer.icon.enableNerdfont": true,
-    "explorer.previewAction.onHover": false,
-    "explorer.keyMappings": {
-        "v": "open:vsplit"
-    },
-    "explorer.quitOnOpen": true,
-    "explorer.file.autoReveal": false,
-    "explorer.openAction.strategy": "previousWindow",
     "snippets.userSnippetsDirectory": "~/.config/nvim/snippets"
 }
