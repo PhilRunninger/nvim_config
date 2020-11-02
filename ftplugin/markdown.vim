@@ -6,7 +6,7 @@ endif
 
 augroup markdownPreview
     autocmd!
-    autocmd BufWinEnter <buffer> call OpenMarkdownPreview()
+    autocmd BufEnter <buffer> call OpenMarkdownPreview()
     autocmd CursorHold,CursorHoldI <buffer> call s:Refresh()
     autocmd BufUnload <buffer> call s:CleanUp()
 augroup END
@@ -30,7 +30,7 @@ function! OpenMarkdownPreview() abort
             let b:tempfile = tempname()
             call s:Refresh()
         endif
-        if !exists("b:job") || jobwait([b:job],0)[0] == -1
+        if !exists("b:job") || jobwait([b:job],0)[0] != -1
             let b:port = system("lsof -s tcp:listen -i :40500-40800 | awk -F ' *|:' '{ print $10 }' | sort -n | tail -n1") + 1
             if b:port == 1
                 let b:port = 40500
