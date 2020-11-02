@@ -362,10 +362,13 @@ augroup END
     nnoremap <silent><nowait> <leader><space>p  :<C-u>CocListResume<CR>
 
     " MinTree   {{{2
+    let g:MinTreeOpen='l'
+    let g:MinTreeCloseParent='h'
     nnoremap <silent> <leader>o <Cmd>MinTree<CR>
     nnoremap <silent> <leader>f <Cmd>MinTreeFind<CR>
 
     " BufSelect   {{{2
+    let g:BufSelectKeyOpen='l'
     nnoremap <silent> <leader>b <Cmd>ShowBufferList<CR>
 
     " Presenting   {{{2
