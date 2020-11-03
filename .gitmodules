@@ -73,3 +73,9 @@
 [submodule "pack/bundle/opt/mintree"]
 	path = pack/bundle/opt/mintree
 	url = git@github.com:PhilRunninger/mintree.git
+[submodule "pack/bundle/opt/vim-startify"]
+	path = pack/bundle/opt/vim-startify
+	url = git@github.com:mhinz/vim-startify.git
+[submodule "pack/bundle/opt/bufselect.vim"]
+	path = pack/bundle/opt/bufselect.vim
+	url = git@github.com:PhilRunninger/bufselect.vim.git
