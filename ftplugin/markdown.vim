@@ -13,27 +13,25 @@ function! MarkdownStartBrowser(timerID)
 endfunction
 
 function! s:Refresh(buffer)
-    if index(g:markdownBuffers, a:buffer) == -1
-        call add(g:markdownBuffers, a:buffer)
-    endif
-    call writefile(getline(1,line('$')), g:markdownTempFile)
+    call uniq(sort(add(s:markdownBuffers,a:buffer)))
+    call writefile(getline(1,line('$')), s:markdownTempFile)
 endfunction
 
 function! s:CleanUp(buffer)
-    call filter(g:markdownBuffers, {_,v -> v != a:buffer})
-    if empty(g:markdownBuffers)
-        call jobstop(g:markdownJob)
+    call filter(s:markdownBuffers, {_,v -> v != a:buffer})
+    if empty(s:markdownBuffers)
+        call jobstop(s:markdownJob)
     endif
 endfunction
 
-let g:markdownBuffers = get(g:, 'markdownBuffers', [])
 let g:markdownPort = get(g:, 'markdownPort', 40500)
-let g:markdownTempFile = get(g:, 'markdownTempFile', tempname())
+let s:markdownBuffers = get(s:, 'markdownBuffers', [])
+let s:markdownTempFile = get(s:, 'markdownTempFile', tempname())
 call s:Refresh(string(bufnr('%')))
 
-if !exists("g:markdownJob") || jobwait([g:markdownJob],0)[0] != -1
+if !exists("s:markdownJob") || jobwait([s:markdownJob],0)[0] != -1
     let password = exists("$GRIP_TOKEN") ? printf('--pass %s', $GRIP_TOKEN) : ''
-    let g:markdownJob = jobstart(printf('grip --title=MarkdownPreview %s %s %d', password, g:markdownTempFile, g:markdownPort))
+    let s:markdownJob = jobstart(printf('grip --title=MarkdownPreview %s %s %d', password, s:markdownTempFile, g:markdownPort))
     call timer_start(5000, 'MarkdownStartBrowser')
 endif
 
