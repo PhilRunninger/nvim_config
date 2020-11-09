@@ -414,11 +414,11 @@ augroup END
     " Startify   {{{2
     let g:startify_session_dir = fnamemodify($MYVIMRC,':p:h').'/cache/sessions'
     let g:startify_lists = [
-                \ { 'type':'sessions',  'header':['Sessions'] },
-                \ { 'type':'files',     'header':['Recent Files'] },
-                \ { 'type':'dir',       'header':['Project: '.fnamemodify(getcwd(),':~')] }
-              \ ]
-    let g:startify_custom_header = []
+        \ { 'type':'sessions',  'header':['Sessions'] },
+        \ { 'type':'files',     'header':['Recent Files'] },
+        \ { 'type':'dir',       'header':['Project: '.fnamemodify(getcwd(),':~')] }
+    \ ]
+    let g:startify_custom_header = startify#fortune#quote()
     let g:startify_session_delete_buffers = 1
     let g:startify_change_to_vcs_root = 1
     let g:startify_session_persistence = 1
