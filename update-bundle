@@ -17,3 +17,6 @@ git submodule foreach '
 
 # Update help tags.
 nvim -u NONE -N --headless -c "helptags ALL" -c "qa!"
+
+cd ./pack/bundle/opt/coc.nvim
+yarn install
