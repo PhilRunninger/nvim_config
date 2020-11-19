@@ -8,5 +8,5 @@
         "yaml",
         "json"
     ],
-    "snippets.userSnippetsDirectory": "~/.config/nvim/snippets"
+    "snippets.userSnippetsDirectory": "$VIMHOME/snippets"
 }
