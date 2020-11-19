@@ -32,7 +32,7 @@ call s:Refresh(string(bufnr('%')))
 if !exists("s:markdownJob") || jobwait([s:markdownJob],0)[0] != -1
     let password = exists("$GRIP_TOKEN") ? printf('--pass %s', $GRIP_TOKEN) : ''
     let s:markdownJob = jobstart(printf('grip --title=MarkdownPreview %s %s %d', password, s:markdownTempFile, g:markdownPort))
-    call timer_start(5000, 'MarkdownStartBrowser')
+    call timer_start(1000, 'MarkdownStartBrowser')
 endif
 
 autocmd BufEnter,BufWinEnter,CursorHold,CursorHoldI <buffer> call s:Refresh(expand('<abuf>'))
