@@ -447,10 +447,6 @@ function! Map_ff()
     return get({ "unix": "␊", "mac": "␍", "dos": "␍␊" }, &ff, "?")
 endfunction
 
-function! Map_ro_mod()
-    return (&modifiable ? (&readonly ? "🔐" : "") : "🔒") . (&modified ? "🔴" : "")
-endfunction
-
 function! Status(winnum)
     let l:statusline=""
     if a:winnum == winnr()
@@ -458,12 +454,12 @@ function! Status(winnum)
         let l:statusline.="\ %#GitBranch#%(\ %{fugitive#head(8)}\ %)%*"
         let l:statusline.="\ %{&ft}"
         let l:statusline.="\ %{Map_ff()}"
-        let l:statusline.="%(\ %{Map_ro_mod()}%)"
+        let l:statusline.="%(\ %R%m%)"
         let l:statusline.="\ %f"
         let l:statusline.="%="
-        " let l:statusline.="%#Session#%(\ %{SessionNameStatusLineFlag()}\ %)%*"
+        let l:statusline.="%#Session#%(\ %{SessionNameStatusLineFlag()}\ %)%*"
     else
-        let l:statusline.="%(\ %{Map_ro_mod()}%)"
+        let l:statusline.="%(\ %R%m%)"
         let l:statusline.="\ %F"
     endif
     return l:statusline
