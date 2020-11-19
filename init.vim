@@ -19,8 +19,7 @@ packadd! csv.vim               " git@github.com:chrisbra/csv.vim
 " Miscellaneous Utilities
 packadd! undotree              " git@github.com:mbbill/undotree
 packadd! vim-easy-align        " git@github.com:junegunn/vim-easy-align
-" packadd! vim-sessions          " git@github.com:PhilRunninger/vim-sessions.git
-packadd! vim-startify          " git@github.com:mhinz/vim-startify.git
+packadd! vim-sessions          " git@github.com:PhilRunninger/vim-sessions.git
 packadd! vim-signature         " git@github.com:kshenoy/vim-signature
 packadd! vim-repeat            " git@github.com:tpope/vim-repeat
 packadd! vim-surround          " git@github.com:tpope/vim-surround
@@ -407,21 +406,9 @@ augroup END
     xnoremap gs :ScratchSelection<CR>
     xnoremap gS :ScratchSelection!<CR>
 
-    " " vim-sessions   {{{2
-    " set sessionoptions-=help
-    " set sessionoptions-=blank
-
-    " Startify   {{{2
-    let g:startify_session_dir = fnamemodify($MYVIMRC,':p:h').'/cache/sessions'
-    let g:startify_lists = [
-        \ { 'type':'sessions',  'header':['Sessions'] },
-        \ { 'type':'files',     'header':['Recent Files'] },
-        \ { 'type':'dir',       'header':['Project: '.fnamemodify(getcwd(),':~')] }
-    \ ]
-    let g:startify_custom_header = startify#fortune#quote()
-    let g:startify_session_delete_buffers = 1
-    let g:startify_change_to_vcs_root = 1
-    let g:startify_session_persistence = 1
+    " vim-sessions   {{{2
+    set sessionoptions-=help
+    set sessionoptions-=blank
 
     " unicode   {{{2
     nnoremap ga :UnicodeName<CR>
