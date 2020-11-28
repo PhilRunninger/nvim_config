@@ -360,6 +360,16 @@ augroup END
     " Resume latest coc list.
     nnoremap <silent><nowait> <leader><space>p  :<C-u>CocListResume<CR>
 
+    " Firenvim   {{{2
+    if exists('g:started_by_firenvim')
+        set laststatus=0
+        set guifont=DroidSansMono\ NF:h10
+    endif
+    let g:firenvim_config = {'globalSettings': {'alt':'all'}, 'localSettings': {}}
+    let fc = g:firenvim_config['localSettings']
+    let fc['.*'] = {'cmdline':'neovim', 'priority':0, 'selector':'textarea', 'takeover':'always'}
+    let fc['https?://www\.facebook\.com'] = {'takeover':'never', 'priority':1}
+
     " MinTree   {{{2
     let g:MinTreeOpen='l'
     let g:MinTreeCloseParent='h'
