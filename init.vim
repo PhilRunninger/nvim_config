@@ -151,6 +151,17 @@ tnoremap <silent> <C-l> <C-\><C-n>:call WinTabSwitch('l')<CR>
 tnoremap <Esc><Esc> <C-\><C-n>
 
 " Some helpful remappings {{{1
+" Setup things for Powershell.
+if has("win32")
+    " Prevent C-Z from freezing the shell (Needed for cmd.exe shell too.)
+    noremap <C-Z> nop
+
+    set shell=powershell
+    set shellquote= shellpipe=\| shellxquote=
+    set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
+    set shellredir=\|\ Out-File\ -Encoding\ UTF8
+endif
+
 " Make # go to the alternate buffer   {{{2
 nnoremap <silent> # :buffer #<CR>
 
