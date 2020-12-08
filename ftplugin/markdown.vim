@@ -6,7 +6,7 @@ endif
 
 function! MarkdownStartBrowser(timerID)
     if has("win32")
-        call system('start "" http://localhost:'. g:markdownPort)
+        call system('cmd /c start "" http://localhost:'. g:markdownPort)
     elseif has("mac")
         call system('open -g http://localhost:' . g:markdownPort)
     endif
