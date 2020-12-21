@@ -371,8 +371,8 @@ augroup END
 
     " Firenvim   {{{2
     if exists('g:started_by_firenvim')
-        set laststatus=0
-        set guifont=DroidSansMono\ NF:h10
+        set linebreak nonumber spell signcolumn=no noruler laststatus=0
+        set guifont=Cascadia\ Code\ PL:h10
     endif
     let g:firenvim_config = {'globalSettings': {'alt':'all'}, 'localSettings': {}}
     let fc = g:firenvim_config['localSettings']
