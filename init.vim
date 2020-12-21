@@ -9,7 +9,6 @@ packadd! vim-fugitive          " git@github.com:tpope/vim-fugitive
 packadd! vim-gitgutter         " git@github.com:airblade/vim-gitgutter
 packadd! vim-commentary        " git@github.com:tpope/vim-commentary.git
 packadd! vim-rest-console      " git@github.com:diepm/vim-rest-console.git
-packadd! Improved-AnsiEsc      " git@github.com:vim-scripts/Improved-AnsiEsc.git
 " Colorschemes
 packadd! gruvbox               " git@github.com:morhetz/gruvbox.git
 packadd! xterm-color-table.vim " git@github.com:guns/xterm-color-table.vim
@@ -396,9 +395,6 @@ augroup END
     let g:presenting_quit = '<Esc>'
     let g:presenting_next = '<Right>'
     let g:presenting_prev = '<Left>'
-
-    " ANSIEsc   {{{2
-    nnoremap <leader>a :AnsiEsc<CR>
 
     " FuzzySearch {{{2
     let g:fuzzysearch_match_spaces = 1

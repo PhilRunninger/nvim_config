@@ -13,9 +13,6 @@
 [submodule "pack/bundle/opt/vim-rest-console"]
 	path = pack/bundle/opt/vim-rest-console
 	url = git@github.com:diepm/vim-rest-console.git
-[submodule "pack/bundle/opt/Improved-AnsiEsc"]
-	path = pack/bundle/opt/Improved-AnsiEsc
-	url = git@github.com:vim-scripts/Improved-AnsiEsc.git
 [submodule "pack/bundle/opt/gruvbox"]
 	path = pack/bundle/opt/gruvbox
 	url = git@github.com:morhetz/gruvbox.git
