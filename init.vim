@@ -25,6 +25,7 @@ packadd! vim-repeat            " git@github.com:tpope/vim-repeat
 packadd! vim-surround          " git@github.com:tpope/vim-surround
 packadd! vim-unimpaired        " git@github.com:tpope/vim-unimpaired
 packadd! vim-exchange          " git@github.com:tommcdo/vim-exchange.git
+packadd! vim-fuzzysearch       " git@github.com:ggVGc/vim-fuzzysearch.git
 packadd! unicode.vim           " git@github.com:chrisbra/unicode.vim.git
 packadd! Recover.vim           " git@github.com:chrisbra/Recover.vim.git
 packadd! scratch.vim           " git@github.com:mtth/scratch.vim
@@ -398,6 +399,10 @@ augroup END
 
     " ANSIEsc   {{{2
     nnoremap <leader>a :AnsiEsc<CR>
+
+    " FuzzySearch {{{2
+    let g:fuzzysearch_match_spaces = 1
+    nnoremap g/ :FuzzySearch<CR>
 
     " Fugitive   {{{2
     nnoremap <silent> <F3> "zyiw/<C-R>z<CR>:Ggrep -e '<C-R>z'<CR><CR>:copen<CR>:redraw!<CR>
