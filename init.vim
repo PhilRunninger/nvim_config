@@ -380,6 +380,7 @@ augroup END
     let fc = g:firenvim_config['localSettings']
     let fc['.*'] = {'cmdline':'neovim', 'priority':0, 'selector':'textarea', 'takeover':'always'}
     let fc['https?://www\.facebook\.com'] = {'takeover':'never', 'priority':1}
+    let fc['https?://docs\.google\.com/spreadsheets'] = {'takeover':'never', 'priority':1}
 
     " MinTree   {{{2
     let g:MinTreeOpen='l'
