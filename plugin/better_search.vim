@@ -22,14 +22,7 @@ function! s:CreateSearchString()
         highlight Search term=reverse cterm=reverse ctermfg=214 ctermbg=235 gui=reverse guifg=#fabd2f guibg=#282828
     else
         let @/ = '\(' . join(s:words,'\|') . '\)'
-        highlight Search term=reverse cterm=reverse ctermfg=208 ctermbg=235 gui=reverse guifg=#fabd2f guibg=#282828
-        try
-            execute 'normal! n'
-        catch
-            echohl Error
-            echo v:exception
-            echohl None
-        endtry
+        highlight Search term=reverse cterm=reverse ctermfg=154 ctermbg=235 gui=reverse guifg=#fabd2f guibg=#282828
     endif
 endfunction
 
@@ -38,7 +31,7 @@ function! s:ClearSearchString()
     call s:CreateSearchString()
 endfunction
 
-nnoremap <silent> * :call <SID>ToggleWord()<CR>
+nnoremap <silent> * :call <SID>ToggleWord()<CR>n
 nnoremap <silent> <leader>* :call <SID>ClearSearchString()<CR>
 
 vnoremap <silent> * :<C-U>
