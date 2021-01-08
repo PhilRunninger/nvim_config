@@ -9,6 +9,7 @@ packadd! vim-fugitive          " git@github.com:tpope/vim-fugitive
 packadd! vim-gitgutter         " git@github.com:airblade/vim-gitgutter
 packadd! vim-commentary        " git@github.com:tpope/vim-commentary.git
 packadd! vim-rest-console      " git@github.com:diepm/vim-rest-console.git
+packadd! Windows-PowerShell-Syntax-Plugin  " git@github.com:vim-scripts/Windows-PowerShell-Syntax-Plugin.git
 " Colorschemes
 packadd! gruvbox               " git@github.com:morhetz/gruvbox.git
 packadd! xterm-color-table.vim " git@github.com:guns/xterm-color-table.vim
@@ -16,6 +17,7 @@ packadd! xterm-color-table.vim " git@github.com:guns/xterm-color-table.vim
 packadd! ldraw.vim             " git@github.com:vim-scripts/ldraw.vim.git
 packadd! csv.vim               " git@github.com:chrisbra/csv.vim
 " Miscellaneous Utilities
+packadd! vim-cool              " git@github.com:romainl/vim-cool.git
 packadd! undotree              " git@github.com:mbbill/undotree
 packadd! vim-easy-align        " git@github.com:junegunn/vim-easy-align
 packadd! vim-sessions          " git@github.com:PhilRunninger/vim-sessions.git
@@ -154,7 +156,7 @@ if has("win32")
     " Prevent C-Z from freezing the shell (Needed for cmd.exe shell too.)
     noremap <C-Z> nop
 
-    set shell=powershell
+    set shell=pwsh
     set shellquote= shellpipe=\| shellxquote=
     set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
     set shellredir=\|\ Out-File\ -Encoding\ UTF8
