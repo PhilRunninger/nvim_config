@@ -150,15 +150,13 @@ tnoremap <silent> <C-l> <C-\><C-n>:call WinTabSwitch('l')<CR>
 tnoremap <Esc><Esc> <C-\><C-n>
 
 " Some helpful remappings {{{1
-" Setup things for Powershell.
+" Open a terminal in a split window    {{{2
 if has("win32")
-    " Prevent C-Z from freezing the shell (Needed for cmd.exe shell too.)
+    nnoremap <silent> <leader>t <Cmd>split<BAR>terminal pwsh<CR>
+    " Prevent C-Z from freezing the shell
     noremap <C-Z> nop
-
-    set shell=pwsh
-    set shellquote= shellpipe=\| shellxquote=
-    set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
-    set shellredir=\|\ Out-File\ -Encoding\ UTF8
+else
+    nnoremap <silent> <leader>t <Cmd>split<BAR>terminal<CR>
 endif
 
 " Make # go to the alternate buffer   {{{2
@@ -195,9 +193,6 @@ nnoremap <F2> i★<Esc>[s1z=/★<CR>x
 
 " Make an easier redo mapping. Who uses U anyway?   {{{2
 nnoremap U <C-R>
-
-" Open a terminal in a split window   {{{2
-nnoremap <leader>t :split<BAR>terminal<CR>
 
 " Auto-command Definitions   {{{1
 augroup trailingWhitespace   " Remove, display/hide trailing whitespace   {{{2
