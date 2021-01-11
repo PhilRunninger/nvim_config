@@ -372,7 +372,7 @@ augroup END
     endif
     let g:firenvim_config = {'globalSettings': {'alt':'all'}, 'localSettings': {}}
     let fc = g:firenvim_config['localSettings']
-    let fc['.*'] = {'cmdline':'neovim', 'priority':0, 'selector':'textarea', 'takeover':'always'}
+    let fc['.*'] = {'cmdline':'neovim', 'priority':0, 'selector':'textarea', 'takeover':'once'}
     let fc['https?://www\.facebook\.com'] = {'takeover':'never', 'priority':1}
     let fc['https?://docs\.google\.com/spreadsheets'] = {'takeover':'never', 'priority':1}
 
