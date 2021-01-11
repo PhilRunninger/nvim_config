@@ -76,7 +76,6 @@ let g:markdown_fenced_languages = ['vim']
 set hlsearch incsearch
 set ignorecase smartcase
 runtime macros/matchit.vim
-nnoremap <silent> <leader><space> :set hlsearch!<CR>
 
 " Command line options   {{{1
 set history=1000

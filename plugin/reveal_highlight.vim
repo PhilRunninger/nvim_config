@@ -1,4 +1,8 @@
 " Show what highlighting is used under the cursor {{{2
+"
+" See :h api-floatwin for a way to improve this with popup windows.
+"
+"
 function! s:RevealHighlights(r,c)
     let l:highlights = map(synstack(a:r,a:c), {_,v -> {'name': synIDattr(v,'name'), 'transparent':synIDattr(synIDtrans(v),'name'), 'fg':synIDattr(synIDtrans(v),'fg'), 'bg':synIDattr(synIDtrans(v),'bg')}})
     echo string(synstack(a:r,a:c))
