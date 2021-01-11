@@ -2,21 +2,20 @@
 
 set -e
 
-git submodule foreach '
+git submodule -q foreach '
+    echo "PULLING SUBMODULE: " $name " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
     BRANCH=$(git config -f $toplevel/.gitmodules submodule."$path".branch || echo master)
-    git checkout $BRANCH
-'
-
-git submodule foreach '
+    git checkout -q $BRANCH
     git pull --recurse-submodules || :
-'
-
-git submodule foreach '
     git submodule update --init --recursive || :
 '
 
+echo "UPDATING HELP TAGS: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 # Update help tags.
 nvim -u NONE -N --headless -c "helptags ALL" -c "qa!"
 
+echo "REBUILDING CoC: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 cd ./pack/bundle/opt/coc.nvim
-yarn install
+git checkout release
+git pull
+yarn install --frozen-lockfile
