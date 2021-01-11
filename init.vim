@@ -139,14 +139,14 @@ function! WinTabSwitch(direction)
     endif
 endfunction
 
-nnoremap <silent> <C-h> :call WinTabSwitch('h')<CR>
-nnoremap <silent> <C-j> :call WinTabSwitch('j')<CR>
-nnoremap <silent> <C-k> :call WinTabSwitch('k')<CR>
-nnoremap <silent> <C-l> :call WinTabSwitch('l')<CR>
-tnoremap <silent> <C-h> <C-\><C-n>:call WinTabSwitch('h')<CR>
-tnoremap <silent> <C-j> <C-\><C-n>:call WinTabSwitch('j')<CR>
-tnoremap <silent> <C-k> <C-\><C-n>:call WinTabSwitch('k')<CR>
-tnoremap <silent> <C-l> <C-\><C-n>:call WinTabSwitch('l')<CR>
+nnoremap <silent> <C-h> <Cmd>call WinTabSwitch('h')<CR>
+nnoremap <silent> <C-j> <Cmd>call WinTabSwitch('j')<CR>
+nnoremap <silent> <C-k> <Cmd>call WinTabSwitch('k')<CR>
+nnoremap <silent> <C-l> <Cmd>call WinTabSwitch('l')<CR>
+tnoremap <silent> <C-h> <C-\><C-n><Cmd>call WinTabSwitch('h')<CR>
+tnoremap <silent> <C-j> <C-\><C-n><Cmd>call WinTabSwitch('j')<CR>
+tnoremap <silent> <C-k> <C-\><C-n><Cmd>call WinTabSwitch('k')<CR>
+tnoremap <silent> <C-l> <C-\><C-n><Cmd>call WinTabSwitch('l')<CR>
 tnoremap <Esc><Esc> <C-\><C-n>
 
 " Some helpful remappings {{{1
@@ -160,7 +160,7 @@ else
 endif
 
 " Make # go to the alternate buffer   {{{2
-nnoremap <silent> # :buffer #<CR>
+nnoremap <silent> # <Cmd>buffer #<CR>
 
 " Swap j/k with gj/gk {{{2
 nnoremap j gj
@@ -169,12 +169,12 @@ nnoremap gj j
 nnoremap gk k
 
 " Show/hide cursorline and cursorcolumn   {{{2
-nnoremap <silent> + :set cursorline! cursorcolumn!<CR>
-nnoremap <silent> - :set cursorline!<CR>
-nnoremap <silent> \| :set cursorcolumn!<CR>
+nnoremap <silent> + <Cmd>set cursorline! cursorcolumn!<CR>
+nnoremap <silent> - <Cmd>set cursorline!<CR>
+nnoremap <silent> \| <Cmd>set cursorcolumn!<CR>
 
 " Change cwd to current buffer's directory   {{{2
-nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+nnoremap <leader>cd <Cmd>cd %:p:h<Bar>pwd<CR>
 
 " Fold-related mappings {{{2
 " Don't allow o to work on a fold.
@@ -279,7 +279,7 @@ augroup END
     nmap <silent> gr <Plug>(coc-references)
 
     " Use K to show documentation in preview window.
-    nnoremap <silent> K :call <SID>show_documentation()<CR>
+    nnoremap <silent> K <Cmd>call <SID>show_documentation()<CR>
 
     function! s:show_documentation()
         if (index(['vim','help'], &filetype) >= 0)
@@ -349,21 +349,21 @@ augroup END
 
     " Mappings for CoCList
     " Show all diagnostics.
-    nnoremap <silent><nowait> <leader><space>a  :<C-u>CocList diagnostics<cr>
+    nnoremap <silent><nowait> <leader><space>a  <Cmd>CocList diagnostics<cr>
     " Manage extensions.
-    nnoremap <silent><nowait> <leader><space>e  :<C-u>CocList extensions<cr>
+    nnoremap <silent><nowait> <leader><space>e  <Cmd>CocList extensions<cr>
     " Show commands.
-    nnoremap <silent><nowait> <leader><space>c  :<C-u>CocList commands<cr>
+    nnoremap <silent><nowait> <leader><space>c  <Cmd>CocList commands<cr>
     " Find symbol of current document.
-    nnoremap <silent><nowait> <leader><space>o  :<C-u>CocList outline<cr>
+    nnoremap <silent><nowait> <leader><space>o  <Cmd>CocList outline<cr>
     " Search workspace symbols.
-    nnoremap <silent><nowait> <leader><space>s  :<C-u>CocList -I symbols<cr>
+    nnoremap <silent><nowait> <leader><space>s  <Cmd>CocList -I symbols<cr>
     " Do default action for next item.
-    nnoremap <silent><nowait> <leader><space>j  :<C-u>CocNext<CR>
+    nnoremap <silent><nowait> <leader><space>j  <Cmd>CocNext<CR>
     " Do default action for previous item.
-    nnoremap <silent><nowait> <leader><space>k  :<C-u>CocPrev<CR>
+    nnoremap <silent><nowait> <leader><space>k  <Cmd>CocPrev<CR>
     " Resume latest coc list.
-    nnoremap <silent><nowait> <leader><space>p  :<C-u>CocListResume<CR>
+    nnoremap <silent><nowait> <leader><space>p  <Cmd>CocListResume<CR>
 
     " Firenvim   {{{2
     if exists('g:started_by_firenvim')
@@ -393,19 +393,19 @@ augroup END
 
     " FuzzySearch {{{2
     let g:fuzzysearch_match_spaces = 1
-    nnoremap g/ :FuzzySearch<CR>
+    nnoremap g/ <Cmd>FuzzySearch<CR>
 
     " Fugitive   {{{2
     nnoremap <silent> <F3> "zyiw/<C-R>z<CR>:Ggrep -e '<C-R>z'<CR><CR>:copen<CR>:redraw!<CR>
     vnoremap <silent> <F3> "zy/<C-R>z<CR>:Ggrep -e '<C-R>z'<CR><CR>:copen<CR>:redraw!<CR>
-    nnoremap <leader>G :Gstatus<CR>
+    nnoremap <leader>G <Cmd>Gstatus<CR>
 
     " REST Console   {{{2
     let g:vrc_show_command = 1
     let g:vrc_trigger = '<leader>r'
 
     " Undotree   {{{2
-    nnoremap <silent> <leader>u :UndotreeShow<CR>
+    nnoremap <silent> <leader>u <Cmd>UndotreeShow<CR>
     let g:undotree_SetFocusWhenToggle = 1
     let g:undotree_WindowLayout = 2
     let g:undotree_HelpLine = 0
@@ -418,17 +418,17 @@ augroup END
     let g:scratch_insert_autohide = 0
     let g:scratch_no_mappings = 1
     let g:scratch_persistence_file = fnamemodify($MYVIMRC,':p:h').'/cache/scratch.txt'
-    nnoremap gs :Scratch<CR>
-    nnoremap gS :Scratch!<CR>
-    xnoremap gs :ScratchSelection<CR>
-    xnoremap gS :ScratchSelection!<CR>
+    nnoremap gs <Cmd>Scratch<CR>
+    nnoremap gS <Cmd>Scratch!<CR>
+    xnoremap gs <Cmd>ScratchSelection<CR>
+    xnoremap gS <Cmd>ScratchSelection!<CR>
 
     " vim-sessions   {{{2
     set sessionoptions-=help
     set sessionoptions-=blank
 
     " unicode   {{{2
-    nnoremap ga :UnicodeName<CR>
+    nnoremap ga <Cmd>UnicodeName<CR>
     inoremap <C-K> <Esc>:UnicodeSearch!<space>
 
 " Color Settings   {{{1
