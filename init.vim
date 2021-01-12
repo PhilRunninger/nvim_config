@@ -151,11 +151,12 @@ tnoremap <Esc><Esc> <C-\><C-n>
 
 " Some helpful remappings {{{1
 " Open a terminal in a split window    {{{2
-if has("win32")
+if has("win32") && &shell !~ 'bash'
     nnoremap <silent> <leader>t <Cmd>split<BAR>terminal pwsh<CR>
     " Prevent C-Z from freezing the shell
     noremap <C-Z> nop
-else
+elseif &shell =~ 'bash'
+    set shell=bash
     nnoremap <silent> <leader>t <Cmd>split<BAR>terminal<CR>
 endif
 
