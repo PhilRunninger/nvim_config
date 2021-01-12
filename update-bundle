@@ -2,12 +2,13 @@
 
 set -e
 
-git submodule -q foreach '
+git submodule --quiet foreach '
     echo "PULLING SUBMODULE: " $name " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
     BRANCH=$(git config -f $toplevel/.gitmodules submodule."$path".branch || echo master)
-    git checkout -q $BRANCH
+    git checkout --quiet $BRANCH
     git pull --recurse-submodules || :
-    git submodule update --init --recursive || :
+    git tag --points-at
+    # git submodule update --init --recursive || :
 '
 
 echo "UPDATING HELP TAGS: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
