@@ -415,7 +415,7 @@ augroup END
     let g:undotree_ShortIndicators = 1
 
     " EasyAlign   {{{2
-    vmap <Enter> <Plug>(EasyAlign)
+    vmap <Enter> <Plug>(LiveEasyAlign)
 
     " Scratch   {{{2
     let g:scratch_insert_autohide = 0
