@@ -69,7 +69,7 @@ function s:RunQuery(align)
     execute 'r! sqlcmd -S ' . g:sqlServer . ' -d ' . g:sqlDatabase . ' -s"|" -W -i ' . s:sqlTempFile
     1delete _
 
-    if a:align && exists('*easy_align#align')
+    if a:align && exists(':EasyAlign')
         let l:start = 1
         call cursor(l:start,1)
         let l:end = search('^\s*(\d\+ rows affected)', 'cW')
