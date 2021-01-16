@@ -94,7 +94,7 @@ command SQLRunSelection :call <SID>SQLRun('selection')
 command SQLDescribe :call <SID>SQLRun('table')
 command SQLReset :call <SID>GetConnectionInfo()
 
-nnoremap <F5> <Cmd>SQLRunFile<CR>
-nnoremap <S-F5> <Cmd>SQLRunParagraph<CR>
-vnoremap <F5> <Cmd>SQLRunSelection<CR>
-nnoremap <C-F5> <Cmd>SQLDescribe<CR>
+nnoremap <buffer> <F5> <Cmd>SQLRunFile<CR>
+nnoremap <buffer> <S-F5> <Cmd>SQLRunParagraph<CR>
+vnoremap <buffer> <F5> <Cmd>SQLRunSelection<CR>
+nnoremap <buffer> <C-F5> <Cmd>SQLDescribe<CR>

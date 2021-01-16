@@ -7,8 +7,8 @@ set expandtab       " use spaces when <tab> is inserted
 let g:erlang_folding = 1
 
 " Convert Erlang "list strings" to <<"binary strings">>, and back again.
-nnoremap <> m`f"a>><ESC>,,i<<<ESC>``ll
-nnoremap >< m`f"lxx,,XX``hh
+nnoremap <buffer> <> m`f"a>><ESC>,,i<<<ESC>``ll
+nnoremap <buffer> >< m`f"lxx,,XX``hh
 
 " This function improves Vim's navigation to tags. The default behavior of ^-]
 " doesn't account for the colon separator between module and function. So we
