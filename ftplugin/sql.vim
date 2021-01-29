@@ -83,7 +83,29 @@ function! s:RunQuery(align)
     normal! ggdG _
     execute 'r! sqlcmd -S ' . g:sqlServer . ' -d ' . g:sqlDatabase . ' -s"|" -W -i ' . s:sqlTempFile
     1delete _
+    call s:JoinLines()
+    call s:AlignColumns(a:align)
+    setlocal buftype=nofile noswapfile nowrap ft=csv
+endfunction
 
+function! s:JoinLines()
+    " If a column contains newlines, records are split into multiple rows, and
+    " sqlcmd marks the end of records with a ^M character (ASCII 13), Test
+    " line 1 to see if we can bypass joining the lines back together.
+    if getline(1) !~ nr2char(13).'$'
+        return
+    endif
+
+    " Join all lines that don't end with ^M to the next line.
+    while search('[^'.nr2char(13).']$', 'cw')
+        execute 'global/[^'.nr2char(13).']$/join'
+    endwhile
+
+    " Clean up the buffer by removing the ^M characters.
+    silent execute '%s/'.nr2char(13).'$//'
+endfunction
+
+function! s:AlignColumns(align)
     if a:align && exists(':EasyAlign')
         let l:start = 1
         call cursor(l:start,1)
@@ -98,7 +120,6 @@ function! s:RunQuery(align)
         endwhile
     endif
     silent execute '%s/^$\n^\s*\((\d\+ rows affected)\)/\1\r/e'
-    set ft=csv
 endfunction
 
 let s:sqlTempFile = get(s:, 'sqlTempFile', tempname())
