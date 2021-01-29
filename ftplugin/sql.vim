@@ -6,13 +6,19 @@
 " SQLRunParagraph - Shift+F5 - submit the paragraph to SQLServer
 " SQLRunSelection - F5 - submit the visual selection to SQLServer
 " SQLDescribe - Ctrl+F5 - use sp_help to describe the table under the cursor
-" SQLReset - reset the server and database name
+" SQLInit - <leader>F5 - update server and database name.
 "
 " You can set g:sqlServer and g:sqlDatabase an another file of your vim setup
 " (like ~/.vim/after/ftplugin/sql.vim) so you don't have to enter it for
 " every session. In that file you can also specify g:sqlAlignLimit to control
 " when to stop aligning query results into columns; that becomes a lengthy
 " process with many rows.
+"
+" g:sqlServer and g:sqlDatabase can be set in the SQL file as well. Use a
+" comment, formatted like one of these, move your cursor to the line, and
+" press <leader>F5.
+"       -- -S server-name -d database-name
+"       -- sqlServer:server-name sqlDatabase:database-name
 "
 " Usernames and passwords are not necessary in my current environment, as we
 " use Windows authentication. Adding them to the mix shouldn't be too hard
@@ -27,7 +33,7 @@
 "     nice highlighting for the columns of data. Again, nice, but not needed.
 "         https://github.com/chrisbra/csv.vim
 
-function s:SQLRun(object)
+function! s:SQLRun(object)
     if !exists('g:sqlServer') || !exists('g:sqlDatabase')
         call s:GetConnectionInfo()
     endif
@@ -36,12 +42,20 @@ function s:SQLRun(object)
     call s:RunQuery(a:object != 'table')
 endfunction
 
-function s:GetConnectionInfo()
+function! s:SQLInit(connection)
+    let l:server = matchstr(a:connection, '\s\(-S\|sqlServer:\)\s*\zs\S\+')
+    let l:database = matchstr(a:connection, '\s\(-d\|sqlDatabase:\)\s*\zs\S\+')
+    let g:sqlServer = empty(l:server) ? g:sqlServer : l:server
+    let g:sqlDatabase = empty(l:database) ? g:sqlDatabase : l:database
+    call s:GetConnectionInfo()
+endfunction
+
+function! s:GetConnectionInfo()
     let g:sqlServer = input('Server Name: ', get(g:, 'sqlServer', ''))
     let g:sqlDatabase = input('Database Name: ', get(g:, 'sqlDatabase', ''))
 endfunction
 
-function s:WriteTempFile(object)
+function! s:WriteTempFile(object)
     let l:iskeyword = &iskeyword
     let l:z = @z
     if a:object == 'paragraph'
@@ -62,7 +76,7 @@ function s:WriteTempFile(object)
     let @z = l:z
 endfunction
 
-function s:RunQuery(align)
+function! s:RunQuery(align)
     let s:sqlResults = bufnr('SQL-Results', 1)
     execute 'silent buffer ' . s:sqlResults
     normal! ggdG _
@@ -93,6 +107,7 @@ command SQLRunParagraph :call <SID>SQLRun('paragraph')
 command SQLRunSelection :call <SID>SQLRun('selection')
 command SQLDescribe :call <SID>SQLRun('table')
 command SQLReset :call <SID>GetConnectionInfo()
+nnoremap <buffer> <leader><F5> :call <SID>SQLInit(getline(line('.')))<CR>
 
 nnoremap <buffer> <F5> <Cmd>SQLRunFile<CR>
 nnoremap <buffer> <S-F5> <Cmd>SQLRunParagraph<CR>
