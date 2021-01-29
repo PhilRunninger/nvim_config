@@ -62,7 +62,7 @@ function! s:WriteTempFile(object)
     if a:object == 'paragraph'
         execute "'{,'}write! " . s:sqlTempFile
     elseif a:object == 'selection'
-        normal! "zy
+        normal! gv"zy
         call writefile(split(@z,'\n'), s:sqlTempFile)
     elseif a:object == 'word'
         set iskeyword+=46
@@ -71,7 +71,7 @@ function! s:WriteTempFile(object)
         normal! "zyiw
         call writefile(["sp_help '" . @z ."';"], s:sqlTempFile)
     else
-        execute "write! " . s:sqlTempFile
+        execute "1,$write! " . s:sqlTempFile
     endif
     let &iskeyword = l:iskeyword
     let @z = l:z
