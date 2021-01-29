@@ -1,12 +1,12 @@
 " This script gives you the commands and functions necessary to run SQLServer
 " queries (and even DML and DDL statements) from within Vim. The following
-" commands and key mappings are provided:
+" key mappings are provided:
 "
-" SQLRunFile - F5 - submit the whole file to SQLServer
-" SQLRunParagraph - Shift+F5 - submit the paragraph to SQLServer
-" SQLRunSelection - F5 - submit the visual selection to SQLServer
-" SQLDescribe - Ctrl+F5 - use sp_help to describe the table under the cursor
-" SQLInit - <leader>F5 - update server and database name.
+" F5 - submit the whole file to SQLServer
+" Shift+F5 - submit the paragraph to SQLServer
+" F5 - submit the visual selection to SQLServer
+" Ctrl+F5 - use sp_help to describe the table under the cursor
+" <leader>F5 - update server and database name.
 "
 " You can set g:sqlServer and g:sqlDatabase an another file of your vim setup
 " (like ~/.vim/after/ftplugin/sql.vim) so you don't have to enter it for
@@ -102,14 +102,9 @@ endfunction
 
 let s:sqlTempFile = get(s:, 'sqlTempFile', tempname())
 
-command SQLRunFile :call <SID>SQLRun('file')
-command SQLRunParagraph :call <SID>SQLRun('paragraph')
-command SQLRunSelection :call <SID>SQLRun('selection')
-command SQLDescribe :call <SID>SQLRun('table')
-command SQLReset :call <SID>GetConnectionInfo()
+nnoremap <buffer> <F5> :call <SID>SQLRun('file')<CR>
+nnoremap <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
+vnoremap <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
+nnoremap <buffer> <C-F5> :call <SID>SQLRun('describe')<CR>
 nnoremap <buffer> <leader><F5> :call <SID>SQLInit(getline(line('.')))<CR>
 
-nnoremap <buffer> <F5> <Cmd>SQLRunFile<CR>
-nnoremap <buffer> <S-F5> <Cmd>SQLRunParagraph<CR>
-vnoremap <buffer> <F5> <Cmd>SQLRunSelection<CR>
-nnoremap <buffer> <C-F5> <Cmd>SQLDescribe<CR>
