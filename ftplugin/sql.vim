@@ -40,7 +40,7 @@ function! s:SQLRun(object)
     endif
 
     call s:WriteTempFile(a:object)
-    call s:RunQuery(a:object != 'table')
+    call s:RunQuery(a:object != 'word')
 endfunction
 
 function! s:SQLInit(connection)
@@ -64,7 +64,7 @@ function! s:WriteTempFile(object)
     elseif a:object == 'selection'
         normal! "zy
         call writefile(split(@z,'\n'), s:sqlTempFile)
-    elseif a:object == 'table'
+    elseif a:object == 'word'
         set iskeyword+=46
         set iskeyword+=91
         set iskeyword+=93
@@ -106,7 +106,7 @@ let s:sqlTempFile = get(s:, 'sqlTempFile', tempname())
 nnoremap <buffer> <F5> :call <SID>SQLRun('file')<CR>
 nnoremap <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
 vnoremap <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
-nnoremap <buffer> <C-F5> :call <SID>SQLRun('describe')<CR>
+nnoremap <buffer> <C-F5> :call <SID>SQLRun('word')<CR>
 nnoremap <buffer> <leader><F5> :call <SID>SQLInit(getline(line('.')))<CR>
 
 augroup SQLResultsMapping
