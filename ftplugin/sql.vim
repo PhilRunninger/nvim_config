@@ -7,6 +7,7 @@
 " F5 - submit the visual selection to SQLServer
 " Ctrl+F5 - use sp_help to describe the table under the cursor
 " <leader>F5 - update server and database name.
+" F5 (in the SQl-Results buffer) - rerun the same query
 "
 " You can set g:sqlServer and g:sqlDatabase an another file of your vim setup
 " (like ~/.vim/after/ftplugin/sql.vim) so you don't have to enter it for
@@ -108,3 +109,7 @@ vnoremap <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
 nnoremap <buffer> <C-F5> :call <SID>SQLRun('describe')<CR>
 nnoremap <buffer> <leader><F5> :call <SID>SQLInit(getline(line('.')))<CR>
 
+augroup SQLResultsMapping
+    autocmd!
+    autocmd BufEnter SQL-Results nnoremap <buffer> <F5> <Cmd>:call <SID>RunQuery(1)<CR>
+augroup END
