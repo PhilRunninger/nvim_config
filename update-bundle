@@ -12,7 +12,6 @@ git submodule --quiet foreach '
 '
 
 echo "UPDATING HELP TAGS: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-# Update help tags.
 nvim -u NONE -N --headless -c "helptags ALL" -c "qa!"
 
 echo "REBUILDING CoC: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
