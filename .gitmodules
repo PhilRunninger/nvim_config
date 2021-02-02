@@ -52,9 +52,6 @@
 [submodule "pack/bundle/opt/unicode.vim"]
 	path = pack/bundle/opt/unicode.vim
 	url = git@github.com:chrisbra/unicode.vim.git
-[submodule "pack/bundle/opt/Recover.vim"]
-	path = pack/bundle/opt/Recover.vim
-	url = git@github.com:chrisbra/Recover.vim.git
 [submodule "pack/bundle/opt/scratch.vim"]
 	path = pack/bundle/opt/scratch.vim
 	url = git@github.com:mtth/scratch.vim
@@ -70,9 +67,6 @@
 [submodule "pack/bundle/opt/mintree"]
 	path = pack/bundle/opt/mintree
 	url = git@github.com:PhilRunninger/mintree.git
-[submodule "pack/bundle/opt/vim-startify"]
-	path = pack/bundle/opt/vim-startify
-	url = git@github.com:mhinz/vim-startify.git
 [submodule "pack/bundle/opt/bufselect.vim"]
 	path = pack/bundle/opt/bufselect.vim
 	url = git@github.com:PhilRunninger/bufselect.vim.git

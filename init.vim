@@ -28,7 +28,6 @@ packadd! vim-unimpaired        " git@github.com:tpope/vim-unimpaired
 packadd! vim-exchange          " git@github.com:tommcdo/vim-exchange.git
 packadd! vim-fuzzysearch       " git@github.com:ggVGc/vim-fuzzysearch.git
 packadd! unicode.vim           " git@github.com:chrisbra/unicode.vim.git
-packadd! Recover.vim           " git@github.com:chrisbra/Recover.vim.git
 packadd! scratch.vim           " git@github.com:mtth/scratch.vim
 packadd! tabline.vim           " git@github.com:mkitt/tabline.vim.git
 packadd! presenting.vim        " git@github.com:sotte/presenting.vim.git
