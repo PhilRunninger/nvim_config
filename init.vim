@@ -377,6 +377,10 @@ augroup END
     let fc['https?://docs\.google\.com/spreadsheets'] = {'takeover':'never', 'priority':1}
     let fc['https?://docs\.desmos\.com'] = {'takeover':'never', 'priority':1}
     let fc['https?://docs\.geogebra\.org'] = {'takeover':'never', 'priority':1}
+    let fc['https?://vi\.stackexchange\.com'] = {'takeover':'never', 'priority':1}
+    let fc['https?://stackoverflow\.com'] = {'takeover':'never', 'priority':1}
+    let fc['https?://serverfault\.com'] = {'takeover':'never', 'priority':1}
+    let fc['https?://superuser\.com'] = {'takeover':'never', 'priority':1}
 
     " MinTree   {{{2
     let g:MinTreeOpen='l'
