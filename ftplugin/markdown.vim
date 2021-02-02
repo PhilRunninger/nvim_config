@@ -4,6 +4,10 @@ if !executable("grip") || exists('g:started_by_firenvim')
     finish
 endif
 
+if confirm("Launch previewer? ", "&Yes\n&no") != 1
+    finish
+endif
+
 function! MarkdownStartBrowser(timerID)
     if has("win32")
         call system('cmd /c start "" http://localhost:'. g:markdownPort)
