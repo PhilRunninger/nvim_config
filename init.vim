@@ -440,6 +440,12 @@ augroup END
 " Color Settings   {{{1
 syntax on                           " Turn syntax highlighting on.
 
+augroup setStatuslineColor    " Change statusline color, depending on mode.
+    autocmd!
+    autocmd InsertEnter,InsertChange,TextChangedI * call <SID>StatuslineColor(1)
+    autocmd VimEnter,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
+augroup END
+
 augroup tweakColorScheme
     autocmd!
     autocmd ColorScheme * highlight Normal                               ctermbg=none " Use terminal's Background color setting
@@ -457,8 +463,16 @@ augroup tweakColorScheme
            \ else |
            \     setlocal winhighlight= |
            \ endif
+    autocmd ColorScheme * highlight Insert         cterm=none ctermfg=15 ctermbg=27   " White on Blue
+    autocmd ColorScheme * highlight NormalMod      cterm=none ctermfg=15 ctermbg=124  " White on Red
+    autocmd ColorScheme * highlight NormalNoMod    cterm=none ctermfg=16 ctermbg=40   " Black on Green
 augroup END
 colorscheme gruvbox
+
+function! s:StatuslineColor(insertMode)
+    execute 'highlight! link StatusLine ' . (a:insertMode ? 'Insert' : (&modified ? 'NormalMod' : 'NormalNoMod'))
+    redraw!
+endfunction
 
 " Status Line Settings   {{{1
 augroup setStatuslineText    " Change statusline text, depending on mode.
@@ -466,17 +480,13 @@ augroup setStatuslineText    " Change statusline text, depending on mode.
     autocmd VimEnter,WinEnter,BufWinEnter,BufWritePost * call <SID>StatusLineText()
 augroup END
 
-function! Map_ff()
-    return get({ "unix": "␊", "mac": "␍", "dos": "␍␊" }, &ff, "?")
-endfunction
-
 function! Status(winnum)
     let l:statusline=""
     if a:winnum == winnr()
         let l:statusline.="%3v"
         let l:statusline.="\ %#GitBranch#%(\ %{fugitive#head(8)}\ %)%*"
         let l:statusline.="\ %{&ft}"
-        let l:statusline.="\ %{Map_ff()}"
+        let l:statusline.="\ %{&ff}"
         let l:statusline.="%(\ %R%m%)"
         let l:statusline.="\ %f"
         let l:statusline.="%="
@@ -489,7 +499,14 @@ function! Status(winnum)
 endfunction
 
 function! s:StatusLineText()
+    let l:exempt  = ['']                        " No name (Quickfix/Location list, new file, etc.)
+    let l:exempt += ['.*[/\\]doc[/\\]\w*\.txt'] " Help files
+    let l:exempt += ['=MinTree=']               " MinTree
+    let l:exempt += ['NERD_tree_\d\+']          " NERDTree
+    let l:exempt += ['=Buffers=']               " BufSelect list
     for nr in range(1, winnr('$'))
-        call setwinvar(nr, '&statusline', '%!Status('.nr.')')
+        if bufname(winbufnr(nr)) !~# '^\(' . join(l:exempt,'\|') . '\)$'
+            call setwinvar(nr, '&statusline', '%!Status('.nr.')')
+        endif
     endfor
 endfunction
