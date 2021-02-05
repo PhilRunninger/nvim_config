@@ -183,9 +183,10 @@ nnoremap <expr> o foldclosed('.')==-1 ? "o" : ""
 nnoremap <leader>z zMzvzz
 
 " Insert current date and/or time in insert mode {{{2
-inoremap Dt =strftime("%-m/%-d/%y %-H:%M:%S")<CR><Space>
-inoremap Dd =strftime("%-m/%-d/%y")<CR><Space>
-inoremap Tt =strftime("%-H:%M:%S")<CR><Space>
+inoremap Dt =strftime("%m/%d/%y %H:%M:%S")<CR><Space>
+inoremap Dd =strftime("%m/%d/%y")<CR><Space>
+inoremap Tt =strftime("%H:%M:%S")<CR><Space>
+inoremap Dj * **=strftime("%d")<CR>**:<Space>
 
 " Fix the closest prior misspelling {{{2
 inoremap <F2> ★<Esc>[s1z=/★<CR>s
