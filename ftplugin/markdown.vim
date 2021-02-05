@@ -8,14 +8,6 @@ if confirm("Launch previewer? ", "&Yes\n&no") != 1
     finish
 endif
 
-function! MarkdownStartBrowser(timerID)
-    if has("win32")
-        call system('cmd /c start "" http://localhost:'. g:markdownPort)
-    elseif has("mac")
-        call system('open -g http://localhost:' . g:markdownPort)
-    endif
-endfunction
-
 function! s:Refresh(buffer)
     call uniq(sort(add(s:markdownBuffers,a:buffer)))
     call writefile(getline(1,line('$')), s:markdownTempFile)
@@ -28,15 +20,13 @@ function! s:CleanUp(buffer)
     endif
 endfunction
 
-let g:markdownPort = get(g:, 'markdownPort', 40500)
 let s:markdownBuffers = get(s:, 'markdownBuffers', [])
 let s:markdownTempFile = get(s:, 'markdownTempFile', tempname())
 call s:Refresh(string(bufnr('%')))
 
 if !exists("s:markdownJob") || jobwait([s:markdownJob],0)[0] != -1
     let password = exists("$GRIP_TOKEN") ? printf('--pass %s', $GRIP_TOKEN) : ''
-    let s:markdownJob = jobstart(printf('grip --title=MarkdownPreview %s %s %d', password, s:markdownTempFile, g:markdownPort))
-    call timer_start(1000, 'MarkdownStartBrowser')
+    let s:markdownJob = jobstart(printf('grip -b --title=MarkdownPreview %s %s', password, s:markdownTempFile))
 endif
 
 autocmd BufEnter,BufWinEnter,CursorHold,CursorHoldI <buffer> call s:Refresh(expand('<abuf>'))
