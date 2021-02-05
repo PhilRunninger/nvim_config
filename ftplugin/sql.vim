@@ -80,12 +80,12 @@ endfunction
 function! s:RunQuery(align)
     let s:sqlResults = bufnr('SQL-Results', 1)
     execute 'silent buffer ' . s:sqlResults
-    normal! ggdG _
-    execute 'r! sqlcmd -S ' . g:sqlServer . ' -d ' . g:sqlDatabase . ' -s"|" -W -i ' . s:sqlTempFile
-    1delete _
+    silent normal! ggdG _
+    silent execute 'r! sqlcmd -S ' . g:sqlServer . ' -d ' . g:sqlDatabase . ' -s"|" -W -i ' . s:sqlTempFile
+    silent 1delete _
     call s:JoinLines()
     call s:AlignColumns(a:align)
-    setlocal buftype=nofile noswapfile nowrap ft=csv
+    silent setlocal buftype=nofile noswapfile nowrap ft=csv
 endfunction
 
 function! s:JoinLines()
