@@ -233,6 +233,9 @@ augroup jumpToLastKnownLocation " Put cursor in the same place you left it.   {{
 augroup END
 
 " Settings for managed plugins {{{1
+    " CSV   {{{2
+    let g:no_csv_maps = 1
+
     " COC   {{{2
     set shortmess+=c
     set signcolumn=yes
