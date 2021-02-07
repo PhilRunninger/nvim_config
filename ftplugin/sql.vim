@@ -114,7 +114,7 @@ function! s:AlignColumns(align)
         let l:end = search('^\s*(\d\+ rows affected)', 'cW')
         while l:end > 0
             if l:end - l:start < get(g:, 'sqlAlignLimit', 50)
-                silent execute l:start . ',' . (l:end-1) . 'call easy_align#align(0,0,"command","* |ar")'
+                silent execute l:start . ',' . (l:end-1) . 'call easy_align#align(0,0,"command","* |")'
             endif
             let l:start = l:end+1
             call cursor(l:start,1)
