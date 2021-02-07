@@ -89,20 +89,22 @@ function! s:RunQuery(align)
 endfunction
 
 function! s:JoinLines()
-    " If a column contains newlines, records are split into multiple rows, and
-    " sqlcmd marks the end of records with a ^M character (ASCII 13), Test
-    " line 1 to see if we can bypass joining the lines back together.
-    if getline(1) !~ nr2char(13).'$'
-        return
-    endif
-
-    " Join all lines that don't end with ^M to the next line.
-    while search('[^'.nr2char(13).']$', 'cw')
-        execute 'global/[^'.nr2char(13).']$/join'
+    let l:start = 1
+    while l:start < line('$')
+        call cursor(l:start,1)
+        let l:end = search('^\s*(\d\+ rows affected)', 'cW') - 2
+        let l:count = strchars(substitute(getline(l:start), '[^|]', '', 'g'))
+        while l:start < l:end
+            if strchars(substitute(getline(l:start), '[^|]', '', 'g')) < l:count
+                execute l:start.','.(l:start+1).'join!'
+                let l:end -= 1
+            else
+                let l:start += 1
+            endif
+        endwhile
+        let l:start = l:end + 3
     endwhile
-
-    " Clean up the buffer by removing the ^M characters.
-    silent execute '%s/'.nr2char(13).'$//'
+    silent execute '%s/'.nr2char(13).'$//e'
 endfunction
 
 function! s:AlignColumns(align)
