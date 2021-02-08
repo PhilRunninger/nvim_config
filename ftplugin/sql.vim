@@ -93,11 +93,17 @@ function! s:JoinLines()
     while l:start < line('$')
         call cursor(l:start,1)
         let l:end = search('^\s*(\d\+ rows affected)', 'cW') - 2
-        let l:count = strchars(substitute(getline(l:start), '[^|]', '', 'g'))
+        let l:required = strchars(substitute(getline(l:start), '[^|]', '', 'g'))
         while l:start < l:end
-            if strchars(substitute(getline(l:start), '[^|]', '', 'g')) < l:count
-                execute l:start.','.(l:start+1).'join!'
-                let l:end -= 1
+            let l:rows = 0
+            let l:count = strchars(substitute(getline(l:start), '[^|]', '', 'g'))
+            while l:count < l:required
+                let l:rows += 1
+                let l:count += strchars(substitute(getline(l:start + l:rows), '[^|]', '', 'g'))
+            endwhile
+            if l:rows > 0
+                execute l:start.','.(l:start + l:rows).'join!'
+                let l:end -= l:rows
             else
                 let l:start += 1
             endif
@@ -113,7 +119,7 @@ function! s:AlignColumns(align)
         call cursor(l:start,1)
         let l:end = search('^\s*(\d\+ rows affected)', 'cW')
         while l:end > 0
-            if l:end - l:start < get(g:, 'sqlAlignLimit', 50)
+            if l:end - l:start - 3 <= get(g:, 'sqlAlignLimit', 50)
                 silent execute l:start . ',' . (l:end-1) . 'call easy_align#align(0,0,"command","* |")'
             endif
             let l:start = l:end+1
