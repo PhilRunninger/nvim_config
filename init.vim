@@ -296,15 +296,8 @@ augroup END
     endif
     let g:firenvim_config = {'globalSettings': {'alt':'all'}, 'localSettings': {}}
     let fc = g:firenvim_config['localSettings']
-    let fc['.*'] = {'cmdline':'neovim', 'priority':0, 'selector':'textarea', 'takeover':'once'}
-    let fc['https?://www\.facebook\.com'] = {'takeover':'never', 'priority':1}
-    let fc['https?://docs\.google\.com/spreadsheets'] = {'takeover':'never', 'priority':1}
-    let fc['https?://docs\.desmos\.com'] = {'takeover':'never', 'priority':1}
-    let fc['https?://docs\.geogebra\.org'] = {'takeover':'never', 'priority':1}
-    let fc['https?://vi\.stackexchange\.com'] = {'takeover':'never', 'priority':1}
-    let fc['https?://stackoverflow\.com'] = {'takeover':'never', 'priority':1}
-    let fc['https?://serverfault\.com'] = {'takeover':'never', 'priority':1}
-    let fc['https?://superuser\.com'] = {'takeover':'never', 'priority':1}
+    let fc['.*'] = {'cmdline':'neovim', 'priority':0, 'selector':'textarea', 'takeover':'never'}
+    let fc['https?://github.com'] = {'takeover':'once', 'priority':1}
 
     " MinTree   {{{2
     let g:MinTreeOpen='l'
