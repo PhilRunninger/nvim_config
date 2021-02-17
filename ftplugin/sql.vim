@@ -6,24 +6,13 @@
 " Shift+F5 - submit the paragraph to SQLServer
 " F5 - submit the visual selection to SQLServer
 " Ctrl+F5 - use sp_help to describe the table under the cursor
-" <leader>F5 - update server and database name.
+" <leader>F5 - select/create sqlcmd parameter set for logins
 " F5 (in the SQl-Results buffer) - rerun the same query
 "
-" You can set g:sqlServer and g:sqlDatabase an another file of your vim setup
-" (like ~/.vim/after/ftplugin/sql.vim) so you don't have to enter it for
-" every session. In that file you can also specify g:sqlAlignLimit to control
-" when to stop aligning query results into columns; that becomes a lengthy
-" process with many rows.
-"
-" g:sqlServer and g:sqlDatabase can be set in the SQL file as well. Use a
-" comment, formatted like one of these, move your cursor to the line, and
-" press <leader>F5.
-"       -- -S server-name -d database-name
-"       -- sqlServer:server-name sqlDatabase:database-name
-"
-" Usernames and passwords are not necessary in my current environment, as we
-" use Windows authentication. Adding them to the mix shouldn't be too hard
-" though.
+" sqlcmd parameters are stored as a Vim dictionary in the .sqlParmeters file
+" in this file's folder. It is .gitignored to keep that information private.
+" The values in the key-value pairs contain whatever parameters are needed to
+" connect to the database, for example: `-S server -d database`
 "
 " Prerequisites
 "   - sqlcmd command-line utility (comes with SSMS or maybe Visual Studio)
@@ -35,7 +24,7 @@
 "         https://github.com/chrisbra/csv.vim
 
 function! s:SQLRun(object)
-    if !exists('g:sqlServer') || !exists('g:sqlDatabase')
+    if !exists('s:sqlParameters')
         call s:GetConnectionInfo()
     endif
 
@@ -43,17 +32,23 @@ function! s:SQLRun(object)
     call s:RunQuery(a:object != 'word')
 endfunction
 
-function! s:SQLInit(connection)
-    let l:server = matchstr(a:connection, '\s\(-S\|sqlServer:\)\s*\zs\S\+')
-    let l:database = matchstr(a:connection, '\s\(-d\|sqlDatabase:\)\s*\zs\S\+')
-    let g:sqlServer = empty(l:server) ? g:sqlServer : l:server
-    let g:sqlDatabase = empty(l:database) ? g:sqlDatabase : l:database
-    call s:GetConnectionInfo()
-endfunction
-
 function! s:GetConnectionInfo()
-    let g:sqlServer = input('Server Name: ', get(g:, 'sqlServer', ''))
-    let g:sqlDatabase = input('Database Name: ', get(g:, 'sqlDatabase', ''))
+    let l:choice = 0
+    let l:connections = {}
+    if filereadable(s:parametersFile)
+        execute 'let l:connections = ' . readfile(s:parametersFile)[0]
+        let l:list = map(range(1,len(keys(l:connections))), {_,i -> i . ') ' . keys(l:connections)[i-1] . ': ' . l:connections[keys(l:connections)[i-1]]})
+        let l:choice = inputlist(insert(l:list,'Select a parameter set. Cancel to create a new one.',0))
+    endif
+
+    if !empty(l:connections) && l:choice > 0 && l:choice <= len(keys(l:connections))
+        let s:sqlParameters = l:connections[keys(l:connections)[l:choice-1]]
+    else
+        let l:name = input('Enter a name for the connection: ')
+        let s:sqlParameters = input('Enter the slqcmd parameters to use: ')
+        let l:connections[l:name] = s:sqlParameters
+        call writefile([string(l:connections)], s:parametersFile)
+    endif
 endfunction
 
 function! s:WriteTempFile(object)
@@ -81,7 +76,7 @@ function! s:RunQuery(align)
     let s:sqlResults = bufnr('SQL-Results', 1)
     execute 'silent buffer ' . s:sqlResults
     silent normal! ggdG _
-    silent execute 'r! sqlcmd -S ' . g:sqlServer . ' -d ' . g:sqlDatabase . ' -s"|" -W -i ' . s:sqlTempFile
+    silent execute 'r! sqlcmd ' . s:sqlParameters . ' -s"|" -W -i ' . s:sqlTempFile
     silent 1delete _
     call s:JoinLines()
     call s:AlignColumns(a:align)
@@ -131,12 +126,13 @@ function! s:AlignColumns(align)
 endfunction
 
 let s:sqlTempFile = get(s:, 'sqlTempFile', tempname())
+let s:parametersFile = expand('<sfile>:p:h').'/.sqlParameters'
 
 nnoremap <buffer> <F5> :call <SID>SQLRun('file')<CR>
 nnoremap <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
 vnoremap <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
 nnoremap <buffer> <C-F5> :call <SID>SQLRun('word')<CR>
-nnoremap <buffer> <leader><F5> :call <SID>SQLInit(getline(line('.')))<CR>
+nnoremap <buffer> <leader><F5> :call <SID>GetConnectionInfo()<CR>
 
 augroup SQLResultsMapping
     autocmd!
