@@ -9,7 +9,7 @@
 " <leader>F5 - select/create sqlcmd parameter set for logins
 " F5 (in the SQl-Results buffer) - rerun the same query
 "
-" sqlcmd parameters are stored as a Vim dictionary in the .sqlParmeters file
+" sqlcmd parameters are stored as a Vim dictionary in the .sqlParameters file
 " in this file's folder. It is .gitignored to keep that information private.
 " The values in the key-value pairs contain whatever parameters are needed to
 " connect to the database, for example: `-S server -d database`
@@ -43,11 +43,13 @@ function! s:GetConnectionInfo()
 
     if !empty(l:connections) && l:choice > 0 && l:choice <= len(keys(l:connections))
         let s:sqlParameters = l:connections[keys(l:connections)[l:choice-1]]
+        execute 'setlocal statusline=SQL\ Parameter\ Set:\ ' . escape(keys(l:connections)[l:choice-1], ' ')
     else
         let l:name = input('Enter a name for the connection: ')
         let s:sqlParameters = input('Enter the slqcmd parameters to use: ')
         let l:connections[l:name] = s:sqlParameters
         call writefile([string(l:connections)], s:parametersFile)
+        execute 'setlocal statusline=SQL\ Parameter\ Set:\ ' . escape(l:name, ' ')
     endif
 endfunction
 
@@ -88,6 +90,9 @@ function! s:JoinLines()
     while l:start < line('$')
         call cursor(l:start,1)
         let l:end = search('^\s*(\d\+ rows affected)', 'cW') - 2
+        if l:end < l:start
+            break
+        endif
         let l:required = strchars(substitute(getline(l:start), '[^|]', '', 'g'))
         while l:start < l:end
             let l:rows = 0
