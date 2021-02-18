@@ -354,7 +354,7 @@ augroup END
     nnoremap ga <Cmd>UnicodeName<CR>
     inoremap <C-K> <Esc>:UnicodeSearch!<space>
 
-" Color Settings   {{{1
+" Color and Statusline Settings   {{{1
 syntax on                           " Turn syntax highlighting on.
 
 augroup setStatuslineColor    " Change statusline color, depending on mode.
@@ -391,39 +391,11 @@ function! s:StatuslineColor(insertMode)
     redraw!
 endfunction
 
-" Status Line Settings   {{{1
-augroup setStatuslineText    " Change statusline text, depending on mode.
-    autocmd!
-    autocmd VimEnter,WinEnter,BufWinEnter,BufWritePost * call <SID>StatusLineText()
-augroup END
-
-function! Status(winnum)
-    let l:statusline=""
-    if a:winnum == winnr()
-        let l:statusline.="%3v"
-        let l:statusline.="\ %#GitBranch#%(\ %{fugitive#head(8)}\ %)%*"
-        let l:statusline.="\ %{&ft}"
-        let l:statusline.="\ %{&ff}"
-        let l:statusline.="%(\ %R%m%)"
-        let l:statusline.="\ %f"
-        let l:statusline.="%="
-        let l:statusline.="%#Session#%(\ %{SessionNameStatusLineFlag()}\ %)%*"
-    else
-        let l:statusline.="%(\ %R%m%)"
-        let l:statusline.="\ %F"
-    endif
-    return l:statusline
-endfunction
-
-function! s:StatusLineText()
-    let l:exempt  = ['']                        " No name (Quickfix/Location list, new file, etc.)
-    let l:exempt += ['.*[/\\]doc[/\\]\w*\.txt'] " Help files
-    let l:exempt += ['=MinTree=']               " MinTree
-    let l:exempt += ['NERD_tree_\d\+']          " NERDTree
-    let l:exempt += ['=Buffers=']               " BufSelect list
-    for nr in range(1, winnr('$'))
-        if bufname(winbufnr(nr)) !~# '^\(' . join(l:exempt,'\|') . '\)$'
-            call setwinvar(nr, '&statusline', '%!Status('.nr.')')
-        endif
-    endfor
-endfunction
+set statusline=%3v
+set statusline+=\ %#GitBranch#%(\ %{fugitive#head(8)}\ %)%*
+set statusline+=\ %{&ft}
+set statusline+=\ %{&ff}
+set statusline+=%(\ %r%m%)
+set statusline+=\ %f
+set statusline+=%=
+set statusline+=%#Session#%(\ %{SessionNameStatusLineFlag()}\ %)%*
