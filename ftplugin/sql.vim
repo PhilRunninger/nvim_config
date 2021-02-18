@@ -1,30 +1,29 @@
-" This script gives you the commands and functions necessary to run SQLServer
+" This script gives you the mappings and functions necessary to run SQLServer
 " queries (and even DML and DDL statements) from within Vim. The following
 " key mappings are provided:
 "
 " F5 - submit the whole file to SQLServer
+" F5 (in visual mode) - submit the visual selection to SQLServer
 " Shift+F5 - submit the paragraph to SQLServer
-" F5 - submit the visual selection to SQLServer
 " Ctrl+F5 - use sp_help to describe the table under the cursor
 " <leader>F5 - select/create sqlcmd parameter set for logins
-" F5 (in the SQl-Results buffer) - rerun the same query
+" F5 (in the query results buffer) - rerun the same query
 "
 " sqlcmd parameters are stored as a Vim dictionary in the .sqlParameters file
 " in this file's folder. It is .gitignored to keep that information private.
-" The values in the key-value pairs contain whatever parameters are needed to
-" connect to the database, for example: `-S server -d database`
+" The dictionary's values contain whatever parameters are needed to connect
+" to the database, for example: `-S server -d database -U userid -P password`
 "
-" Prerequisites
+" Prerequisite and Bonuses
 "   - sqlcmd command-line utility (comes with SSMS or maybe Visual Studio)
-"   - EasyAlign is a handy plugin for aligning the text into columns. This is
-"     nice, but not necessary.
+"   - EasyAlign aligns the text into columns, but only if it's installed.
 "         https://github.com/junegunn/vim-easy-align
 "   - csv.vim is another nice plugin that, among MANY other things, provides
 "     nice highlighting for the columns of data. Again, nice, but not needed.
 "         https://github.com/chrisbra/csv.vim
 
 function! s:SQLRun(object)
-    if !exists('s:sqlParameters')
+    if !exists('b:sqlName')
         call s:GetConnectionInfo()
     endif
 
@@ -34,22 +33,16 @@ endfunction
 
 function! s:GetConnectionInfo()
     let l:choice = 0
-    let l:connections = {}
-    if filereadable(s:parametersFile)
-        execute 'let l:connections = ' . readfile(s:parametersFile)[0]
-        let l:list = map(range(1,len(keys(l:connections))), {_,i -> i . ') ' . keys(l:connections)[i-1] . ': ' . l:connections[keys(l:connections)[i-1]]})
-        let l:choice = inputlist(insert(l:list,'Select a parameter set. Cancel to create a new one.',0))
-    endif
+    let l:prompt = ['Select a parameter set. Cancel to create a new one.']
+    let l:prompt += map(range(1,len(keys(s:sqlParameterSets))), {_,i -> i . ') ' . keys(s:sqlParameterSets)[i-1] . ': ' . s:sqlParameterSets[keys(s:sqlParameterSets)[i-1]]})
+    let l:choice = inputlist(l:prompt)
 
-    if !empty(l:connections) && l:choice > 0 && l:choice <= len(keys(l:connections))
-        let s:sqlParameters = l:connections[keys(l:connections)[l:choice-1]]
-        execute 'setlocal statusline=SQL\ Parameter\ Set:\ ' . escape(keys(l:connections)[l:choice-1], ' ')
+    if !empty(s:sqlParameterSets) && l:choice > 0 && l:choice <= len(keys(s:sqlParameterSets))
+        let b:sqlName = keys(s:sqlParameterSets)[l:choice-1]
     else
-        let l:name = input('Enter a name for the connection: ')
-        let s:sqlParameters = input('Enter the slqcmd parameters to use: ')
-        let l:connections[l:name] = s:sqlParameters
-        call writefile([string(l:connections)], s:parametersFile)
-        execute 'setlocal statusline=SQL\ Parameter\ Set:\ ' . escape(l:name, ' ')
+        let b:sqlName = input('Enter a name for the connection: ')
+        let s:sqlParameterSets[b:sqlName] = input('Enter the slqcmd parameters to use: ')
+        call writefile([string(s:sqlParameterSets)], s:sqlParametersFile)
     endif
 endfunction
 
@@ -57,32 +50,34 @@ function! s:WriteTempFile(object)
     let l:iskeyword = &iskeyword
     let l:z = @z
     if a:object == 'paragraph'
-        execute "'{,'}write! " . s:sqlTempFile
+        execute "'{,'}write! " . b:sqlTempFile
     elseif a:object == 'selection'
         normal! gv"zy
-        call writefile(split(@z,'\n'), s:sqlTempFile)
+        call writefile(split(@z,'\n'), b:sqlTempFile)
     elseif a:object == 'word'
         set iskeyword+=46
         set iskeyword+=91
         set iskeyword+=93
         normal! "zyiw
-        call writefile(["sp_help '" . @z ."';"], s:sqlTempFile)
+        call writefile(["sp_help '" . @z ."';"], b:sqlTempFile)
     else
-        execute "1,$write! " . s:sqlTempFile
+        call writefile(getline(1,line('$')), b:sqlTempFile)
     endif
     let &iskeyword = l:iskeyword
     let @z = l:z
 endfunction
 
 function! s:RunQuery(align)
-    let s:sqlResults = bufnr('SQL-Results', 1)
+    let l:command = 'sqlcmd ' . s:sqlParameterSets[b:sqlName] . ' -s"|" -W -i ' . b:sqlTempFile
+    let s:sqlResults = bufnr('SQL Query Results: ' . b:sqlName, 1)
     execute 'silent buffer ' . s:sqlResults
     silent normal! ggdG _
-    silent execute 'r! sqlcmd ' . s:sqlParameters . ' -s"|" -W -i ' . s:sqlTempFile
+    silent execute 'r! ' . l:command
     silent 1delete _
     call s:JoinLines()
     call s:AlignColumns(a:align)
-    silent setlocal buftype=nofile noswapfile nowrap ft=csv
+    silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv statusline=%f
+    execute 'nnoremap <buffer> <F5> <Cmd>:buffer ' . bufnr('#') . '\|call <SID>RunQuery(1)<CR>'
 endfunction
 
 function! s:JoinLines()
@@ -130,16 +125,21 @@ function! s:AlignColumns(align)
     silent execute '%s/^$\n^\s*\((\d\+ rows affected)\)/\1\r/e'
 endfunction
 
-let s:sqlTempFile = get(s:, 'sqlTempFile', tempname())
-let s:parametersFile = expand('<sfile>:p:h').'/.sqlParameters'
+function! SqlStatusLine()
+    return exists('b:sqlName') ? b:sqlName : '<not selected>'
+endfunction
+
+setlocal statusline=Parameter\ Set:\ %{SqlStatusLine()}\ \|\ %f
+
+let b:sqlTempFile = tempname()
+let s:sqlParametersFile = expand('<sfile>:p:h').'/.sqlParameters'
+let s:sqlParameterSets = {}
+if filereadable(s:sqlParametersFile)
+    execute 'let s:sqlParameterSets = ' . readfile(s:sqlParametersFile)[0]
+endif
 
 nnoremap <buffer> <F5> :call <SID>SQLRun('file')<CR>
 nnoremap <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
 vnoremap <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
 nnoremap <buffer> <C-F5> :call <SID>SQLRun('word')<CR>
 nnoremap <buffer> <leader><F5> :call <SID>GetConnectionInfo()<CR>
-
-augroup SQLResultsMapping
-    autocmd!
-    autocmd BufEnter SQL-Results nnoremap <buffer> <F5> <Cmd>:call <SID>RunQuery(1)<CR>
-augroup END
