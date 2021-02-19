@@ -33,15 +33,16 @@ endfunction
 
 function! s:GetConnectionInfo()
     let l:choice = 0
-    let l:prompt = ['Select a parameter set. Cancel to create a new one.']
-    let l:prompt += map(range(1,len(keys(s:sqlParameterSets))), {_,i -> i . ') ' . keys(s:sqlParameterSets)[i-1] . ': ' . s:sqlParameterSets[keys(s:sqlParameterSets)[i-1]]})
-    let l:choice = inputlist(l:prompt)
+        let l:prompt = ['Select a parameter set. Cancel to create a new one.']
+        let l:names = sort(keys(s:sqlParameterSets))
+        let l:prompt += map(range(1,len(l:names)), {_,i -> i . ') ' . l:names[i-1] . ': ' . s:sqlParameterSets[l:names[i-1]]})
+        let l:choice = inputlist(l:prompt)
 
-    if !empty(s:sqlParameterSets) && l:choice > 0 && l:choice <= len(keys(s:sqlParameterSets))
-        let b:sqlName = keys(s:sqlParameterSets)[l:choice-1]
+    if !empty(s:sqlParameterSets) && l:choice > 0 && l:choice <= len(l:names)
+        let b:sqlName = l:names[l:choice-1]
     else
         let b:sqlName = input('Enter a name for the connection: ')
-        let s:sqlParameterSets[b:sqlName] = input('Enter the slqcmd parameters to use: ')
+        let s:sqlParameterSets[b:sqlName] = input('Enter the slqcmd parameters "' . b:sqlName . '" will use: ')
         call writefile([string(s:sqlParameterSets)], s:sqlParametersFile)
     endif
 endfunction
