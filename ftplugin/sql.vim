@@ -33,10 +33,12 @@ endfunction
 
 function! s:GetConnectionInfo()
     let l:choice = 0
+    if !empty(s:sqlParameterSets)
         let l:prompt = ['Select a parameter set. Cancel to create a new one.']
         let l:names = sort(keys(s:sqlParameterSets))
         let l:prompt += map(range(1,len(l:names)), {_,i -> i . ') ' . l:names[i-1] . ': ' . s:sqlParameterSets[l:names[i-1]]})
         let l:choice = inputlist(l:prompt)
+    endif
 
     if !empty(s:sqlParameterSets) && l:choice > 0 && l:choice <= len(l:names)
         let b:sqlName = l:names[l:choice-1]
