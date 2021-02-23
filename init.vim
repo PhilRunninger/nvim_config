@@ -31,8 +31,6 @@ packadd! unicode.vim           " git@github.com:chrisbra/unicode.vim.git
 packadd! scratch.vim           " git@github.com:mtth/scratch.vim
 packadd! tabline.vim           " git@github.com:mkitt/tabline.vim.git
 packadd! presenting.vim        " git@github.com:sotte/presenting.vim.git
-" Firefox extension to embed Neovim.
-packadd! firenvim              " git@github.com:glacambre/firenvim.git
 
 " Must come AFTER the :packadd! calls above; otherwise, the contents of package 'ftdetect'
 " directories won't be evaluated.
@@ -288,16 +286,6 @@ augroup END
 
     " Highlight the symbol and its references when holding the cursor.
     autocmd CursorHold * silent call CocActionAsync('highlight')
-
-    " Firenvim   {{{2
-    if exists('g:started_by_firenvim')
-        set linebreak nonumber spell signcolumn=no noruler laststatus=0
-        set guifont=Cascadia\ Code\ PL:h10
-    endif
-    let g:firenvim_config = {'globalSettings': {'alt':'all'}, 'localSettings': {}}
-    let fc = g:firenvim_config['localSettings']
-    let fc['.*'] = {'cmdline':'neovim', 'priority':0, 'selector':'textarea', 'takeover':'never'}
-    let fc['https?://github.com'] = {'takeover':'once', 'priority':1}
 
     " MinTree   {{{2
     let g:MinTreeOpen='l'
