@@ -31,14 +31,12 @@ imap <buffer> <S-F5> <Esc><S-F5>
 imap <buffer> <C-F5> <Esc><C-F5>
 
 function! s:SQLRun(object)
-    let l:start = reltime()
     if !exists('b:sqlName')
         call s:GetConnectionInfo()
     endif
 
     call s:WriteTempFile(a:object)
     call s:RunQuery()
-    echo 'Finished in ' .  split(reltimestr(reltime(start)))[0] . ' seconds.'
 endfunction
 
 let s:sqlParametersFile = expand('<sfile>:p:h').'/.sqlParameters'
@@ -89,18 +87,23 @@ function! s:WriteTempFile(object)
 endfunction
 
 function! s:RunQuery()
+    let l:start = reltime()
     let l:command = 'sqlcmd ' . s:sqlParameterSets[b:sqlName] . ' -s"|" -W -i ' . b:sqlTempFile
     let s:sqlResults = bufnr('SQL Query Results: ' . b:sqlName, 1)
     execute 'silent buffer ' . s:sqlResults
     silent normal! ggdG _
+    echon 'Querying...  '
     redraw!
     silent execute 'r! ' . l:command
+    echon 'Fixing line breaks...  '
     redraw!
     call s:JoinLines()
+    echon 'Aligning columns...  '
     redraw!
     call s:AlignColumns()
     silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv statusline=%f
     execute 'nnoremap <buffer> <F5> <Cmd>:buffer ' . bufnr('#') . '\|call <SID>RunQuery()<CR>'
+    echon 'Finished in ' .  split(reltimestr(reltime(start)))[0] . ' seconds.'
 endfunction
 
 function! s:JoinLines()
