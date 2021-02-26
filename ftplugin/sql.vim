@@ -1,18 +1,17 @@
-" This script gives you the mappings and functions necessary to run SQLServer
-" queries (and even DML and DDL statements) from within Vim. The following
-" key mappings are provided:
+" This script gives you the abliity to run SQLServer queries from within Vim.
+" The following key mappings are provided:
 "
 " F5 - submit the whole file to SQLServer
 " F5 (in visual mode) - submit the visual selection to SQLServer
 " Shift+F5 - submit the paragraph to SQLServer
 " Ctrl+F5 - use sp_help to describe the table under the cursor
-" <leader>F5 - select/create sqlcmd parameter set for logins
+" <leader>F5 - select or create new sqlcmd parameter set for command line
 " F5 (in the query results buffer) - rerun the same query
 "
 " sqlcmd parameters are stored as a Vim dictionary in the .sqlParameters file
 " in this file's folder. It is .gitignored to keep that information private.
 " The dictionary's values contain whatever parameters are needed to connect
-" to the database, for example: `-S server -d database -U userid -P password`
+" to the database, such as: `-S server -d database -U userid -P password`
 "
 " Prerequisite and Bonuses
 "   - sqlcmd command-line utility (comes with SSMS or maybe Visual Studio)
@@ -32,12 +31,14 @@ imap <buffer> <S-F5> <Esc><S-F5>
 imap <buffer> <C-F5> <Esc><C-F5>
 
 function! s:SQLRun(object)
+    let l:start = reltime()
     if !exists('b:sqlName')
         call s:GetConnectionInfo()
     endif
 
     call s:WriteTempFile(a:object)
     call s:RunQuery()
+    echo 'Finished in ' .  split(reltimestr(reltime(start)))[0] . ' seconds.'
 endfunction
 
 let s:sqlParametersFile = expand('<sfile>:p:h').'/.sqlParameters'
