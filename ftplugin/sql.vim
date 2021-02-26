@@ -50,23 +50,23 @@ function! s:GetConnectionInfo()
 endfunction
 
 function! s:WriteTempFile(object)
-    let l:iskeyword = &iskeyword
     let l:z = @z
     if a:object == 'paragraph'
-        execute "'{,'}write! " . b:sqlTempFile
+        call writefile(getline(line("'{"),line("'}")), b:sqlTempFile)
     elseif a:object == 'selection'
         normal! gv"zy
         call writefile(split(@z,'\n'), b:sqlTempFile)
     elseif a:object == 'word'
+        let l:iskeyword = &iskeyword
         set iskeyword+=46
         set iskeyword+=91
         set iskeyword+=93
         normal! "zyiw
+        let &iskeyword = l:iskeyword
         call writefile(["sp_help '" . @z ."';"], b:sqlTempFile)
     else
         call writefile(getline(1,line('$')), b:sqlTempFile)
     endif
-    let &iskeyword = l:iskeyword
     let @z = l:z
 endfunction
 
