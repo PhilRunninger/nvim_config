@@ -28,7 +28,7 @@ function! s:SQLRun(object)
     endif
 
     call s:WriteTempFile(a:object)
-    call s:RunQuery(a:object != 'word')
+    call s:RunQuery()
 endfunction
 
 function! s:GetConnectionInfo()
@@ -70,21 +70,23 @@ function! s:WriteTempFile(object)
     let @z = l:z
 endfunction
 
-function! s:RunQuery(align)
+function! s:RunQuery()
     let l:command = 'sqlcmd ' . s:sqlParameterSets[b:sqlName] . ' -s"|" -W -i ' . b:sqlTempFile
     let s:sqlResults = bufnr('SQL Query Results: ' . b:sqlName, 1)
     execute 'silent buffer ' . s:sqlResults
     silent normal! ggdG _
+    redraw!
     silent execute 'r! ' . l:command
-    silent 1delete _
+    redraw!
     call s:JoinLines()
-    call s:AlignColumns(a:align)
+    redraw!
+    call s:AlignColumns()
     silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv statusline=%f
-    execute 'nnoremap <buffer> <F5> <Cmd>:buffer ' . bufnr('#') . '\|call <SID>RunQuery(1)<CR>'
+    execute 'nnoremap <buffer> <F5> <Cmd>:buffer ' . bufnr('#') . '\|call <SID>RunQuery()<CR>'
 endfunction
 
 function! s:JoinLines()
-    let l:start = 1
+    let l:start = 2
     while l:start < line('$')
         call cursor(l:start,1)
         let l:end = search('^\s*(\d\+ rows affected)', 'cW') - 2
@@ -111,21 +113,23 @@ function! s:JoinLines()
     silent execute '%s/'.nr2char(13).'$//e'
 endfunction
 
-function! s:AlignColumns(align)
-    if a:align && exists(':EasyAlign')
-        let l:start = 1
-        call cursor(l:start,1)
-        let l:end = search('^\s*(\d\+ rows affected)', 'cW')
-        while l:end > 0
-            if l:end - l:start - 3 <= get(g:, 'sqlAlignLimit', 50)
-                silent execute l:start . ',' . (l:end-1) . 'call easy_align#align(0,0,"command","* |")'
+function! s:AlignColumns()
+    if exists(':EasyAlign')
+        silent execute '%s/^$\n^\s*\((\d\+ rows affected)\)/\r\1\r/e'
+        silent execute '%s/^\s\+$//e'
+        normal! gg
+        let l:start = search('^.\+$','W')
+        while l:start > 0
+            let l:end = line("'}") - 1
+            if l:end - l:start - 1 <= get(g:, 'sqlAlignLimit', 100)
+                silent execute l:start . ',' . l:end . 'call easy_align#align(0,0,"command","* |")'
             endif
-            let l:start = l:end+1
-            call cursor(l:start,1)
-            let l:end = search('^\s*(\d\+ rows affected)', 'W')
+            normal! }
+            let l:start = search('^.\+$','W')
         endwhile
     endif
-    silent execute '%s/^$\n^\s*\((\d\+ rows affected)\)/\1\r/e'
+    silent execute '%s/^$\n^\s*\((\d\+ rows affected)\)\(\n^$\)\?/\1\r/e'
+    silent 1delete _
 endfunction
 
 function! SqlStatusLine()
