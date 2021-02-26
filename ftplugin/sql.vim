@@ -22,6 +22,15 @@
 "     nice highlighting for the columns of data. Again, nice, but not needed.
 "         https://github.com/chrisbra/csv.vim
 
+nnoremap <buffer> <F5> :call <SID>SQLRun('file')<CR>
+nnoremap <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
+vnoremap <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
+nnoremap <buffer> <C-F5> :call <SID>SQLRun('word')<CR>
+nnoremap <buffer> <leader><F5> :call <SID>GetConnectionInfo()<CR>
+imap <buffer> <F5> <Esc><F5>
+imap <buffer> <S-F5> <Esc><S-F5>
+imap <buffer> <C-F5> <Esc><C-F5>
+
 function! s:SQLRun(object)
     if !exists('b:sqlName')
         call s:GetConnectionInfo()
@@ -30,6 +39,12 @@ function! s:SQLRun(object)
     call s:WriteTempFile(a:object)
     call s:RunQuery()
 endfunction
+
+let s:sqlParametersFile = expand('<sfile>:p:h').'/.sqlParameters'
+let s:sqlParameterSets = {}
+if filereadable(s:sqlParametersFile)
+    execute 'let s:sqlParameterSets = ' . readfile(s:sqlParametersFile)[0]
+endif
 
 function! s:GetConnectionInfo()
     let l:choice = 0
@@ -48,6 +63,8 @@ function! s:GetConnectionInfo()
         call writefile([string(s:sqlParameterSets)], s:sqlParametersFile)
     endif
 endfunction
+
+let b:sqlTempFile = tempname()
 
 function! s:WriteTempFile(object)
     let l:z = @z
@@ -132,24 +149,8 @@ function! s:AlignColumns()
     silent 1delete _
 endfunction
 
+setlocal statusline=Parameter\ Set:\ %{SqlStatusLine()}\ \|\ %f
+
 function! SqlStatusLine()
     return exists('b:sqlName') ? b:sqlName : '<not selected>'
 endfunction
-
-setlocal statusline=Parameter\ Set:\ %{SqlStatusLine()}\ \|\ %f
-
-let b:sqlTempFile = tempname()
-let s:sqlParametersFile = expand('<sfile>:p:h').'/.sqlParameters'
-let s:sqlParameterSets = {}
-if filereadable(s:sqlParametersFile)
-    execute 'let s:sqlParameterSets = ' . readfile(s:sqlParametersFile)[0]
-endif
-
-nnoremap <buffer> <F5> :call <SID>SQLRun('file')<CR>
-nnoremap <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
-vnoremap <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
-nnoremap <buffer> <C-F5> :call <SID>SQLRun('word')<CR>
-nnoremap <buffer> <leader><F5> :call <SID>GetConnectionInfo()<CR>
-imap <buffer> <F5> <Esc><F5>
-imap <buffer> <S-F5> <Esc><S-F5>
-imap <buffer> <C-F5> <Esc><C-F5>
