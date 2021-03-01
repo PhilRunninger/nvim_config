@@ -59,6 +59,7 @@ set confirm                         " Ask what to do with unsave/read-only files
 set backspace=indent,eol,start      " How backspace works at start of line
 set ttimeoutlen=10                  " Time out time for key codes in milliseconds (Removes delay after <Esc> in Command mode.)
 set diffopt+=iwhite
+set mouse=a                         " Don't worry. I haven't gone crazy. It's for scrolling CoC's popup windows.
 let mapleader=' '                   " Character to use for <leader> mappings
 
 " Disable netrw
@@ -226,7 +227,7 @@ if !has('gui_running')       " make autoread work better in the terminal   {{{2
     augroup END
 endif
 
-augroup jumpToLastKnownLocation " Put cursor in the same place you left it.   {{{2
+augroup jumpToLastKnownLocation " Restart with cursor in the location from last session.   {{{2
     autocmd!
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif
 augroup END
