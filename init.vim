@@ -287,6 +287,7 @@ augroup END
     nnoremap <silent> <leader>f <Cmd>MinTreeFind<CR>
 
     " BufSelect   {{{2
+    let g:BufSelectKeyDeleteBuffer='w'
     let g:BufSelectKeyOpen='l'
     nnoremap <silent> <leader>b <Cmd>ShowBufferList<CR>
 
