@@ -1,3 +1,4 @@
+" Documentation {{{1
 " This script gives you the abliity to run SQLServer queries from within Vim.
 " The following key mappings are provided:
 "
@@ -21,6 +22,7 @@
 "     nice highlighting for the columns of data. Again, nice, but not needed.
 "         https://github.com/chrisbra/csv.vim
 
+" Mappings {{{1
 nnoremap <buffer> <F5> :call <SID>SQLRun('file')<CR>
 nnoremap <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
 vnoremap <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
@@ -30,42 +32,38 @@ imap <buffer> <F5> <Esc><F5>
 imap <buffer> <S-F5> <Esc><S-F5>
 imap <buffer> <C-F5> <Esc><C-F5>
 
-function! s:SQLRun(object)
-    if !exists('b:sqlName')
+function! s:SQLRun(object) " {{{1
+    if !exists('b:sqlParmKey')
         call s:GetConnectionInfo()
     endif
 
     call s:WriteTempFile(a:object)
+    call s:GotoResultsBuffer(expand('%:t:r'), b:sqlParmKey, b:sqlTempFile)
     call s:RunQuery()
 endfunction
 
-let s:sqlParametersFile = expand('<sfile>:p:h').'/.sqlParameters'
-let s:sqlParameterSets = {}
-if filereadable(s:sqlParametersFile)
-    execute 'let s:sqlParameterSets = ' . readfile(s:sqlParametersFile)[0]
-endif
 
-function! s:GetConnectionInfo()
+function! s:GetConnectionInfo() " {{{1
     let l:choice = 0
-    if !empty(s:sqlParameterSets)
+    if !empty(s:sqlParms)
         let l:prompt = ['Select a parameter set. Cancel to create a new one.']
-        let l:names = sort(keys(s:sqlParameterSets))
-        let l:prompt += map(range(1,len(l:names)), {_,i -> i . ') ' . l:names[i-1] . ': ' . s:sqlParameterSets[l:names[i-1]]})
+        let l:names = sort(keys(s:sqlParms))
+        let l:prompt += map(range(1,len(l:names)), {_,i -> i . ') ' . l:names[i-1] . ': ' . s:sqlParms[l:names[i-1]]})
         let l:choice = inputlist(l:prompt)
     endif
 
-    if !empty(s:sqlParameterSets) && l:choice > 0 && l:choice <= len(l:names)
-        let b:sqlName = l:names[l:choice-1]
+    if !empty(s:sqlParms) && l:choice > 0 && l:choice <= len(l:names)
+        let b:sqlParmKey = l:names[l:choice-1]
     else
-        let b:sqlName = input('Enter a name for the connection: ')
-        let s:sqlParameterSets[b:sqlName] = input('Enter the slqcmd parameters "' . b:sqlName . '" will use: ')
-        call writefile([string(s:sqlParameterSets)], s:sqlParametersFile)
+        let b:sqlParmKey = input('Enter a name for the connection: ')
+        let s:sqlParms[b:sqlParmKey] = input('Enter the slqcmd parameters "' . b:sqlParmKey . '" will use: ')
+        if b:sqlParmKey != ''
+            call writefile([string(s:sqlParms)], s:sqlParmsFile)
+        endif
     endif
 endfunction
 
-let b:sqlTempFile = tempname()
-
-function! s:WriteTempFile(object)
+function! s:WriteTempFile(object) " {{{1
     let l:z = @z
     if a:object == 'paragraph'
         call writefile(getline(line("'{"),line("'}")), b:sqlTempFile)
@@ -86,27 +84,38 @@ function! s:WriteTempFile(object)
     let @z = l:z
 endfunction
 
-function! s:RunQuery()
+function! s:GotoResultsBuffer(sqlQueryBuffer, sqlParmKey, sqlTempFile) " {{{1
+    let l:bufferName = a:sqlQueryBuffer . ' @ ' . a:sqlParmKey
+    let l:bufNum = bufnr(l:bufferName, 1)
+    let l:winnr = bufwinnr(l:bufferName)
+    if l:winnr == -1
+        execute 'silent split ' . l:bufferName
+        silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv statusline=Query\ Results:\ %f
+        nnoremap <buffer> <F5> <Cmd>call <SID>RunQuery()<CR>
+    else
+        execute l:winnr . 'wincmd w'
+    endif
+    let b:sqlParmKey = a:sqlParmKey
+    let b:sqlTempFile = a:sqlTempFile
+endfunction
+
+function! s:RunQuery() " {{{1
+    " We're in the Results buffer now.
     let l:start = reltime()
-    let l:command = 'sqlcmd ' . s:sqlParameterSets[b:sqlName] . ' -s"|" -W -i ' . b:sqlTempFile
-    let s:sqlResults = bufnr('SQL Query Results: ' . b:sqlName, 1)
-    execute 'silent buffer ' . s:sqlResults
     silent normal! ggdG _
     echon 'Querying...  '
     redraw!
-    silent execute 'r! ' . l:command
+    silent execute 'r! sqlcmd ' . s:sqlParms[b:sqlParmKey] . ' -s"|" -W -i ' . b:sqlTempFile
     echon 'Fixing line breaks...  '
     redraw!
     call s:JoinLines()
     echon 'Aligning columns...  '
     redraw!
     call s:AlignColumns()
-    silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv statusline=%f
-    execute 'nnoremap <buffer> <F5> <Cmd>:buffer ' . bufnr('#') . '\|call <SID>RunQuery()<CR>'
     echon 'Finished in ' .  split(reltimestr(reltime(start)))[0] . ' seconds.'
 endfunction
 
-function! s:JoinLines()
+function! s:JoinLines() " {{{1
     let l:start = 2
     while l:start < line('$')
         call cursor(l:start,1)
@@ -134,7 +143,7 @@ function! s:JoinLines()
     silent execute '%s/'.nr2char(13).'$//e'
 endfunction
 
-function! s:AlignColumns()
+function! s:AlignColumns() " {{{1
     if exists(':EasyAlign')
         silent execute '%s/^$\n^\s*\((\d\+ rows affected)\)/\r\1\r/e'
         silent execute '%s/^\s\+$//e'
@@ -153,8 +162,19 @@ function! s:AlignColumns()
     silent 1delete _
 endfunction
 
-setlocal statusline=Parameter\ Set:\ %{SqlStatusLine()}\ \|\ %f
-
-function! SqlStatusLine()
-    return exists('b:sqlName') ? b:sqlName : '<not selected>'
+function! SqlParameters() " {{{1
+    return exists('b:sqlParmKey') ? b:sqlParmKey : '<not selected>'
 endfunction
+
+" Start Here {{{1
+setlocal statusline=Parameter\ Set:\ %{SqlParameters()}\ \|\ %f
+
+let s:sqlParmsFile = expand('<sfile>:p:h').'/.sqlParameters'
+let s:sqlParms = {}
+if filereadable(s:sqlParmsFile)
+    execute 'let s:sqlParms = ' . readfile(s:sqlParmsFile)[0]
+endif
+
+let b:sqlTempFile = tempname()
+
+" vim: foldmethod=marker
