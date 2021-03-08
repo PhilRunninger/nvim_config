@@ -112,6 +112,12 @@ function! s:RunQuery() " {{{1
     echon 'Aligning columns...  '
     redraw!
     call s:AlignColumns()
+
+    if exists(':CSVInit')
+        let b:delimiter = '|'
+        CSVInit!
+    endif
+
     echon 'Finished in ' .  split(reltimestr(reltime(start)))[0] . ' seconds.'
 endfunction
 
