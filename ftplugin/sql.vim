@@ -118,7 +118,7 @@ function! s:RunQuery() " {{{1
         CSVInit!
     endif
 
-    echon 'Finished in ' .  split(reltimestr(reltime(start)))[0] . ' seconds.'
+    echon 'Finished in ' .  split(reltimestr(reltime(l:start)))[0] . ' seconds.'
 endfunction
 
 function! s:JoinLines() " {{{1
@@ -129,13 +129,13 @@ function! s:JoinLines() " {{{1
         if l:end < l:start
             break
         endif
-        let l:required = strchars(substitute(getline(l:start), '[^|]', '', 'g'))
+        let l:required = count(getline(l:start), '|')
         while l:start < l:end
             let l:rows = 0
-            let l:count = strchars(substitute(getline(l:start), '[^|]', '', 'g'))
+            let l:count = count(getline(l:start), '|')
             while l:count < l:required
                 let l:rows += 1
-                let l:count += strchars(substitute(getline(l:start + l:rows), '[^|]', '', 'g'))
+                let l:count += count(getline(l:start + l:rows), '|')
             endwhile
             if l:rows > 0
                 execute l:start.','.(l:start + l:rows).'join!'
