@@ -5,7 +5,7 @@
 " F5 - submit the whole file to SQLServer
 " F5 (in visual mode) - submit the visual selection to SQLServer
 " Shift+F5 - submit the paragraph to SQLServer
-" Ctrl+F5 - use sp_help to describe the table under the cursor
+" Ctrl+F5 - select from a list of special queries to run
 " <leader>F5 - select or create new sqlcmd parameter set for command line
 " F5 (in the query results buffer) - rerun the same query
 "
@@ -14,27 +14,27 @@
 " The dictionary's values contain whatever parameters are needed to connect
 " to the database, such as: `-S server -d database -U userid -P password`
 "
-" Prerequisite and Bonuses
+" Prerequisite
 "   - sqlcmd command-line utility (comes with SSMS or maybe Visual Studio)
+" Bonuses
 "   - EasyAlign aligns the text into columns, but only if it's installed.
 "         https://github.com/junegunn/vim-easy-align
-"   - csv.vim is another nice plugin that, among MANY other things, provides
-"     nice highlighting for the columns of data. Again, nice, but not needed.
+"   - csv.vim, among MANY other things, highlights the columns.
 "         https://github.com/chrisbra/csv.vim
 
 " Mappings {{{1
 nnoremap <buffer> <F5> :call <SID>SQLRun('file')<CR>
 nnoremap <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
 vnoremap <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
-nnoremap <buffer> <C-F5> :call <SID>SQLRun('word')<CR>
+nnoremap <buffer> <C-F5> :call <SID>SQLRunSpecial()<CR>
 nnoremap <buffer> <leader><F5> :call <SID>GetConnectionInfo()<CR>
 imap <buffer> <F5> <Esc><F5>
 imap <buffer> <S-F5> <Esc><S-F5>
 imap <buffer> <C-F5> <Esc><C-F5>
 
 function! s:SQLRun(object) " {{{1
-    if !exists('b:sqlParmKey')
-        call s:GetConnectionInfo()
+    if !exists('b:sqlParmKey') && !s:GetConnectionInfo()
+        return
     endif
 
     call s:WriteTempFile(a:object)
@@ -42,46 +42,95 @@ function! s:SQLRun(object) " {{{1
     call s:RunQuery()
 endfunction
 
+function! s:SQLRunSpecial() " {{{1
+    let [l:choice,_] = s:Choose('Select a special instruction to perform.',
+        \ ['Describe table under cursor', 'List all tables', 'List all column names of table under cursor'])
+    if l:choice > 0
+        call s:SQLRun(l:choice)
+    endif
+endfunction
 
 function! s:GetConnectionInfo() " {{{1
-    let l:choice = 0
-    if !empty(s:sqlParms)
-        let l:prompt = ['Select a parameter set. Cancel to create a new one.']
-        let l:names = sort(keys(s:sqlParms))
-        let l:prompt += map(range(1,len(l:names)), {_,i -> i . ') ' . l:names[i-1] . ': ' . s:sqlParms[l:names[i-1]]})
-        let l:choice = inputlist(l:prompt)
-    endif
-
-    if !empty(s:sqlParms) && l:choice > 0 && l:choice <= len(l:names)
-        let b:sqlParmKey = l:names[l:choice-1]
-    else
-        let b:sqlParmKey = input('Enter a name for the connection: ')
-        let s:sqlParms[b:sqlParmKey] = input('Enter the slqcmd parameters "' . b:sqlParmKey . '" will use: ')
-        if b:sqlParmKey != ''
+    let [l:choice, b:sqlParmKey] = s:Choose('Select a parameter set. Esc to create a new one.', s:sqlParms)
+    if l:choice == 0
+        let b:sqlParmKey = input('Enter a name for the new connection: ')
+        if b:sqlParmKey == ''
+            unlet b:sqlParmKey
+        else
+            let s:sqlParms[b:sqlParmKey] = input('Enter the slqcmd parameters "' . b:sqlParmKey . '" will use: ')
             call writefile([string(s:sqlParms)], s:sqlParmsFile)
         endif
     endif
+    return exists('b:sqlParmKey')
+endfunction
+
+function! s:Choose(prompt, choices) " {{{1
+    if empty(a:choices)
+        return [0, '']
+    endif
+    let l:choices = type(a:choices) == v:t_dict ? sort(values(map(copy(a:choices), {k,v -> k . ' -▷ ' . v}))) : a:choices
+    let l:choice = 1
+    let l:cmdheight = &cmdheight
+    let &cmdheight = len(l:choices)+1
+    while 1
+        mode
+        echo a:prompt . '  [Keys: j/k/Enter/Esc]'
+        for i in range(1,len(l:choices))
+            echo (i == l:choice ? '▶ ' : '  ') . l:choices[i-1]
+        endfor
+        let l:key = nr2char(getchar())
+        if l:key ==# 'j'
+            let l:choice = min([l:choice+1, len(l:choices)])
+        elseif l:key ==# 'k'
+            let l:choice = max([l:choice-1, 1])
+        elseif l:key ==# nr2char(27)
+            let l:choice = 0
+            break
+        elseif l:key ==# nr2char(13)
+            break
+        endif
+    endwhile
+    let &cmdheight = l:cmdheight
+    mode
+    return [l:choice, l:choice == 0 ? '' : split(l:choices[l:choice-1], ' -▷ ')[0]]
 endfunction
 
 function! s:WriteTempFile(object) " {{{1
     let l:z = @z
-    if a:object == 'paragraph'
+    let l:iskeyword = &iskeyword
+    set iskeyword+=46
+    set iskeyword+=91
+    set iskeyword+=93
+    if a:object == 'file'
+        call writefile(getline(1,line('$')), b:sqlTempFile)
+    elseif a:object == 'paragraph'
         call writefile(getline(line("'{"),line("'}")), b:sqlTempFile)
     elseif a:object == 'selection'
         normal! gv"zy
         call writefile(split(@z,'\n'), b:sqlTempFile)
-    elseif a:object == 'word'
-        let l:iskeyword = &iskeyword
-        set iskeyword+=46
-        set iskeyword+=91
-        set iskeyword+=93
+    elseif a:object == 1  " Describe table
         normal! "zyiw
-        let &iskeyword = l:iskeyword
         call writefile(["sp_help '" . @z ."';"], b:sqlTempFile)
+    elseif a:object == 2  " List tables
+        call writefile(['SELECT table_schema, table_name'
+                     \ ,'FROM information_schema.tables'], b:sqlTempFile)
+    elseif a:object == 3  " List columns
+        normal! "zyiw
+        let l:parts = split(@z, '\.')
+        if !empty(l:parts)
+            call writefile(['SELECT column_name'
+                         \ ,'FROM information_schema.columns'
+                         \ ,'WHERE table_name = ''' . substitute(l:parts[-1], '[[\]]', '', 'g') . ''' '
+                         \ .(len(l:parts) > 1
+                         \    ? 'AND table_schema = ''' . substitute(l:parts[-2], '[[\]]', '', 'g') . ''''
+                         \    : '')
+                         \ ,'ORDER BY ordinal_position'], b:sqlTempFile)
+        endif
     else
-        call writefile(getline(1,line('$')), b:sqlTempFile)
+        throw 'Invalid object type.'
     endif
     let @z = l:z
+    let &iskeyword = l:iskeyword
 endfunction
 
 function! s:GotoResultsBuffer(sqlQueryBuffer, sqlParmKey, sqlTempFile) " {{{1
