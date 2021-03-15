@@ -6,13 +6,14 @@
 " F5 (in visual mode) - submit the visual selection to SQLServer
 " Shift+F5 - submit the paragraph to SQLServer
 " Ctrl+F5 - select from a list of special queries to run
-" <leader>F5 - select or create new sqlcmd parameter set for command line
+" <leader>F5 - select or create new sqlcmd connection string parameters
 " F5 (in the query results buffer) - rerun the same query
 "
-" sqlcmd parameters are stored as a Vim dictionary in the .sqlParameters file
-" in this file's folder. It is .gitignored to keep that information private.
-" The dictionary's values contain whatever parameters are needed to connect
-" to the database, such as: `-S server -d database -U userid -P password`
+" sqlcmd connection strings are stored as a Vim dictionary in the
+" .sqlConnections file in this file's folder. It is .gitignored to keep that
+" information private. The dictionary's values contain whatever parameters are
+" needed to connect to the database, such as:
+"       `-S server -d database -U userid -P password`
 "
 " Prerequisite
 "   - sqlcmd command-line utility (comes with SSMS or maybe Visual Studio)
@@ -33,12 +34,12 @@ imap <buffer> <S-F5> <Esc><S-F5>
 imap <buffer> <C-F5> <Esc><C-F5>
 
 function! s:SQLRun(object) " {{{1
-    if !exists('b:sqlParmKey') && !s:GetConnectionInfo()
+    if !exists('b:sqlConnectionName') && !s:GetConnectionInfo()
         return
     endif
 
     call s:WriteTempFile(a:object)
-    call s:GotoResultsBuffer(expand('%:t:r'), b:sqlParmKey, b:sqlTempFile)
+    call s:GotoResultsBuffer(expand('%:t:r'), b:sqlConnectionName, b:sqlTempFile)
     call s:RunQuery()
 endfunction
 
@@ -51,17 +52,17 @@ function! s:SQLRunSpecial() " {{{1
 endfunction
 
 function! s:GetConnectionInfo() " {{{1
-    let [l:choice, b:sqlParmKey] = s:Choose('Select a parameter set. Esc to create a new one.', s:sqlParms)
+    let [l:choice, b:sqlConnectionName] = s:Choose('Select a connection name. Esc to create a new one.', s:sqlConnections)
     if l:choice == 0
-        let b:sqlParmKey = input('Enter a name for the new connection: ')
-        if b:sqlParmKey == ''
-            unlet b:sqlParmKey
+        let b:sqlConnectionName = input('Enter a name for the new connection: ')
+        if b:sqlConnectionName == ''
+            unlet b:sqlConnectionName
         else
-            let s:sqlParms[b:sqlParmKey] = input('Enter the slqcmd parameters "' . b:sqlParmKey . '" will use: ')
-            call writefile([string(s:sqlParms)], s:sqlParmsFile)
+            let s:sqlConnections[b:sqlConnectionName] = input('Enter the slqcmd parameters "' . b:sqlConnectionName . '" will use: ')
+            call writefile([string(s:sqlConnections)], s:sqlConnectionsFile)
         endif
     endif
-    return exists('b:sqlParmKey')
+    return exists('b:sqlConnectionName')
 endfunction
 
 function! s:Choose(prompt, choices) " {{{1
@@ -133,8 +134,8 @@ function! s:WriteTempFile(object) " {{{1
     let &iskeyword = l:iskeyword
 endfunction
 
-function! s:GotoResultsBuffer(sqlQueryBuffer, sqlParmKey, sqlTempFile) " {{{1
-    let l:bufferName = a:sqlQueryBuffer . ' @ ' . a:sqlParmKey
+function! s:GotoResultsBuffer(sqlQueryBuffer, sqlConnectionName, sqlTempFile) " {{{1
+    let l:bufferName = a:sqlQueryBuffer . ' @ ' . a:sqlConnectionName
     let l:bufNum = bufnr(l:bufferName, 1)
     let l:winnr = bufwinnr(l:bufferName)
     if l:winnr == -1
@@ -144,7 +145,7 @@ function! s:GotoResultsBuffer(sqlQueryBuffer, sqlParmKey, sqlTempFile) " {{{1
     else
         execute l:winnr . 'wincmd w'
     endif
-    let b:sqlParmKey = a:sqlParmKey
+    let b:sqlConnectionName = a:sqlConnectionName
     let b:sqlTempFile = a:sqlTempFile
 endfunction
 
@@ -154,7 +155,7 @@ function! s:RunQuery() " {{{1
     silent normal! ggdG _
     echon 'Querying...  '
     redraw!
-    silent execute 'r! sqlcmd ' . s:sqlParms[b:sqlParmKey] . ' -s"|" -W -i ' . b:sqlTempFile
+    silent execute 'r! sqlcmd ' . s:sqlConnections[b:sqlConnectionName] . ' -s"|" -W -i ' . b:sqlTempFile
     echon 'Fixing line breaks...  '
     redraw!
     call s:JoinLines()
@@ -217,17 +218,17 @@ function! s:AlignColumns() " {{{1
     silent 1delete _
 endfunction
 
-function! SqlParameters() " {{{1
-    return exists('b:sqlParmKey') ? b:sqlParmKey : '<not selected>'
+function! SqlConnection() " {{{1
+    return exists('b:sqlConnectionName') ? b:sqlConnectionName : '<not selected>'
 endfunction
 
 " Start Here {{{1
-setlocal statusline=Parameter\ Set:\ %{SqlParameters()}\ \|\ %f
+setlocal statusline=Connection:\ %{SqlConnection()}\ \|\ %f
 
-let s:sqlParmsFile = expand('<sfile>:p:h').'/.sqlParameters'
-let s:sqlParms = {}
-if filereadable(s:sqlParmsFile)
-    execute 'let s:sqlParms = ' . readfile(s:sqlParmsFile)[0]
+let s:sqlConnectionsFile = expand('<sfile>:p:h').'/.sqlConnections'
+let s:sqlConnections = {}
+if filereadable(s:sqlConnectionsFile)
+    execute 'let s:sqlConnections = ' . readfile(s:sqlConnectionsFile)[0]
 endif
 
 let b:sqlTempFile = tempname()
