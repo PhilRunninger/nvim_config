@@ -45,7 +45,13 @@ endfunction
 
 function! s:SQLRunSpecial() " {{{1
     let [l:choice,_] = s:Choose('Select a special instruction to perform.',
-        \ ['Describe table under cursor', 'List all tables', 'List all column names of table under cursor'])
+        \ ['List all tables'
+        \ ,'Describe table/view under cursor (sp_help)'
+        \ ,'List all stored procedures'
+        \ ,'List all views'
+        \ ,'List all triggers'
+        \ ,'T-SQL definition of object (procs, views, triggers, etc.)'
+        \ ])
     if l:choice > 0
         call s:SQLRun(l:choice)
     endif
@@ -109,24 +115,24 @@ function! s:WriteTempFile(object) " {{{1
     elseif a:object == 'selection'
         normal! gv"zy
         call writefile(split(@z,'\n'), b:sqlTempFile)
-    elseif a:object == 1  " Describe table
+    elseif a:object == 1  " List tables
+        call writefile(["SELECT table_schema + '.' + table_name"
+                     \ ,'FROM information_schema.tables'], b:sqlTempFile)
+    elseif a:object == 2  " Describe table/view
         normal! "zyiw
         call writefile(["sp_help '" . @z ."';"], b:sqlTempFile)
-    elseif a:object == 2  " List tables
-        call writefile(['SELECT table_schema, table_name'
-                     \ ,'FROM information_schema.tables'], b:sqlTempFile)
-    elseif a:object == 3  " List columns
+    elseif a:object == 3  " List stored procedures
+        call writefile(['SELECT name FROM sys.procedures'], b:sqlTempFile)
+    elseif a:object == 4  " List views
+        call writefile(['SELECT name FROM sys.views'], b:sqlTempFile)
+    elseif a:object == 5  " List triggers
+        call writefile(['SELECT name FROM sys.triggers'], b:sqlTempFile)
+    elseif a:object == 6  " View or Stored Procedure definition
         normal! "zyiw
-        let l:parts = split(@z, '\.')
-        if !empty(l:parts)
-            call writefile(['SELECT column_name'
-                         \ ,'FROM information_schema.columns'
-                         \ ,'WHERE table_name = ''' . substitute(l:parts[-1], '[[\]]', '', 'g') . ''' '
-                         \ .(len(l:parts) > 1
-                         \    ? 'AND table_schema = ''' . substitute(l:parts[-2], '[[\]]', '', 'g') . ''''
-                         \    : '')
-                         \ ,'ORDER BY ordinal_position'], b:sqlTempFile)
-        endif
+        call writefile(["select c.text"
+                     \ ,"from syscomments c"
+                     \ ,"join sysobjects o on o.id = c.id"
+                     \ ,"where o.name = '" . @z . "';"], b:sqlTempFile)
     else
         throw 'Invalid object type.'
     endif
