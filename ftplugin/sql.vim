@@ -148,6 +148,7 @@ function! s:GotoResultsBuffer(sqlQueryBuffer, sqlConnectionName, sqlTempFile) " 
         execute 'silent split ' . l:bufferName
         silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv statusline=Query\ Results:\ %f
         nnoremap <buffer> <F5> <Cmd>call <SID>RunQuery()<CR>
+        nnoremap <buffer> <C-F5> <Cmd>call <SID>SQLRunSpecial()<CR>
     else
         execute l:winnr . 'wincmd w'
     endif
