@@ -39,7 +39,7 @@ function! s:SQLRun(object) " {{{1
     endif
 
     call s:WriteTempFile(a:object)
-    call s:GotoResultsBuffer(expand('%:t:r'), b:sqlConnectionName, b:sqlTempFile)
+    call s:GotoResultsBuffer(expand('%:t'), b:sqlConnectionName, b:sqlTempFile)
     call s:RunQuery()
 endfunction
 
@@ -141,12 +141,14 @@ function! s:WriteTempFile(object) " {{{1
 endfunction
 
 function! s:GotoResultsBuffer(sqlQueryBuffer, sqlConnectionName, sqlTempFile) " {{{1
-    let l:bufferName = a:sqlQueryBuffer . ' @ ' . a:sqlConnectionName
+    echomsg "IN: ".a:sqlQueryBuffer
+    let l:bufferName = fnamemodify(a:sqlQueryBuffer, ':r') . '.OUT.' . a:sqlConnectionName
+    echomsg "OUT: ".l:bufferName
     let l:bufNum = bufnr(l:bufferName, 1)
     let l:winnr = bufwinnr(l:bufferName)
     if l:winnr == -1
         execute 'silent split ' . l:bufferName
-        silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv statusline=Query\ Results:\ %f
+        silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv statusline=%{expand('%:r')}\ \|\ %{SqlConnection()}
         nnoremap <buffer> <F5> <Cmd>call <SID>RunQuery()<CR>
         nnoremap <buffer> <C-F5> <Cmd>call <SID>SQLRunSpecial()<CR>
     else
@@ -226,11 +228,11 @@ function! s:AlignColumns() " {{{1
 endfunction
 
 function! SqlConnection() " {{{1
-    return exists('b:sqlConnectionName') ? b:sqlConnectionName : '<not selected>'
+    return exists('b:sqlConnectionName') ? b:sqlConnectionName : '<disconnected>'
 endfunction
 
 " Start Here {{{1
-setlocal statusline=Connection:\ %{SqlConnection()}\ \|\ %f
+setlocal statusline=%{expand('%:t')}\ \|\ %{SqlConnection()}
 
 let s:sqlConnectionsFile = expand('<sfile>:p:h').'/.sqlConnections'
 let s:sqlConnections = {}
