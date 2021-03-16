@@ -87,9 +87,9 @@ function! s:Choose(prompt, choices) " {{{1
         endfor
         let l:key = nr2char(getchar())
         if l:key ==# 'j'
-            let l:choice = min([l:choice+1, len(l:choices)])
+            let l:choice = (l:choice % len(l:choices)) + 1
         elseif l:key ==# 'k'
-            let l:choice = max([l:choice-1, 1])
+            let l:choice = ((l:choice + len(l:choices) - 2) % len(l:choices)) + 1
         elseif l:key ==# nr2char(27)
             let l:choice = 0
             break
