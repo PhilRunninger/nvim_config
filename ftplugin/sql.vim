@@ -215,7 +215,7 @@ function! s:AlignColumns() " {{{1
         normal! gg
         let l:start = search('^.\+$','W')
         while l:start > 0
-            let l:end = line("'}") - 1
+            let l:end = line("'}") - (line("'}") != line("$"))
             if l:end - l:start - 1 <= get(g:, 'sqlAlignLimit', 100)
                 silent execute l:start . ',' . l:end . 'call easy_align#align(0,0,"command","* |")'
             endif
