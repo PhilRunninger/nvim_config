@@ -41,6 +41,7 @@ function! s:SQLRun(object) " {{{1
     call s:WriteTempFile(a:object)
     call s:GotoResultsBuffer(expand('%:t'), b:sqlConnectionName, b:sqlTempFile)
     call s:RunQuery()
+    wincmd p
 endfunction
 
 function! s:SQLRunSpecial() " {{{1
