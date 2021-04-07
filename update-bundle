@@ -2,19 +2,20 @@
 
 set -e
 
+echo "▶ PULLING SUBMODULES ━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-"
 git submodule --quiet foreach '
-    echo "PULLING SUBMODULE: " $name " >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+    echo $name
     BRANCH=$(git config -f $toplevel/.gitmodules submodule."$path".branch || echo master)
     git checkout --quiet $BRANCH
-    git pull --recurse-submodules || :
-    git tag --points-at
-    # git submodule update --init --recursive || :
+    OLDHASH=$(git rev-parse HEAD)
+    git pull --quiet --recurse-submodules || :
+    git log --oneline $OLDHASH..HEAD
 '
 
-echo "UPDATING HELP TAGS: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo "▶ UPDATING HELP TAGS ━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-"
 nvim -u NONE -N --headless -c "helptags ALL" -c "qa!"
 
-echo "REBUILDING CoC: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo "▶ REBUILDING CoC ━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-"
 cd ./pack/bundle/opt/coc.nvim
 git checkout release
 git pull
