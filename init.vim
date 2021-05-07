@@ -321,7 +321,7 @@ augroup END
 
     " unicode   {{{2
     nnoremap ga <Cmd>UnicodeName<CR>
-    inoremap <C-K> <Esc>:UnicodeSearch!<space>
+    nnoremap <leader>k <Cmd>UnicodeSearch!<space>
 
 " Color, Tabline, and Statusline Settings   {{{1
 syntax on " Turn syntax highlighting on.
