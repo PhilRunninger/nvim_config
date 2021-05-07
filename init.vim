@@ -90,6 +90,7 @@ set noshowmode      " [no] message on status line show current mode
 set showmatch       " briefly jump to matching bracket if inserting one
 set number          " print the line number in front of each line
 set fillchars=stl:\ ,stlnc:\ ,vert:\  " characters to use for displaying special items
+set list listchars=tab:●·,extends:→,precedes:←,trail:■
 set laststatus=2                      " tells when last window has status line
 
 " Undo/Backup/Swap file settings   {{{1
@@ -192,44 +193,37 @@ nnoremap <F2> i★<Esc>[s1z=/★<CR>x
 nnoremap U <C-R>
 
 " Auto-command Definitions   {{{1
-augroup trailingWhitespace   " Remove, display/hide trailing whitespace   {{{2
+augroup mySetup
     autocmd!
+
+    " Remove, display/hide trailing whitespace   {{{2
     autocmd BufWrite * %s/\s\+$//ce
     autocmd InsertEnter * :set listchars-=trail:■
     autocmd InsertLeave * :set listchars+=trail:■
-augroup END
-set list listchars=tab:●·,extends:→,precedes:←,trail:■
 
-augroup terminalSettings     " Turn off line numbers in Terminal windows.   {{{2
-    autocmd!
+    " Turn off line numbers in Terminal windows.   {{{2
     autocmd TermOpen * setlocal nonumber | startinsert
-augroup END
 
-if !&diff                    " Keep cursor in original position when switching buffers   {{{2
-    augroup saveAndRestoreView
-        autocmd!
+    " Keep cursor in original position when switching buffers   {{{2
+    if !&diff
         autocmd BufLeave * let b:winview = winsaveview()
         autocmd BufEnter * if exists('b:winview') | call winrestview(b:winview) | endif
-    augroup END
-endif
+    endif
 
-if !has('gui_running')       " make autoread work better in the terminal   {{{2
-    augroup autoreadHelperForTerminal
-        autocmd!
+    " make autoread work better in the terminal   {{{2
+    if !has('gui_running')
         autocmd BufEnter        * silent! checktime
         autocmd CursorHold      * silent! checktime
         autocmd CursorHoldI     * silent! checktime
         autocmd CursorMoved     * silent! checktime
         autocmd CursorMovedI    * silent! checktime
-    augroup END
-endif
+    endif
 
-augroup jumpToLastKnownLocation " Restart with cursor in the location from last session.   {{{2
-    autocmd!
+    " Restart with cursor in the location from last session.   {{{2
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif
 augroup END
 
-" Settings for managed plugins {{{1
+" Settings for 3rd-party plugins {{{1
     " CSV   {{{2
     let g:no_csv_maps = 1
 
@@ -329,17 +323,15 @@ augroup END
     nnoremap ga <Cmd>UnicodeName<CR>
     inoremap <C-K> <Esc>:UnicodeSearch!<space>
 
-" Color and Statusline Settings   {{{1
-syntax on                           " Turn syntax highlighting on.
+" Color, Tabline, and Statusline Settings   {{{1
+syntax on " Turn syntax highlighting on.
 
-augroup setStatuslineColor    " Change statusline color, depending on mode.
-    autocmd!
+augroup mySetup
+    " Change statusline color, depending on mode.   {{{2
     autocmd InsertEnter,InsertChange,TextChangedI * call <SID>StatuslineColor(1)
     autocmd VimEnter,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
-augroup END
 
-augroup tweakColorScheme
-    autocmd!
+    " Override selected colorscheme colors   {{{2
     autocmd ColorScheme * highlight Normal                               ctermbg=none " Use terminal's Background color setting
     autocmd ColorScheme * highlight Folded         cterm=none ctermfg=8  ctermbg=234  " Gray on Almost Black
     autocmd ColorScheme * highlight MatchParen     cterm=bold ctermfg=15 ctermbg=124  " White on Red
@@ -367,6 +359,7 @@ augroup tweakColorScheme
 augroup END
 colorscheme gruvbox
 
+" Change statusline color based on current mode and modified status.   {{{2
 function! s:StatuslineColor(insertMode)
     execute 'highlight! link StatusLine ' . (a:insertMode ? 'Insert' : (&modified ? 'NormalMod' : 'NormalNoMod'))
     redraw!
@@ -381,6 +374,7 @@ set statusline+=\ %f
 set statusline+=%=
 set statusline+=%#Session#%(\ %{SessionNameStatusLineFlag()}\ %)%*
 
+" Custom tabline, showing active window in each tab.   {{{2
 function! Tabline()
   let s = ''
   for i in range(1,tabpagenr('$'))
