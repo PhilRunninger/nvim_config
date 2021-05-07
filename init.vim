@@ -9,7 +9,6 @@ packadd! vim-fugitive          " git@github.com:tpope/vim-fugitive
 packadd! vim-gitgutter         " git@github.com:airblade/vim-gitgutter
 packadd! vim-commentary        " git@github.com:tpope/vim-commentary.git
 packadd! vim-rest-console      " git@github.com:diepm/vim-rest-console.git
-packadd! Windows-PowerShell-Syntax-Plugin  " git@github.com:vim-scripts/Windows-PowerShell-Syntax-Plugin.git
 " Colorschemes
 packadd! gruvbox               " git@github.com:morhetz/gruvbox.git
 packadd! xterm-color-table.vim " git@github.com:guns/xterm-color-table.vim
@@ -26,10 +25,8 @@ packadd! vim-repeat            " git@github.com:tpope/vim-repeat
 packadd! vim-surround          " git@github.com:tpope/vim-surround
 packadd! vim-unimpaired        " git@github.com:tpope/vim-unimpaired
 packadd! vim-exchange          " git@github.com:tommcdo/vim-exchange.git
-packadd! vim-fuzzysearch       " git@github.com:ggVGc/vim-fuzzysearch.git
 packadd! unicode.vim           " git@github.com:chrisbra/unicode.vim.git
 packadd! scratch.vim           " git@github.com:mtth/scratch.vim
-packadd! tabline.vim           " git@github.com:mkitt/tabline.vim.git
 packadd! presenting.vim        " git@github.com:sotte/presenting.vim.git
 
 " Must come AFTER the :packadd! calls above; otherwise, the contents of package 'ftdetect'
@@ -296,10 +293,6 @@ augroup END
     let g:presenting_next = '<Right>'
     let g:presenting_prev = '<Left>'
 
-    " FuzzySearch {{{2
-    let g:fuzzysearch_match_spaces = 1
-    nnoremap g/ <Cmd>FuzzySearch<CR>
-
     " Fugitive   {{{2
     nnoremap <silent> <F3> "zyiw/<C-R>z<CR>:Ggrep -e '<C-R>z'<CR><CR>:copen<CR>:redraw!<CR>
     vnoremap <silent> <F3> "zy/<C-R>z<CR>:Ggrep -e '<C-R>z'<CR><CR>:copen<CR>:redraw!<CR>
@@ -356,12 +349,18 @@ augroup tweakColorScheme
     autocmd ColorScheme * highlight StatusLineTerm cterm=none ctermfg=16 ctermbg=208  " Black on Gold
     autocmd ColorScheme * highlight! link Session WildMenu
     autocmd ColorScheme * highlight! link VertSplit StatusLineNC
+    autocmd ColorScheme *
+        \ redir => x |
+        \ silent highlight TabLineSel |
+        \ redir END |
+        \ let bg = matchstr(x,'ctermbg=\zs\d\+') |
+        \ execute 'highlight TabLineMod ctermfg=117' . (bg!='' ? ' ctermbg='.bg : '')
     autocmd TermOpen,WinEnter *
-           \ if &buftype=='terminal' |
-           \     setlocal winhighlight=StatusLine:StatusLineTerm|
-           \ else |
-           \     setlocal winhighlight= |
-           \ endif
+        \ if &buftype=='terminal' |
+        \     setlocal winhighlight=StatusLine:StatusLineTerm|
+        \ else |
+        \     setlocal winhighlight= |
+        \ endif
     autocmd ColorScheme * highlight Insert         cterm=none ctermfg=15 ctermbg=27   " White on Blue
     autocmd ColorScheme * highlight NormalMod      cterm=none ctermfg=15 ctermbg=124  " White on Red
     autocmd ColorScheme * highlight NormalNoMod    cterm=none ctermfg=16 ctermbg=40   " Black on Green
@@ -377,7 +376,20 @@ set statusline=%3v
 set statusline+=\ %#GitBranch#%(\ %{fugitive#head(8)}\ %)%*
 set statusline+=\ %{&ft}
 set statusline+=\ %{&ff}
-set statusline+=%(\ %r%m%)
+set statusline+=%(\ %{&readonly?'':''}%{&modified?'':''}%)
 set statusline+=\ %f
 set statusline+=%=
 set statusline+=%#Session#%(\ %{SessionNameStatusLineFlag()}\ %)%*
+
+function! Tabline()
+  let s = ''
+  for i in range(1,tabpagenr('$'))
+    let bufnr = tabpagebuflist(i)[tabpagewinnr(i) - 1]
+    let bufname = bufname(bufnr)
+    let s .= printf('%%%dT%%#TabLine%s#%s%s ', i, i==tabpagenr()?'Sel':'Fill',
+    \ bufname!=''?fnamemodify(bufname,':t'):'…', getbufvar(bufnr,'&modified')?'%#TabLineMod#':'')
+  endfor
+  return s . '%#TabLineFill#'
+endfunction
+
+set tabline=%!Tabline()

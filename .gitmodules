@@ -55,9 +55,6 @@
 [submodule "pack/bundle/opt/scratch.vim"]
 	path = pack/bundle/opt/scratch.vim
 	url = git@github.com:mtth/scratch.vim
-[submodule "pack/bundle/opt/tabline.vim"]
-	path = pack/bundle/opt/tabline.vim
-	url = git@github.com:mkitt/tabline.vim.git
 [submodule "pack/bundle/opt/presenting.vim"]
 	path = pack/bundle/opt/presenting.vim
 	url = git@github.com:sotte/presenting.vim.git
@@ -67,12 +64,6 @@
 [submodule "pack/bundle/opt/bufselect.vim"]
 	path = pack/bundle/opt/bufselect.vim
 	url = git@github.com:PhilRunninger/bufselect.vim.git
-[submodule "pack/bundle/opt/vim-fuzzysearch"]
-	path = pack/bundle/opt/vim-fuzzysearch
-	url = git@github.com:ggVGc/vim-fuzzysearch.git
-[submodule "pack/bundle/opt/Windows-PowerShell-Syntax-Plugin"]
-	path = pack/bundle/opt/Windows-PowerShell-Syntax-Plugin
-	url = git@github.com:vim-scripts/Windows-PowerShell-Syntax-Plugin.git
 [submodule "pack/bundle/opt/vim-cool"]
 	path = pack/bundle/opt/vim-cool
 	url = git@github.com:romainl/vim-cool.git
