@@ -288,8 +288,8 @@ augroup END
     let g:presenting_prev = '<Left>'
 
     " Fugitive   {{{2
-    nnoremap <silent> <F3> "zyiw/<C-R>z<CR>:Ggrep -e '<C-R>z'<CR><CR>:copen<CR>:redraw!<CR>
-    vnoremap <silent> <F3> "zy/<C-R>z<CR>:Ggrep -e '<C-R>z'<CR><CR>:copen<CR>:redraw!<CR>
+    nnoremap <silent> <F3> "zyiw/<C-R>z<CR>:Ggrep -i -e '<C-R>z'<CR><CR>:copen<CR>:redraw!<CR>
+    vnoremap <silent> <F3> "zy/<C-R>z<CR>:Ggrep -i -e '<C-R>z'<CR><CR>:copen<CR>:redraw!<CR>
     nnoremap <leader>G <Cmd>Gstatus<CR>
 
     " REST Console   {{{2
