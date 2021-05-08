@@ -346,7 +346,7 @@ augroup mySetup
         \ silent highlight TabLineSel |
         \ redir END |
         \ let bg = matchstr(x,'ctermbg=\zs\d\+') |
-        \ execute 'highlight TabLineMod ctermfg=117' . (bg!='' ? ' ctermbg='.bg : '')
+        \ execute 'highlight TabLineMod ctermfg=45' . (bg!='' ? ' ctermbg='.bg : '')
     autocmd TermOpen,WinEnter *
         \ if &buftype=='terminal' |
         \     setlocal winhighlight=StatusLine:StatusLineTerm|
