@@ -142,9 +142,7 @@ function! s:WriteTempFile(object) " {{{1
 endfunction
 
 function! s:GotoResultsBuffer(sqlQueryBuffer, sqlConnectionName, sqlTempFile) " {{{1
-    echomsg "IN: ".a:sqlQueryBuffer
     let l:bufferName = fnamemodify(a:sqlQueryBuffer, ':r') . '.OUT.' . a:sqlConnectionName
-    echomsg "OUT: ".l:bufferName
     let l:bufNum = bufnr(l:bufferName, 1)
     let l:winnr = bufwinnr(l:bufferName)
     if l:winnr == -1
@@ -186,7 +184,7 @@ function! s:JoinLines() " {{{1
     while l:start < line('$')
         call cursor(l:start,1)
         let l:end = search('^\s*(\d\+ rows affected)', 'cW') - 2
-        if l:end < l:start
+        if l:end == -2
             break
         endif
         let l:required = count(getline(l:start), '|')
