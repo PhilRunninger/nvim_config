@@ -19,10 +19,10 @@ endfunction
 function! s:CreateSearchString()
     if empty(s:words)
         let @/ = s:savedPattern
-        highlight Search term=reverse cterm=reverse ctermfg=214 ctermbg=235 gui=reverse guifg=#fabd2f guibg=#282828
+        highlight Search term=reverse cterm=reverse ctermfg=214 ctermbg=235 gui=reverse guifg=#ffaf00 guibg=#262626
     else
         let @/ = '\(' . join(s:words,'\|') . '\)'
-        highlight Search term=reverse cterm=reverse ctermfg=154 ctermbg=235 gui=reverse guifg=#fabd2f guibg=#282828
+        highlight Search term=reverse cterm=reverse ctermfg=154 ctermbg=235 gui=reverse guifg=#afff00 guibg=#262626
     endif
 endfunction
 
@@ -31,8 +31,9 @@ function! s:ClearSearchString()
     call s:CreateSearchString()
 endfunction
 
-nnoremap <silent> * :call <SID>ToggleWord()<CR>n
-nnoremap <silent> <leader>* :call <SID>ClearSearchString()<CR>
+nnoremap <silent> * <Cmd>call <SID>ToggleWord()<CR>n
+nnoremap <silent> <leader>* <Cmd>call <SID>ClearSearchString()<CR>
+nnoremap <silent> <leader><leader>* <Cmd>nohlsearch<CR>
 
 vnoremap <silent> * :<C-U>
   \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
