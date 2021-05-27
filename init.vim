@@ -321,9 +321,13 @@ augroup END
 
     " unicode   {{{2
     nnoremap ga <Cmd>UnicodeName<CR>
-    nnoremap <leader>k <Cmd>UnicodeSearch!<space>
+    nnoremap <leader>k :UnicodeSearch!<space>
 
 " Color, Tabline, and Statusline Settings   {{{1
+if has('gui_running')
+    set guifont=DroidSansMono\ NF
+endif
+
 syntax on " Turn syntax highlighting on.
 
 augroup mySetup
