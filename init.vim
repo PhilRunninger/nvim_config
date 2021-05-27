@@ -336,17 +336,15 @@ augroup mySetup
     autocmd ColorScheme * highlight Folded         cterm=none ctermfg=8  ctermbg=234  " Gray on Almost Black
     autocmd ColorScheme * highlight MatchParen     cterm=bold ctermfg=15 ctermbg=124  " White on Red
     autocmd ColorScheme * highlight WildMenu       cterm=none ctermfg=16 ctermbg=178  " Black on Gold
+    " Tab Line
+    autocmd ColorScheme * highlight TabLineMod     cterm=none ctermfg=39 ctermbg=237
+    autocmd ColorScheme * highlight TabLineEdges   cterm=none ctermfg=208 ctermbg=237
+    " Status Line
     autocmd ColorScheme * highlight GitBranch      cterm=none ctermfg=12 ctermbg=17   " Blue on Dark Blue
     autocmd ColorScheme * highlight StatusLine     cterm=none ctermfg=16 ctermbg=40   " Black on Green
     autocmd ColorScheme * highlight StatusLineTerm cterm=none ctermfg=16 ctermbg=208  " Black on Gold
     autocmd ColorScheme * highlight! link Session WildMenu
     autocmd ColorScheme * highlight! link VertSplit StatusLineNC
-    autocmd ColorScheme *
-        \ redir => x |
-        \ silent highlight TabLineSel |
-        \ redir END |
-        \ let bg = matchstr(x,'ctermbg=\zs\d\+') |
-        \ execute 'highlight TabLineMod ctermfg=117' . (bg!='' ? ' ctermbg='.bg : '')
     autocmd TermOpen,WinEnter *
         \ if &buftype=='terminal' |
         \     setlocal winhighlight=StatusLine:StatusLineTerm|
@@ -380,8 +378,16 @@ function! Tabline()
   for i in range(1,tabpagenr('$'))
     let bufnr = tabpagebuflist(i)[tabpagewinnr(i) - 1]
     let bufname = bufname(bufnr)
-    let s .= printf('%%%dT%%#TabLine%s#%s%s ', i, i==tabpagenr()?'Sel':'Fill',
-    \ bufname!=''?fnamemodify(bufname,':t'):'…', getbufvar(bufnr,'&modified')?'%#TabLineMod#':'')
+    if i <= tabpagenr()
+        let s .= '%#TabLineEdges#⎛'
+    endif
+    let s .= '%' . i . 'T'
+    let s .= (i == tabpagenr() ? '%#TabLineSel#' : '%#TabLineFill#')
+    let s .= (bufname!='' ? fnamemodify(bufname,':t') : '…')
+    let s .= (getbufvar(bufnr,'&modified') ? '%#TabLineMod#' : '')
+    if i >= tabpagenr()
+        let s .= '%#TabLineEdges#⎞'
+    endif
   endfor
   return s . '%#TabLineFill#'
 endfunction
