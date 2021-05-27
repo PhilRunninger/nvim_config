@@ -16,7 +16,6 @@ packadd! xterm-color-table.vim " git@github.com:guns/xterm-color-table.vim
 packadd! ldraw.vim             " git@github.com:vim-scripts/ldraw.vim.git
 packadd! csv.vim               " git@github.com:chrisbra/csv.vim
 " Miscellaneous Utilities
-packadd! vim-cool              " git@github.com:romainl/vim-cool.git
 packadd! undotree              " git@github.com:mbbill/undotree
 packadd! vim-easy-align        " git@github.com:junegunn/vim-easy-align
 packadd! vim-sessions          " git@github.com:PhilRunninger/vim-sessions.git

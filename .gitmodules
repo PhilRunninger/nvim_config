@@ -64,6 +64,3 @@
 [submodule "pack/bundle/opt/bufselect.vim"]
 	path = pack/bundle/opt/bufselect.vim
 	url = git@github.com:PhilRunninger/bufselect.vim.git
-[submodule "pack/bundle/opt/vim-cool"]
-	path = pack/bundle/opt/vim-cool
-	url = git@github.com:romainl/vim-cool.git
