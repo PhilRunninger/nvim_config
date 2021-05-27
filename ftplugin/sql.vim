@@ -222,7 +222,7 @@ function! s:AlignColumns() " {{{1
             let l:start = search('^.\+$','W')
         endwhile
     endif
-    silent execute '%s/^$\n^\s*\((\d\+ rows affected)\)\(\n^$\)\?/\1\r/e'
+    silent execute '%s/^$\n^\s*(\(\d\+ rows affected\))\(\n^$\)\?/\1 ' . repeat('-._.-~',40) . '\r/e'
     silent 1delete _
 endfunction
 
