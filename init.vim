@@ -329,32 +329,28 @@ augroup mySetup
     autocmd VimEnter,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
 
     " Override selected colorscheme colors   {{{2
-    autocmd ColorScheme * highlight Normal                               ctermbg=none " Use terminal's Background color setting
-    autocmd ColorScheme * highlight Folded         cterm=none ctermfg=8  ctermbg=234  " Gray on Almost Black
-    autocmd ColorScheme * highlight MatchParen     cterm=bold ctermfg=15 ctermbg=124  " White on Red
-    autocmd ColorScheme * highlight WildMenu       cterm=none ctermfg=16 ctermbg=178  " Black on Gold
-    " Tab Line
-    autocmd ColorScheme * highlight TabLineMod     cterm=none ctermfg=39 ctermbg=237
-    autocmd ColorScheme * highlight TabLineEdges   cterm=none ctermfg=208 ctermbg=237
-    " Status Line
-    autocmd ColorScheme * highlight GitBranch      cterm=none ctermfg=12 ctermbg=17   " Blue on Dark Blue
-    autocmd ColorScheme * highlight StatusLine     cterm=none ctermfg=16 ctermbg=40   " Black on Green
-    autocmd ColorScheme * highlight StatusLineTerm cterm=none ctermfg=16 ctermbg=208  " Black on Gold
-    autocmd ColorScheme * highlight! link Session WildMenu
+    autocmd ColorScheme * highlight Normal                                ctermbg=none " Use terminal's Background color setting
+    autocmd ColorScheme * highlight Folded          cterm=none ctermfg=8  ctermbg=254  " Gray on Light Gray
+    autocmd ColorScheme * highlight MatchParen      cterm=bold ctermfg=15 ctermbg=165  " White on Magenta
     autocmd ColorScheme * highlight! link VertSplit StatusLineNC
-    autocmd TermOpen,WinEnter *
-        \ if &buftype=='terminal' |
-        \     setlocal winhighlight=StatusLine:StatusLineTerm|
-        \ else |
-        \     setlocal winhighlight= |
-        \ endif
-    autocmd ColorScheme * highlight Insert         cterm=none ctermfg=15 ctermbg=27   " White on Blue
-    autocmd ColorScheme * highlight NormalMod      cterm=none ctermfg=15 ctermbg=124  " White on Red
-    autocmd ColorScheme * highlight NormalNoMod    cterm=none ctermfg=16 ctermbg=40   " Black on Green
+    " Tab Line
+    autocmd ColorScheme * highlight TabLineMod      cterm=none ctermfg=39  ctermbg=17  " Cyan on Dark Blue
+    autocmd ColorScheme * highlight TabLineEdges    cterm=none ctermfg=208 ctermbg=17  " Gold on Dark Blue
+    autocmd ColorScheme * highlight TabLineFill     cterm=none ctermfg=245 ctermbg=17  " Gray on Dark Blue
+    autocmd ColorScheme * highlight TabLineSel      cterm=none ctermfg=15  ctermbg=17  " White on Dark Blue
+    " Status Line
+    autocmd ColorScheme * highlight StatusLine      cterm=none ctermfg=16 ctermbg=40   " Black on Green
+    autocmd ColorScheme * highlight StatusLineTerm  cterm=none ctermfg=16 ctermbg=208  " Black on Gold
+    autocmd ColorScheme * highlight GitBranch       cterm=none ctermfg=12 ctermbg=17   " Blue on Dark Blue
+    autocmd ColorScheme * highlight Session         cterm=none ctermfg=16 ctermbg=178  " Black on Gold
+    autocmd ColorScheme * highlight Insert          cterm=none ctermfg=15 ctermbg=27   " White on Blue
+    autocmd ColorScheme * highlight NormalMod       cterm=none ctermfg=15 ctermbg=124  " White on Red
+    autocmd ColorScheme * highlight NormalNoMod     cterm=none ctermfg=16 ctermbg=40   " Black on Green
+    autocmd TermOpen,WinEnter * execute 'setlocal winhighlight='.(&buftype=='terminal'?'StatusLine:StatusLineTerm':'')
 augroup END
-colorscheme gruvbox
+colorscheme onehalflight
 
-" Change statusline color based on current mode and modified status.   {{{2
+" Dynamic statusline contents and color.   {{{2
 function! s:StatuslineColor(insertMode)
     execute 'highlight! link StatusLine ' . (a:insertMode ? 'Insert' : (&modified ? 'NormalMod' : 'NormalNoMod'))
     redraw!
