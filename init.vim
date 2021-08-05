@@ -1,10 +1,11 @@
 " vim: foldmethod=marker
 
 " Plugin Management (Comment a line to temporarily disable a plugin.)  {{{1
-" Coding / Development
-packadd! coc.nvim              " git@github.com:neoclide/coc.nvim.git
+" File / Buffer Management
 packadd! mintree               " git@github.com:PhilRunninger/mintree.git
 packadd! bufselect.vim         " git@github.com:PhilRunninger/bufselect.vim.git
+" Coding / Development
+packadd! coc.nvim              " git@github.com:neoclide/coc.nvim.git
 packadd! vim-fugitive          " git@github.com:tpope/vim-fugitive
 packadd! vim-gitgutter         " git@github.com:airblade/vim-gitgutter
 packadd! vim-commentary        " git@github.com:tpope/vim-commentary.git
@@ -32,10 +33,10 @@ packadd! presenting.vim        " git@github.com:sotte/presenting.vim.git
 " directories won't be evaluated.
 filetype indent plugin on
 
-" Function to ensure all my CoC extension are installed.
+" Function to ensure all my CoC extensions are installed.
 function InstallCocExtensions()
     let installed = map(CocAction('extensionStats'), {_,v -> v.id})
-    for ext in ['coc-vimlsp', 'coc-omnisharp', 'coc-angular', 'coc-erlang_ls', 'coc-tsserver',
+    for ext in ['coc-vimlsp', 'coc-omnisharp', 'coc-angular', 'coc-erlang_ls', 'coc-tsserver', 'coc-pyright',
         \ 'coc-json', 'coc-html', 'coc-css',
         \ 'coc-snippets']
         if index(installed,ext) == -1
@@ -47,20 +48,14 @@ endfunction
 " Miscellaneous settings   {{{1
 set path+=**                        " search recursively for files with :find
 set autoread                        " automatically read file when changed outside of vim
-set scrolloff=3 sidescrolloff=3     " minimum # of rows/columns from cursor to edge of window
 set sidescroll=1                    " Minimum number of columns to scroll horizontal
 set nostartofline                   " [do not] move cursor to first non-blank column when paging
 set hidden                          " don't unload buffer when it is abandoned
-set confirm                         " Ask what to do with unsave/read-only files
+set confirm                         " Ask what to do with unsaved/read-only files
 set backspace=indent,eol,start      " How backspace works at start of line
-set ttimeoutlen=10                  " Time out time for key codes in milliseconds (Removes delay after <Esc> in Command mode.)
+set ttimeoutlen=10                  " Time out for key codes in milliseconds (Removes delay after <Esc> in Command mode.)
 set diffopt+=iwhite
-set mouse=a                         " Don't worry. I haven't gone crazy. It's for scrolling CoC's popup windows.
 let mapleader=' '                   " Character to use for <leader> mappings
-
-" Disable netrw
-let g:loaded_netrw       = 1
-let g:loaded_netrwPlugin = 1
 
 " Markdown settings
 let g:markdown_folding = 1
@@ -99,9 +94,6 @@ execute 'set directory='.fnamemodify($MYVIMRC,':p:h').'/cache/swapfiles//'
 if !isdirectory(&undodir)   | call mkdir(&undodir, 'p') | endif
 if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p') | endif
 if !isdirectory(&directory) | call mkdir(&directory, 'p') | endif
-
-" Disable the bells (audible and visual).   {{{1
-set noerrorbells visualbell
 
 " Window behavior and commands   {{{1
 set splitbelow splitright          " new window is put below or right of the current one
@@ -271,6 +263,8 @@ augroup END
     autocmd CursorHold * silent call CocActionAsync('highlight')
 
     " MinTree   {{{2
+    let g:MinTreeExpanded='▼'
+    let g:MinTreeCollapsed='▶'
     let g:MinTreeOpen='l'
     let g:MinTreeCloseParent='h'
     nnoremap <silent> <leader>o <Cmd>MinTree<CR>
