@@ -283,7 +283,7 @@ augroup END
     " Fugitive   {{{2
     nnoremap <silent> <F3> "zyiw/<C-R>z<CR>:Ggrep -i -e '<C-R>z'<CR><CR>:copen<CR>:redraw!<CR>
     vnoremap <silent> <F3> "zy/<C-R>z<CR>:Ggrep -i -e '<C-R>z'<CR><CR>:copen<CR>:redraw!<CR>
-    nnoremap <leader>G <Cmd>Gstatus<CR>
+    nnoremap <leader>G <Cmd>Git<CR>
 
     " REST Console   {{{2
     let g:vrc_show_command = 1
