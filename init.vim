@@ -10,8 +10,8 @@ packadd! vim-fugitive          " git@github.com:tpope/vim-fugitive
 packadd! vim-gitgutter         " git@github.com:airblade/vim-gitgutter
 packadd! vim-commentary        " git@github.com:tpope/vim-commentary.git
 packadd! vim-rest-console      " git@github.com:diepm/vim-rest-console.git
-" Colorschemes
-packadd! gruvbox               " git@github.com:morhetz/gruvbox.git
+" Colors
+packadd! PaperColor.vim        " git@github.com:vim-scripts/PaperColor.vim.git
 packadd! xterm-color-table.vim " git@github.com:guns/xterm-color-table.vim
 " Filetype-specific
 packadd! ldraw.vim             " git@github.com:vim-scripts/ldraw.vim.git
@@ -317,9 +317,7 @@ augroup END
     nnoremap <leader>k :UnicodeSearch!<space>
 
 " Color, Tabline, and Statusline Settings   {{{1
-if has('gui_running')
-    set guifont=DroidSansMono\ NF
-endif
+set guifont=DroidSansMono\ NF
 
 syntax on " Turn syntax highlighting on.
 
@@ -330,14 +328,13 @@ augroup mySetup
 
     " Override selected colorscheme colors   {{{2
     autocmd ColorScheme * highlight Normal                                ctermbg=none " Use terminal's Background color setting
-    autocmd ColorScheme * highlight Folded          cterm=none ctermfg=8  ctermbg=254  " Gray on Light Gray
-    autocmd ColorScheme * highlight MatchParen      cterm=bold ctermfg=15 ctermbg=165  " White on Magenta
     autocmd ColorScheme * highlight! link VertSplit StatusLineNC
+    autocmd ColorScheme * highlight Search          term=reverse cterm=reverse ctermfg=214 ctermbg=235
     " Tab Line
-    autocmd ColorScheme * highlight TabLineMod      cterm=none ctermfg=39  ctermbg=17  " Cyan on Dark Blue
-    autocmd ColorScheme * highlight TabLineEdges    cterm=none ctermfg=208 ctermbg=17  " Gold on Dark Blue
-    autocmd ColorScheme * highlight TabLineFill     cterm=none ctermfg=245 ctermbg=17  " Gray on Dark Blue
-    autocmd ColorScheme * highlight TabLineSel      cterm=none ctermfg=15  ctermbg=17  " White on Dark Blue
+    autocmd ColorScheme * highlight TabLineMod      cterm=none ctermfg=39  ctermbg=237 " Cyan on Gray
+    autocmd ColorScheme * highlight TabLineEdges    cterm=none ctermfg=208 ctermbg=237 " Gold on Gray
+    autocmd ColorScheme * highlight TabLineFill     cterm=none ctermfg=245 ctermbg=237 " Gray on Gray
+    autocmd ColorScheme * highlight TabLineSel      cterm=none ctermfg=15  ctermbg=237 " White on Gray
     " Status Line
     autocmd ColorScheme * highlight StatusLine      cterm=none ctermfg=16 ctermbg=40   " Black on Green
     autocmd ColorScheme * highlight StatusLineTerm  cterm=none ctermfg=16 ctermbg=208  " Black on Gold
@@ -348,7 +345,8 @@ augroup mySetup
     autocmd ColorScheme * highlight NormalNoMod     cterm=none ctermfg=16 ctermbg=40   " Black on Green
     autocmd TermOpen,WinEnter * execute 'setlocal winhighlight='.(&buftype=='terminal'?'StatusLine:StatusLineTerm':'')
 augroup END
-colorscheme onehalflight
+set background=light
+colorscheme PaperColor
 
 " Dynamic statusline contents and color.   {{{2
 function! s:StatuslineColor(insertMode)
