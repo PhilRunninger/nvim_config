@@ -262,6 +262,11 @@ augroup END
     " Highlight the symbol and its references when holding the cursor.
     autocmd CursorHold * silent call CocActionAsync('highlight')
 
+    inoremap <nowait><expr> <PageDown> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : ""
+    inoremap <nowait><expr> <PageUp>   coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : ""
+    inoremap <nowait><expr> <Down> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1,1)\<cr>" : ""
+    inoremap <nowait><expr> <Up>   coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0,1)\<cr>" : ""
+
     " MinTree   {{{2
     let g:MinTreeExpanded='▼'
     let g:MinTreeCollapsed='▶'
