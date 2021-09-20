@@ -64,6 +64,6 @@
 [submodule "pack/bundle/opt/bufselect.vim"]
 	path = pack/bundle/opt/bufselect.vim
 	url = git@github.com:PhilRunninger/bufselect.vim.git
-[submodule "pack/bundle/opt/PaperColor.vim"]
-	path = pack/bundle/opt/PaperColor.vim
-	url = git@github.com:vim-scripts/PaperColor.vim.git
+[submodule "pack/bundle/opt/papercolor-theme"]
+	path = pack/bundle/opt/papercolor-theme
+	url = git@github.com:NLKNguyen/papercolor-theme.git

@@ -11,7 +11,7 @@ packadd! vim-gitgutter         " git@github.com:airblade/vim-gitgutter
 packadd! vim-commentary        " git@github.com:tpope/vim-commentary.git
 packadd! vim-rest-console      " git@github.com:diepm/vim-rest-console.git
 " Colors
-packadd! PaperColor.vim        " git@github.com:vim-scripts/PaperColor.vim.git
+packadd! papercolor-theme      " git@github.com:NLKNguyen/papercolor-theme.git
 packadd! xterm-color-table.vim " git@github.com:guns/xterm-color-table.vim
 " Filetype-specific
 packadd! ldraw.vim             " git@github.com:vim-scripts/ldraw.vim.git
@@ -332,24 +332,27 @@ augroup mySetup
     autocmd VimEnter,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
 
     " Override selected colorscheme colors   {{{2
-    autocmd ColorScheme * highlight Normal                                ctermbg=none " Use terminal's Background color setting
-    autocmd ColorScheme * highlight! link VertSplit StatusLineNC
-    autocmd ColorScheme * highlight Search          term=reverse cterm=reverse ctermfg=214 ctermbg=235
+    autocmd ColorScheme * highlight! link VertSplit StatusLineNC |
+                        \ highlight Search          term=reverse cterm=reverse ctermfg=214 ctermbg=235
     " Tab Line
-    autocmd ColorScheme * highlight TabLineMod      cterm=none ctermfg=39  ctermbg=237 " Cyan on Gray
-    autocmd ColorScheme * highlight TabLineEdges    cterm=none ctermfg=208 ctermbg=237 " Gold on Gray
-    autocmd ColorScheme * highlight TabLineFill     cterm=none ctermfg=245 ctermbg=237 " Gray on Gray
-    autocmd ColorScheme * highlight TabLineSel      cterm=none ctermfg=15  ctermbg=237 " White on Gray
+    autocmd ColorScheme * let ctermbg = synIDattr(synIDtrans(hlID('TabLineSel')), 'bg', 'cterm') |
+                        \ let guibg = synIDattr(synIDtrans(hlID('TabLineSel')), 'bg', 'gui') |
+                        \ execute 'highlight TabLineSelMod ctermbg=' . (empty(ctermbg)?'none':ctermbg) . ' ctermfg=202 guibg=' . guibg . ' guifg=#ff5f00' |
+                        \ let ctermbg = synIDattr(synIDtrans(hlID('TabLine')), 'bg', 'cterm') |
+                        \ let guibg = synIDattr(synIDtrans(hlID('TabLine')), 'bg', 'gui') |
+                        \ execute 'highlight TabLineMod ctermbg=' . (empty(ctermbg)?'none':ctermbg) . ' ctermfg=214 guibg=' . guibg . ' guifg=#ffaf00'
     " Status Line
-    autocmd ColorScheme * highlight StatusLine      cterm=none ctermfg=16 ctermbg=40   " Black on Green
-    autocmd ColorScheme * highlight StatusLineTerm  cterm=none ctermfg=16 ctermbg=208  " Black on Gold
-    autocmd ColorScheme * highlight GitBranch       cterm=none ctermfg=12 ctermbg=17   " Blue on Dark Blue
-    autocmd ColorScheme * highlight Session         cterm=none ctermfg=16 ctermbg=178  " Black on Gold
-    autocmd ColorScheme * highlight Insert          cterm=none ctermfg=15 ctermbg=27   " White on Blue
-    autocmd ColorScheme * highlight NormalMod       cterm=none ctermfg=15 ctermbg=124  " White on Red
-    autocmd ColorScheme * highlight NormalNoMod     cterm=none ctermfg=16 ctermbg=40   " Black on Green
+    autocmd ColorScheme * highlight StatusLine     cterm=none ctermfg=16 ctermbg=40  gui=none guifg=#000000 guibg=#00df00 |
+                        \ highlight GitBranch      cterm=none ctermfg=12 ctermbg=17  gui=none guifg=#00afdf guibg=#00005f |
+                        \ highlight Session        cterm=none ctermfg=16 ctermbg=178 gui=none guifg=#000000 guibg=#dfaf00 |
+                        \ highlight Insert         cterm=none ctermfg=15 ctermbg=27  gui=none guifg=#ffffff guibg=#005fff |
+                        \ highlight NormalMod      cterm=none ctermfg=15 ctermbg=124 gui=none guifg=#ffffff guibg=#af0000 |
+                        \ highlight NormalNoMod    cterm=none ctermfg=16 ctermbg=40  gui=none guifg=#000000 guibg=#00df00
+    " Terminal window Status Line
+    autocmd ColorScheme * highlight StatusLineTerm cterm=none ctermfg=16 ctermbg=208 gui=none guifg=#000000 guibg=#ff8700
     autocmd TermOpen,WinEnter * execute 'setlocal winhighlight='.(&buftype=='terminal'?'StatusLine:StatusLineTerm':'')
 augroup END
+set termguicolors
 set background=light
 colorscheme PaperColor
 
@@ -374,16 +377,10 @@ function! Tabline()
   for i in range(1,tabpagenr('$'))
     let bufnr = tabpagebuflist(i)[tabpagewinnr(i) - 1]
     let bufname = bufname(bufnr)
-    if i <= tabpagenr()
-        let s .= '%#TabLineEdges#⎛'
-    endif
     let s .= '%' . i . 'T'
-    let s .= (i == tabpagenr() ? '%#TabLineSel#' : '%#TabLineFill#')
-    let s .= (bufname!='' ? fnamemodify(bufname,':t') : '…')
-    let s .= (getbufvar(bufnr,'&modified') ? '%#TabLineMod#' : '')
-    if i >= tabpagenr()
-        let s .= '%#TabLineEdges#⎞'
-    endif
+    let s .= (i == tabpagenr() ? '%#TabLineSel#' : '%#TabLine#')
+    let s .= ' ' . (bufname!='' ? fnamemodify(bufname,':t') : '?')
+    let s .= (getbufvar(bufnr,'&modified') ? (i == tabpagenr() ? '%#TabLineSelMod#' : '%#TabLineMod#').' ' : ' ')
   endfor
   return s . '%#TabLineFill#'
 endfunction
