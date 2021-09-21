@@ -272,6 +272,8 @@ augroup END
     let g:MinTreeCollapsed='▶'
     let g:MinTreeOpen='l'
     let g:MinTreeCloseParent='h'
+    let g:MinTreeOpenTab='T'
+    let g:MinTreeTagAFile='t'
     nnoremap <silent> <leader>o <Cmd>MinTree<CR>
     nnoremap <silent> <leader>f <Cmd>MinTreeFind<CR>
 
