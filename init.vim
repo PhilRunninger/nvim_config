@@ -333,19 +333,20 @@ augroup mySetup
 
     " Override selected colorscheme colors   {{{2
     autocmd ColorScheme * highlight! link VertSplit StatusLineNC |
-                        \ highlight Search gui=none guifg=#000000 guibg=#ffaf00
-    " Tab Line
-    autocmd ColorScheme * execute 'highlight TabLineSelMod guifg=#af0000 guibg='.synIDattr(synIDtrans(hlID('TabLineSel')), 'bg') |
-                        \ execute 'highlight TabLineMod guifg=#ffaf00 guibg='.synIDattr(synIDtrans(hlID('TabLine')), 'bg')
-    " Status Line
-    autocmd ColorScheme * highlight GitBranch   gui=none guifg=#efefe7 guibg=#f54d27 |
-                        \ highlight Session     gui=none guifg=#000000 guibg=#ffaf00 |
-                        \ highlight Insert      gui=none guifg=#ffffff guibg=#005fff |
-                        \ highlight NormalMod   gui=none guifg=#ffffff guibg=#af0000 |
-                        \ highlight NormalNoMod gui=none guifg=#000000 guibg=#00df00
-    " Terminal window Status Line
-    autocmd ColorScheme * highlight StatusLineTerm gui=none guifg=#000000 guibg=#ffaf00
+                        \ highlight Search         gui=none guifg=#000000 guibg=#ffaf00
+    " Tab Line - custom colors for modified indicator
+    autocmd ColorScheme * let GUI={group,attr -> synIDattr(synIDtrans(hlID(group)), attr, 'gui')} |
+               \ execute 'highlight TabLineSelMod  gui=none guifg=#00af00 guibg='.GUI('TabLineSel', 'bg') |
+               \ execute 'highlight TabLineMod     gui=none guifg=#ffaf00 guibg='.GUI('TabLine', 'bg')
+    " Status Line (terminal window)
     autocmd TermOpen,WinEnter * execute 'setlocal winhighlight='.(&buftype=='terminal'?'StatusLine:StatusLineTerm':'')
+    autocmd ColorScheme * highlight StatusLineTerm gui=none guifg=#000000 guibg=#ffaf00
+    " Status Line
+    autocmd ColorScheme * highlight GitBranch      gui=none guifg=#efefe7 guibg=#f54d27 |
+                        \ highlight Session        gui=none guifg=#000000 guibg=#ffaf00 |
+                        \ highlight Insert         gui=none guifg=#ffffff guibg=#005fff |
+                        \ highlight NormalMod      gui=none guifg=#ffffff guibg=#af0000 |
+                        \ highlight NormalNoMod    gui=none guifg=#000000 guibg=#00df00
 augroup END
 set termguicolors
 set background=light
