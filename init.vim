@@ -2,32 +2,32 @@
 
 " Plugin Management (Comment a line to temporarily disable a plugin.)  {{{1
 " File / Buffer Management
-packadd! mintree               " git@github.com:PhilRunninger/mintree.git
-packadd! bufselect.vim         " git@github.com:PhilRunninger/bufselect.vim.git
+packadd! mintree               " https://github.com/PhilRunninger/mintree.git
+packadd! bufselect.vim         " https://github.com/PhilRunninger/bufselect.vim.git
 " Coding / Development
-packadd! coc.nvim              " git@github.com:neoclide/coc.nvim.git
-packadd! vim-fugitive          " git@github.com:tpope/vim-fugitive
-packadd! vim-gitgutter         " git@github.com:airblade/vim-gitgutter
-packadd! vim-commentary        " git@github.com:tpope/vim-commentary.git
-packadd! vim-rest-console      " git@github.com:diepm/vim-rest-console.git
+packadd! coc.nvim              " https://github.com/neoclide/coc.nvim.git
+packadd! vim-fugitive          " https://github.com/tpope/vim-fugitive
+packadd! vim-gitgutter         " https://github.com/airblade/vim-gitgutter
+packadd! vim-commentary        " https://github.com/tpope/vim-commentary.git
+packadd! vim-rest-console      " https://github.com/diepm/vim-rest-console.git
 " Colors
-packadd! papercolor-theme      " git@github.com:NLKNguyen/papercolor-theme.git
-packadd! xterm-color-table.vim " git@github.com:guns/xterm-color-table.vim
+packadd! papercolor-theme      " https://github.com/NLKNguyen/papercolor-theme.git
+packadd! xterm-color-table.vim " https://github.com/guns/xterm-color-table.vim
 " Filetype-specific
-packadd! ldraw.vim             " git@github.com:vim-scripts/ldraw.vim.git
-packadd! csv.vim               " git@github.com:chrisbra/csv.vim
+packadd! ldraw.vim             " https://github.com/vim-scripts/ldraw.vim.git
+packadd! csv.vim               " https://github.com/chrisbra/csv.vim
 " Miscellaneous Utilities
-packadd! undotree              " git@github.com:mbbill/undotree
-packadd! vim-easy-align        " git@github.com:junegunn/vim-easy-align
-packadd! vim-sessions          " git@github.com:PhilRunninger/vim-sessions.git
-packadd! vim-signature         " git@github.com:kshenoy/vim-signature
-packadd! vim-repeat            " git@github.com:tpope/vim-repeat
-packadd! vim-surround          " git@github.com:tpope/vim-surround
-packadd! vim-unimpaired        " git@github.com:tpope/vim-unimpaired
-packadd! vim-exchange          " git@github.com:tommcdo/vim-exchange.git
-packadd! unicode.vim           " git@github.com:chrisbra/unicode.vim.git
-packadd! scratch.vim           " git@github.com:mtth/scratch.vim
-packadd! presenting.vim        " git@github.com:sotte/presenting.vim.git
+packadd! undotree              " https://github.com/mbbill/undotree
+packadd! vim-easy-align        " https://github.com/junegunn/vim-easy-align
+packadd! vim-sessions          " https://github.com/PhilRunninger/vim-sessions.git
+packadd! vim-signature         " https://github.com/kshenoy/vim-signature
+packadd! vim-repeat            " https://github.com/tpope/vim-repeat
+packadd! vim-surround          " https://github.com/tpope/vim-surround
+packadd! vim-unimpaired        " https://github.com/tpope/vim-unimpaired
+packadd! vim-exchange          " https://github.com/tommcdo/vim-exchange.git
+packadd! unicode.vim           " https://github.com/chrisbra/unicode.vim.git
+packadd! scratch.vim           " https://github.com/mtth/scratch.vim
+packadd! presenting.vim        " https://github.com/sotte/presenting.vim.git
 
 " Must come AFTER the :packadd! calls above; otherwise, the contents of package 'ftdetect'
 " directories won't be evaluated.
