@@ -37,7 +37,7 @@ filetype indent plugin on
 function InstallCocExtensions()
     let installed = map(CocAction('extensionStats'), {_,v -> v.id})
     for ext in ['coc-vimlsp', 'coc-omnisharp', 'coc-angular', 'coc-erlang_ls', 'coc-tsserver', 'coc-pyright',
-        \ 'coc-json', 'coc-html', 'coc-css',
+        \ 'coc-json', 'coc-html', 'coc-css', 'coc-highlight',
         \ 'coc-snippets']
         if index(installed,ext) == -1
             execute 'CocInstall '.ext
@@ -333,7 +333,7 @@ augroup mySetup
 
     " Override selected colorscheme colors   {{{2
     autocmd ColorScheme * highlight! link VertSplit StatusLineNC |
-                        \ highlight Search          term=reverse cterm=reverse ctermfg=214 ctermbg=235
+                        \ highlight Search term=reverse cterm=reverse ctermfg=214 ctermbg=235 gui=reverse guifg=#ffaf00 guibg=#262626
     " Tab Line
     autocmd ColorScheme * let ctermbg = synIDattr(synIDtrans(hlID('TabLineSel')), 'bg', 'cterm') |
                         \ let guibg = synIDattr(synIDtrans(hlID('TabLineSel')), 'bg', 'gui') |
