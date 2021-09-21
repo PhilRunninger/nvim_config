@@ -333,23 +333,18 @@ augroup mySetup
 
     " Override selected colorscheme colors   {{{2
     autocmd ColorScheme * highlight! link VertSplit StatusLineNC |
-                        \ highlight Search term=reverse cterm=reverse ctermfg=214 ctermbg=235 gui=reverse guifg=#ffaf00 guibg=#262626
+                        \ highlight Search gui=none guifg=#000000 guibg=#ffaf00
     " Tab Line
-    autocmd ColorScheme * let ctermbg = synIDattr(synIDtrans(hlID('TabLineSel')), 'bg', 'cterm') |
-                        \ let guibg = synIDattr(synIDtrans(hlID('TabLineSel')), 'bg', 'gui') |
-                        \ execute 'highlight TabLineSelMod ctermbg=' . (empty(ctermbg)?'none':ctermbg) . ' ctermfg=202 guibg=' . guibg . ' guifg=#ff5f00' |
-                        \ let ctermbg = synIDattr(synIDtrans(hlID('TabLine')), 'bg', 'cterm') |
-                        \ let guibg = synIDattr(synIDtrans(hlID('TabLine')), 'bg', 'gui') |
-                        \ execute 'highlight TabLineMod ctermbg=' . (empty(ctermbg)?'none':ctermbg) . ' ctermfg=214 guibg=' . guibg . ' guifg=#ffaf00'
+    autocmd ColorScheme * execute 'highlight TabLineSelMod guifg=#af0000 guibg='.synIDattr(synIDtrans(hlID('TabLineSel')), 'bg') |
+                        \ execute 'highlight TabLineMod guifg=#ffaf00 guibg='.synIDattr(synIDtrans(hlID('TabLine')), 'bg')
     " Status Line
-    autocmd ColorScheme * highlight StatusLine     cterm=none ctermfg=16 ctermbg=40  gui=none guifg=#000000 guibg=#00df00 |
-                        \ highlight GitBranch      cterm=none ctermfg=12 ctermbg=17  gui=none guifg=#00afdf guibg=#00005f |
-                        \ highlight Session        cterm=none ctermfg=16 ctermbg=178 gui=none guifg=#000000 guibg=#dfaf00 |
-                        \ highlight Insert         cterm=none ctermfg=15 ctermbg=27  gui=none guifg=#ffffff guibg=#005fff |
-                        \ highlight NormalMod      cterm=none ctermfg=15 ctermbg=124 gui=none guifg=#ffffff guibg=#af0000 |
-                        \ highlight NormalNoMod    cterm=none ctermfg=16 ctermbg=40  gui=none guifg=#000000 guibg=#00df00
+    autocmd ColorScheme * highlight GitBranch   gui=none guifg=#efefe7 guibg=#f54d27 |
+                        \ highlight Session     gui=none guifg=#000000 guibg=#ffaf00 |
+                        \ highlight Insert      gui=none guifg=#ffffff guibg=#005fff |
+                        \ highlight NormalMod   gui=none guifg=#ffffff guibg=#af0000 |
+                        \ highlight NormalNoMod gui=none guifg=#000000 guibg=#00df00
     " Terminal window Status Line
-    autocmd ColorScheme * highlight StatusLineTerm cterm=none ctermfg=16 ctermbg=208 gui=none guifg=#000000 guibg=#ff8700
+    autocmd ColorScheme * highlight StatusLineTerm gui=none guifg=#000000 guibg=#ffaf00
     autocmd TermOpen,WinEnter * execute 'setlocal winhighlight='.(&buftype=='terminal'?'StatusLine:StatusLineTerm':'')
 augroup END
 set termguicolors
