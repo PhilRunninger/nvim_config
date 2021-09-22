@@ -11,6 +11,7 @@ packadd! vim-gitgutter         " https://github.com/airblade/vim-gitgutter
 packadd! vim-commentary        " https://github.com/tpope/vim-commentary.git
 packadd! vim-rest-console      " https://github.com/diepm/vim-rest-console.git
 " Colors
+packadd! gruvbox               " https://github.com/morhetz/gruvbox.git
 packadd! papercolor-theme      " https://github.com/NLKNguyen/papercolor-theme.git
 packadd! xterm-color-table.vim " https://github.com/guns/xterm-color-table.vim
 " Filetype-specific
@@ -351,8 +352,9 @@ augroup mySetup
                         \ highlight NormalNoMod    gui=none guifg=#000000 guibg=#00df00
 augroup END
 set termguicolors
-set background=light
-colorscheme PaperColor
+command Light set background=light|colorscheme PaperColor
+command Dark set background=dark|colorscheme gruvbox
+Light
 
 " Dynamic statusline contents and color.   {{{2
 function! s:StatuslineColor(insertMode)
