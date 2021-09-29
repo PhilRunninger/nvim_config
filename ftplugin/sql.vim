@@ -147,7 +147,7 @@ function! s:GotoResultsBuffer(sqlQueryBuffer, sqlConnectionName, sqlTempFile) " 
     let l:winnr = bufwinnr(l:bufferName)
     if l:winnr == -1
         execute 'silent split ' . l:bufferName
-        silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv statusline=%{expand('%:r')}\ \|\ %{SqlConnection()}
+        silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv
         nnoremap <buffer> <F5> <Cmd>call <SID>RunQuery()<CR>
         nnoremap <buffer> <C-F5> <Cmd>call <SID>SQLRunSpecial()<CR>
     else
@@ -231,7 +231,7 @@ function! SqlConnection() " {{{1
 endfunction
 
 " Start Here {{{1
-setlocal statusline=%{expand('%:t')}\ \|\ %{SqlConnection()}
+execute 'setlocal statusline='.escape(substitute(&statusline, '%f\( @ %{SqlConnection()}\)\?', '%f @ %{SqlConnection()}', ''),' ')
 
 let s:sqlConnectionsFile = expand('<sfile>:p:h').'/.sqlConnections'
 let s:sqlConnections = {}
