@@ -67,3 +67,6 @@
 [submodule "pack/bundle/opt/papercolor-theme"]
 	path = pack/bundle/opt/papercolor-theme
 	url = git@github.com:NLKNguyen/papercolor-theme.git
+[submodule "pack/bundle/opt/crease.vim"]
+	path = pack/bundle/opt/crease.vim
+	url = git@github.com:scr1pt0r/crease.vim.git

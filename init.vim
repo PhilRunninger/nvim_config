@@ -18,6 +18,7 @@ packadd! xterm-color-table.vim " https://github.com/guns/xterm-color-table.vim
 packadd! ldraw.vim             " https://github.com/vim-scripts/ldraw.vim.git
 packadd! csv.vim               " https://github.com/chrisbra/csv.vim
 " Miscellaneous Utilities
+packadd! crease.vim            " https://github.com/scr1pt0r/crease.vim.git
 packadd! undotree              " https://github.com/mbbill/undotree
 packadd! vim-easy-align        " https://github.com/junegunn/vim-easy-align
 packadd! vim-sessions          " https://github.com/PhilRunninger/vim-sessions.git
@@ -35,7 +36,7 @@ packadd! presenting.vim        " https://github.com/sotte/presenting.vim.git
 filetype indent plugin on
 
 " Function to ensure all my CoC extensions are installed.
-function InstallCocExtensions()
+function! InstallCocExtensions()
     let installed = map(CocAction('extensionStats'), {_,v -> v.id})
     for ext in ['coc-vimlsp', 'coc-omnisharp', 'coc-angular', 'coc-erlang_ls', 'coc-tsserver', 'coc-pyright',
         \ 'coc-json', 'coc-html', 'coc-css', 'coc-highlight',
@@ -84,7 +85,7 @@ set showcmd         " show (partial) command in last line of screen
 set noshowmode      " [no] message on status line show current mode
 set showmatch       " briefly jump to matching bracket if inserting one
 set number          " print the line number in front of each line
-set fillchars=stl:\ ,stlnc:\ ,vert:\  " characters to use for displaying special items
+set fillchars=stl:\ ,stlnc:\ ,vert:\ ,fold:‧ " characters to use for displaying special items
 set list listchars=tab:●·,extends:→,precedes:←,trail:■
 set laststatus=2                      " tells when last window has status line
 
@@ -216,6 +217,9 @@ augroup mySetup
 augroup END
 
 " Settings for 3rd-party plugins {{{1
+    " Crease   {{{2
+    let g:crease_foldtext = { 'default': '%{repeat(">",v:foldlevel)}%{repeat(" ",v:foldlevel)}%t %{gitgutter#fold#is_changed()?"⭐":""} %=[%l lines]' }
+
     " CSV   {{{2
     let g:no_csv_maps = 1
 
@@ -352,8 +356,8 @@ augroup mySetup
                         \ highlight NormalNoMod    gui=none guifg=#000000 guibg=#00df00
 augroup END
 set termguicolors
-command Light set background=light|colorscheme PaperColor
-command Dark set background=dark|colorscheme gruvbox
+command! Light set background=light|colorscheme PaperColor
+command! Dark set background=dark|colorscheme gruvbox
 Light
 
 " Dynamic statusline contents and color.   {{{2
