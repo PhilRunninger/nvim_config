@@ -1,7 +1,5 @@
 let s:words = []
 let s:savedPattern = @/
-let s:savedFG = synIDattr(synIDtrans(hlID('Search')), 'fg')
-let s:savedBG = synIDattr(synIDtrans(hlID('Search')), 'bg')
 
 function! s:ToggleWord()
     if s:words == []
@@ -21,10 +19,8 @@ endfunction
 function! s:CreateSearchString()
     if empty(s:words)
         let @/ = s:savedPattern
-        execute 'highlight Search guifg='. s:savedFG . ' guibg=' . s:savedBG
     else
         let @/ = '\(' . join(s:words,'\|') . '\)'
-        highlight Search guifg=#000000 guibg=#afff00
     endif
 endfunction
 

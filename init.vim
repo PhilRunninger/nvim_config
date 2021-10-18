@@ -329,32 +329,32 @@ augroup END
     nnoremap <leader>k :UnicodeSearch!<space>
 
 " Color, Tabline, and Statusline Settings   {{{1
-set guifont=DroidSansMono\ NF
-
-syntax on " Turn syntax highlighting on.
-
 augroup mySetup
-    " Change statusline color, depending on mode.   {{{2
+    autocmd TermOpen,WinEnter * execute 'setlocal winhighlight='.(&buftype=='terminal'?'StatusLine:StatusLineTerm':'')
+    autocmd ColorScheme * call <SID>TweakColors()
     autocmd InsertEnter,InsertChange,TextChangedI * call <SID>StatuslineColor(1)
     autocmd VimEnter,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
-
-    " Override selected colorscheme colors   {{{2
-    autocmd ColorScheme * highlight! link VertSplit StatusLineNC |
-                        \ highlight Search         gui=none guifg=#000000 guibg=#ffaf00
-    " Tab Line - custom colors for modified indicator
-    autocmd ColorScheme * let GUI={group,attr -> synIDattr(synIDtrans(hlID(group)), attr, 'gui')} |
-               \ execute 'highlight TabLineSelMod  gui=none guifg=#00af00 guibg='.GUI('TabLineSel', 'bg') |
-               \ execute 'highlight TabLineMod     gui=none guifg=#ffaf00 guibg='.GUI('TabLine', 'bg')
-    " Status Line (terminal window)
-    autocmd TermOpen,WinEnter * execute 'setlocal winhighlight='.(&buftype=='terminal'?'StatusLine:StatusLineTerm':'')
-    autocmd ColorScheme * highlight StatusLineTerm gui=none guifg=#000000 guibg=#ffaf00
-    " Status Line
-    autocmd ColorScheme * highlight GitBranch      gui=none guifg=#efefe7 guibg=#f54d27 |
-                        \ highlight Session        gui=none guifg=#000000 guibg=#ffaf00 |
-                        \ highlight Insert         gui=none guifg=#ffffff guibg=#005fff |
-                        \ highlight NormalMod      gui=none guifg=#ffffff guibg=#af0000 |
-                        \ highlight NormalNoMod    gui=none guifg=#000000 guibg=#00df00
 augroup END
+
+function! s:TweakColors()
+    " Helper lambda function
+    let HL={group,attr,mode -> synIDattr(synIDtrans(hlID(group)), attr, mode)}
+
+    highlight! link VertSplit StatusLineNC
+    " Tab Line - custom colors for modified indicator.
+    execute 'silent highlight TabLineSelMod  gui=none guifg=#00af00 guibg='.HL('TabLineSel', 'bg', 'gui')
+    execute 'silent highlight TabLineMod     gui=none guifg=#ffaf00 guibg='.HL('TabLine', 'bg', 'gui')
+    " Status Line - custom colors for status line items and background.
+    highlight StatusLineTerm gui=none guifg=#000000 guibg=#ffaf00
+    highlight GitBranch      gui=none guifg=#efefe7 guibg=#f54d27
+    highlight Session        gui=none guifg=#000000 guibg=#ffaf00
+    highlight Insert         gui=none guifg=#ffffff guibg=#005fff
+    highlight NormalMod      gui=none guifg=#ffffff guibg=#af0000
+    highlight NormalNoMod    gui=none guifg=#000000 guibg=#00df00
+endfunction
+
+syntax on " Turn syntax highlighting on.
+set guifont=DroidSansMono\ NF
 set termguicolors
 command! Light set background=light|colorscheme PaperColor
 command! Dark set background=dark|colorscheme gruvbox
