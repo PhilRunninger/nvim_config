@@ -11,7 +11,6 @@ packadd! vim-gitgutter         " https://github.com/airblade/vim-gitgutter
 packadd! vim-commentary        " https://github.com/tpope/vim-commentary.git
 packadd! vim-rest-console      " https://github.com/diepm/vim-rest-console.git
 " Colors
-packadd! gruvbox               " https://github.com/morhetz/gruvbox.git
 packadd! papercolor-theme      " https://github.com/NLKNguyen/papercolor-theme.git
 packadd! xterm-color-table.vim " https://github.com/guns/xterm-color-table.vim
 " Filetype-specific
@@ -365,7 +364,7 @@ function! s:StatuslineColor(insertMode)
     redraw!
 endfunction
 
-set statusline=%3v
+set statusline=%3l/%3L\ %3v
 set statusline+=\ %#GitBranch#%(\ %{fugitive#head(8)}\ %)%*
 set statusline+=\ %{&ft}
 set statusline+=\ %{&ff}
