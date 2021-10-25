@@ -356,9 +356,8 @@ endfunction
 syntax on " Turn syntax highlighting on.
 set guifont=DroidSansMono\ NF
 set termguicolors
-command! Light set background=light|colorscheme PaperColor
-command! Dark set background=dark|colorscheme gruvbox
-Light
+set background=light
+colorscheme PaperColor
 
 " Dynamic statusline contents and color.   {{{2
 function! s:StatuslineColor(insertMode)
