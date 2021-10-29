@@ -161,25 +161,24 @@ function! s:RunQuery() " {{{1
     " We're in the Results buffer now.
     let l:start = reltime()
     silent normal! ggdG _
+    let l:querying = s:SQLServer()
+    let l:joining = s:JoinLines()
+    let l:aligning = s:AlignColumns()
+    echon printf('Elapsed: %f seconds (Query: %f  Join: %f  Align: %f)', reltimefloat(reltime(l:start)), l:querying, l:joining, l:aligning)
+endfunction
+
+function! s:SQLServer() " {{{1
+    let l:startTime = reltime()
     echon 'Querying...  '
     redraw!
     silent execute 'r! sqlcmd ' . s:sqlConnections[b:sqlConnectionName] . ' -s"|" -W -i ' . b:sqlTempFile
-    echon 'Fixing line breaks...  '
-    redraw!
-    call s:JoinLines()
-    echon 'Aligning columns...  '
-    redraw!
-    call s:AlignColumns()
-
-    if exists(':CSVInit')
-        let b:delimiter = '|'
-        CSVInit!
-    endif
-
-    echon 'Finished in ' .  split(reltimestr(reltime(l:start)))[0] . ' seconds.'
+    return reltimefloat(reltime(l:startTime))
 endfunction
 
 function! s:JoinLines() " {{{1
+    let l:startTime = reltime()
+    echon 'Fixing line breaks...  '
+    redraw!
     let l:start = 2
     while l:start < line('$')
         call cursor(l:start,1)
@@ -205,9 +204,13 @@ function! s:JoinLines() " {{{1
         let l:start = l:end + 3
     endwhile
     silent execute '%s/'.nr2char(13).'$//e'
+    return reltimefloat(reltime(l:startTime))
 endfunction
 
 function! s:AlignColumns() " {{{1
+    let l:startTime = reltime()
+    echon 'Aligning columns...  '
+    redraw!
     if exists(':EasyAlign')
         silent execute '%s/^$\n^\s*\((\d\+ rows affected)\)/\r\1\r/e'
         silent execute '%s/^\s\+$//e'
@@ -222,8 +225,15 @@ function! s:AlignColumns() " {{{1
             let l:start = search('^.\+$','W')
         endwhile
     endif
+
+    if exists(':CSVInit')
+        let b:delimiter = '|'
+        CSVInit!
+    endif
     silent execute '%s/^$\n^\s*(\(\d\+ rows affected\))\(\n^$\)\?/|\1|' . repeat('-._.-\~',40) . '\r/e'
     silent 1delete _
+
+    return reltimefloat(reltime(l:startTime))
 endfunction
 
 function! SqlConnection() " {{{1
