@@ -10,13 +10,11 @@ packadd! vim-fugitive          " https://github.com/tpope/vim-fugitive
 packadd! vim-gitgutter         " https://github.com/airblade/vim-gitgutter
 packadd! vim-commentary        " https://github.com/tpope/vim-commentary.git
 packadd! vim-rest-console      " https://github.com/diepm/vim-rest-console.git
-" Colors
+" Colorschemes
 packadd! papercolor-theme      " https://github.com/NLKNguyen/papercolor-theme.git
-packadd! xterm-color-table.vim " https://github.com/guns/xterm-color-table.vim
-" Filetype-specific
+" Miscellaneous Utilities
 packadd! ldraw.vim             " https://github.com/vim-scripts/ldraw.vim.git
 packadd! csv.vim               " https://github.com/chrisbra/csv.vim
-" Miscellaneous Utilities
 packadd! crease.vim            " https://github.com/scr1pt0r/crease.vim.git
 packadd! undotree              " https://github.com/mbbill/undotree
 packadd! vim-easy-align        " https://github.com/junegunn/vim-easy-align
@@ -27,7 +25,6 @@ packadd! vim-surround          " https://github.com/tpope/vim-surround
 packadd! vim-unimpaired        " https://github.com/tpope/vim-unimpaired
 packadd! vim-exchange          " https://github.com/tommcdo/vim-exchange.git
 packadd! unicode.vim           " https://github.com/chrisbra/unicode.vim.git
-packadd! scratch.vim           " https://github.com/mtth/scratch.vim
 packadd! presenting.vim        " https://github.com/sotte/presenting.vim.git
 
 " Must come AFTER the :packadd! calls above; otherwise, the contents of package 'ftdetect'
@@ -60,7 +57,7 @@ let mapleader=' '                   " Character to use for <leader> mappings
 
 " Markdown settings
 let g:markdown_folding = 1
-let g:markdown_fenced_languages = ['vim']
+let g:markdown_fenced_languages = ['vim','sql','cs','ps1']
 
 " Searching settings (See plugin/better_search.vim for new * mapping)   {{{2
 set hlsearch incsearch
@@ -84,9 +81,9 @@ set showcmd         " show (partial) command in last line of screen
 set noshowmode      " [no] message on status line show current mode
 set showmatch       " briefly jump to matching bracket if inserting one
 set number          " print the line number in front of each line
-set fillchars=stl:\ ,stlnc:\ ,vert:\ ,fold:‧ " characters to use for displaying special items
+set fillchars=stl:\ ,stlnc:\ ,vert:\ ,eob:\ ,fold:‧  " characters to use for displaying special items
 set list listchars=tab:●·,extends:→,precedes:←,trail:■
-set laststatus=2                      " tells when last window has status line
+set laststatus=2    " tells when last window has status line
 
 " Undo/Backup/Swap file settings   {{{1
 execute 'set   undodir='.fnamemodify($MYVIMRC,':p:h').'/cache/undo//      undofile undolevels=500'
@@ -301,23 +298,13 @@ augroup END
     let g:vrc_trigger = '<leader>r'
 
     " Undotree   {{{2
-    nnoremap <silent> <leader>u <Cmd>UndotreeShow<CR>
-    let g:undotree_SetFocusWhenToggle = 1
+    nnoremap <silent> <leader>u <Cmd>UndotreeToggle<CR>
     let g:undotree_WindowLayout = 2
     let g:undotree_HelpLine = 0
     let g:undotree_ShortIndicators = 1
 
     " EasyAlign   {{{2
     vmap <Enter> <Plug>(LiveEasyAlign)
-
-    " Scratch   {{{2
-    let g:scratch_insert_autohide = 0
-    let g:scratch_no_mappings = 1
-    let g:scratch_persistence_file = fnamemodify($MYVIMRC,':p:h').'/cache/scratch.txt'
-    nnoremap gs <Cmd>Scratch<CR>
-    nnoremap gS <Cmd>Scratch!<CR>
-    xnoremap gs <Cmd>ScratchSelection<CR>
-    xnoremap gS <Cmd>ScratchSelection!<CR>
 
     " vim-sessions   {{{2
     set sessionoptions-=help
@@ -347,7 +334,7 @@ function! s:TweakColors()
 endfunction
 
 syntax on " Turn syntax highlighting on.
-set guifont=DroidSansMono\ NF
+set guifont=DroidSansMono\ NF:h9
 set termguicolors
 set background=light
 colorscheme PaperColor
