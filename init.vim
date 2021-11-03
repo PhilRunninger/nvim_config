@@ -45,9 +45,7 @@ endfunction
 
 " Miscellaneous settings   {{{1
 set path+=**                        " search recursively for files with :find
-set autoread                        " automatically read file when changed outside of vim
 set sidescroll=1                    " Minimum number of columns to scroll horizontal
-set nostartofline                   " [do not] move cursor to first non-blank column when paging
 set hidden                          " don't unload buffer when it is abandoned
 set confirm                         " Ask what to do with unsaved/read-only files
 set backspace=indent,eol,start      " How backspace works at start of line
@@ -60,24 +58,22 @@ let g:markdown_folding = 1
 let g:markdown_fenced_languages = ['vim','sql','cs','ps1']
 
 " Searching settings (See plugin/better_search.vim for new * mapping)   {{{2
-set hlsearch incsearch
 set ignorecase smartcase
 runtime macros/matchit.vim
 
 " Command line options   {{{1
 set history=1000
-set wildmenu wildignorecase
+set wildignorecase
 set wildignore+=*.a,*.o,*.beam
 set wildignore+=*.bmp,*.gif,*.jpg,*.ico,*.png
 set wildignore+=.DS_Store,.git,.ht,.svn
 set wildignore+=*~,*.swp,*.tmp
 
 " Tab settings and behavior   {{{1
-set autoindent smartindent
+set smartindent
 set softtabstop=4 tabstop=4 shiftwidth=4 expandtab
 
 " Which things are displayed on screen?   {{{1
-set showcmd         " show (partial) command in last line of screen
 set noshowmode      " [no] message on status line show current mode
 set showmatch       " briefly jump to matching bracket if inserting one
 set number          " print the line number in front of each line
@@ -199,14 +195,10 @@ augroup mySetup
         autocmd BufEnter * if exists('b:winview') | call winrestview(b:winview) | endif
     endif
 
-    " make autoread work better in the terminal   {{{2
-    if !has('gui_running')
-        autocmd BufEnter        * silent! checktime
-        autocmd CursorHold      * silent! checktime
-        autocmd CursorHoldI     * silent! checktime
-        autocmd CursorMoved     * silent! checktime
-        autocmd CursorMovedI    * silent! checktime
-    endif
+    " Make 'autoread' work more responsively   {{{2
+    autocmd BufEnter    * silent! checktime
+    autocmd CursorHold  * silent! checktime
+    autocmd CursorMoved * silent! checktime
 
     " Restart with cursor in the location from last session.   {{{2
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif
@@ -360,8 +352,7 @@ function! Tabline()
   for i in range(1,tabpagenr('$'))
     let bufnr = tabpagebuflist(i)[tabpagewinnr(i) - 1]
     let bufname = bufname(bufnr)
-    let s .= '%' . i . 'T'
-    let s .= (i == tabpagenr() ? '%#TabLineSel#' : '%#TabLine#')
+    let s .= '%'.i.'T' . (i == tabpagenr() ? '%#TabLineSel#' : '%#TabLine#')
     let s .= ' ' . (bufname!='' ? fnamemodify(bufname,':t') : '?')
     let s .= (getbufvar(bufnr,'&modified') ? '  ' : ' ')
   endfor
