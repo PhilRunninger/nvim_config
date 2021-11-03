@@ -336,13 +336,7 @@ augroup mySetup
 augroup END
 
 function! s:TweakColors()
-    " Helper lambda function
-    let HL={group,attr,mode -> synIDattr(synIDtrans(hlID(group)), attr, mode)}
-
     highlight! link VertSplit StatusLineNC
-    " Tab Line - custom colors for modified indicator.
-    execute 'silent highlight TabLineSelMod  gui=none guifg=#00af00 guibg='.HL('TabLineSel', 'bg', 'gui')
-    execute 'silent highlight TabLineMod     gui=none guifg=#ffaf00 guibg='.HL('TabLine', 'bg', 'gui')
     " Status Line - custom colors for status line items and background.
     highlight StatusLineTerm gui=none guifg=#000000 guibg=#ffaf00
     highlight GitBranch      gui=none guifg=#efefe7 guibg=#f54d27
@@ -382,7 +376,7 @@ function! Tabline()
     let s .= '%' . i . 'T'
     let s .= (i == tabpagenr() ? '%#TabLineSel#' : '%#TabLine#')
     let s .= ' ' . (bufname!='' ? fnamemodify(bufname,':t') : '?')
-    let s .= (getbufvar(bufnr,'&modified') ? (i == tabpagenr() ? '%#TabLineSelMod#' : '%#TabLineMod#').' ' : ' ')
+    let s .= (getbufvar(bufnr,'&modified') ? '  ' : ' ')
   endfor
   return s . '%#TabLineFill#'
 endfunction
