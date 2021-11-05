@@ -18,7 +18,8 @@ function! s:RevealHighlights(r,c)
         let buf = nvim_create_buf(v:false, v:true)
         call nvim_buf_set_lines(buf, 0, -1, v:true, lines)
         let opts = {'width':max(map(lines,{_,v -> strchars(v)})), 'height':len(lines),
-                    \ 'relative':'win', 'bufpos':[a:r,a:c], 'row':0, 'style':'minimal'}
+                    \ 'relative':'win', 'bufpos':[a:r,a:c], 'row':0, 'style':'minimal',
+                    \ 'border':'rounded'}
         let win = nvim_open_win(buf, 0, opts)
 
         call timer_start(5000, {-> nvim_win_close(win, 0)})
