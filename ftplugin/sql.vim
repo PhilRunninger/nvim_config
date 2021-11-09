@@ -66,7 +66,7 @@ function! s:GetConnectionInfo() " {{{1
             unlet b:sqlConnectionName
         else
             let s:sqlConnections[b:sqlConnectionName] = input('Enter the slqcmd parameters "' . b:sqlConnectionName . '" will use: ')
-            call writefile([string(s:sqlConnections)], s:sqlConnectionsFile)
+            call writefile([substitute(substitute(string(s:sqlConnections),"'",'"','g'),'""', "'",'g')], s:sqlConnectionsFile)
         endif
     endif
     return exists('b:sqlConnectionName')
@@ -251,10 +251,10 @@ endfunction
 " Start Here {{{1
 execute 'setlocal statusline='.escape(substitute(&statusline, '%f\( @ %{SqlConnection()}\)\?', '%f @ %{SqlConnection()}', ''),' ')
 
-let s:sqlConnectionsFile = expand('<sfile>:p:h').'/.sqlConnections'
+let s:sqlConnectionsFile = expand('<sfile>:p:h').'/.sqlConnections.json'
 let s:sqlConnections = {}
 if filereadable(s:sqlConnectionsFile)
-    execute 'let s:sqlConnections = ' . readfile(s:sqlConnectionsFile)[0]
+    execute 'let s:sqlConnections = ' . join(readfile(s:sqlConnectionsFile),'')
 endif
 
 let b:sqlTempFile = tempname()
