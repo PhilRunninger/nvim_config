@@ -217,8 +217,16 @@ function! s:AlignColumns() " {{{1
         normal! gg
         let l:start = search('^.\+$','W')
         while l:start > 0
+            let l:columns = count(getline(l:start), '|') + 1
             let l:end = line("'}") - (line("'}") != line("$"))
-            if l:end - l:start - 1 <= get(g:, 'sqlAlignLimit', 100)
+            let l:rows = l:end - l:start - 1
+            " These coefficients were derived from an experiment I did with
+            " tables as long as 10000 rows (2 columns), as wide as 2048
+            " columns (10 rows), and various sizes in between.
+            let l:timeEstimate = 0.000299808*l:rows*l:columns + 0.014503037*l:columns
+            if l:timeEstimate <= get(g:, 'sqlAlignTimeLimit', 5.0)
+                echon printf('Aligning columns...  (rows: %d, columns: %d, estimate: %.1f seconds)', l:rows, l:columns, l:timeEstimate)
+                redraw!
                 silent execute l:start . ',' . l:end . 'call easy_align#align(0,0,"command","* |")'
             endif
             normal! }
