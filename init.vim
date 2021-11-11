@@ -35,8 +35,7 @@ filetype indent plugin on
 function! InstallCocExtensions()
     let installed = map(CocAction('extensionStats'), {_,v -> v.id})
     for ext in ['coc-vimlsp', 'coc-omnisharp', 'coc-angular', 'coc-erlang_ls', 'coc-tsserver', 'coc-pyright',
-        \ 'coc-json', 'coc-html', 'coc-css', 'coc-highlight',
-        \ 'coc-snippets']
+        \ 'coc-json', 'coc-html', 'coc-css', 'coc-sql', 'coc-highlight', 'coc-snippets']
         if index(installed,ext) == -1
             execute 'CocInstall '.ext
         endif
