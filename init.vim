@@ -10,6 +10,7 @@ packadd! vim-fugitive          " https://github.com/tpope/vim-fugitive
 packadd! vim-gitgutter         " https://github.com/airblade/vim-gitgutter
 packadd! vim-commentary        " https://github.com/tpope/vim-commentary.git
 packadd! vim-rest-console      " https://github.com/diepm/vim-rest-console.git
+packadd! vim-matchup           " https://github.com/andymass/vim-matchup.git
 " Colorschemes
 packadd! papercolor-theme      " https://github.com/NLKNguyen/papercolor-theme.git
 " Miscellaneous Utilities
@@ -58,7 +59,6 @@ let g:markdown_fenced_languages = ['vim','sql','cs','ps1']
 
 " Searching settings (See plugin/better_search.vim for new * mapping)   {{{2
 set ignorecase smartcase
-runtime macros/matchit.vim
 
 " Command line options   {{{1
 set history=1000

@@ -61,3 +61,6 @@
 [submodule "pack/bundle/opt/crease.vim"]
 	path = pack/bundle/opt/crease.vim
 	url = git@github.com:scr1pt0r/crease.vim.git
+[submodule "pack/bundle/opt/vim-matchup"]
+	path = pack/bundle/opt/vim-matchup
+	url = git@github.com:andymass/vim-matchup.git
