@@ -62,23 +62,12 @@ fun! Splash()
     setlocal nomodifiable nomodified
 
     " Setup the colors.
-    syn match Splash0 //
-    syn match Splash1 //
-    syn match Splash2 //
-    syn match Splash3 //
-    syn match Splash4 //
-    syn match Splash5 //
-
-    let l:colors = ['#2fa8e4','#2993c2','#6dbc61','#91ca61','#519e39','#76b237']
-    let l:hlOn = join(map(copy(l:colors),{i,v -> 'highlight Splash'.i.' guifg='.v}),'|')
-    let l:hlOff = join(map(copy(l:colors),{i,v -> 'highlight clear Splash'.i}),'|')
-    execute l:hlOn
-
-    augroup SplashScreen
-        autocmd!
-        execute 'autocmd ColorScheme <buffer> '.l:hlOn
-        execute 'autocmd BufWipeout <buffer> '.l:hlOff
-    augroup END
+    let l:colors = [['','#2fa8e4'], ['','#6dbc61'], ['','#91ca61'], ['','#519e39'], ['','#76b237']]
+    for l:i in range(len(l:colors))
+        execute 'syntax match Splash'.l:i.' /'.l:colors[l:i][0].'/'
+        execute 'highlight Splash'.l:i.' guifg='.l:colors[l:i][1]
+        execute 'autocmd BufWipeout <buffer> highlight clear Splash'.l:i
+    endfor
 
     " Pressing any key (numbers or letters) will exit the splash screen.
     for l:letter in range(48,57)+range(65,90)+range(97,122)
