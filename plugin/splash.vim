@@ -11,7 +11,7 @@ function! s:SetColors(colors)
     let l:i = 0
     for [l:color,l:matches] in a:colors
         for l:match in l:matches
-            execute 'syntax match Splash'.l:i.' #'.l:match.'#'
+            execute 'syntax match Splash'.l:i.' /'.l:match.'/'
         endfor
         execute 'highlight Splash'.l:i.' guifg='.l:color
         execute 'autocmd BufWipeout <buffer> highlight clear Splash'.l:i
@@ -29,7 +29,7 @@ function! s:Splash()
 
     let s:wininfo = getwininfo(win_getid())[0]
 
-    if float2nr(reltimefloat(reltime()))%2
+    if float2nr(reltimefloat(reltime()))%2 || s:wininfo['height'] < 55
         let s:logo = [  '           .             .'
                     \ , '         ⎽⎺\            |⎺⎽'
                     \ , '       ⎽⎺\           |⎺⎽'
@@ -76,60 +76,73 @@ function! s:Splash()
             call map(s:logo, {i,v -> v.l:name[i]})
         endif
         call s:WriteLogo()
-        call s:SetColors([['#2fa8e4',['']], ['#6dbc61',['']], ['#91ca61',['']], ['#519e39',['']], ['#76b237',['']]])
+        call s:SetColors([
+            \ ['#2fa8e4',['']],
+            \ ['#6dbc61',['']],
+            \ ['#91ca61',['']],
+            \ ['#519e39',['']],
+            \ ['#76b237',['']]
+        \ ])
     else
-        let s:logo = [ '                                         NNNNNNNNNNNNNNNN'
-                   \ , '                                 NNNmmmdhhyssoo++++ooosyhhdmmmNNN'
-                   \ , '                            NNNmmhso/-.``                ``.-/+shmmNNN'
-                   \ , '                        NNmmds+-``   `.-:/+ossyyyyyysso+/:-.`   ``-+sdmmNN'
-                   \ , '                     NNmdy+-`   .:+shddmmmmmmmmmmmmmmmmmmmmddhs+:.   `-+ydmNN'
-                   \ , '                   Nmdy/.`  ./shdmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmdhs/-   ./ydmN'
-                   \ , '                NNmh+.  `-ohdmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmdho-`  .+hmNN'
-                   \ , '              Nmmy:`  -+hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmh+-  `:ymmN'
-                   \ , '            NNmy:` `:ydmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmdy:` `:ymNN'
-                   \ , '           Nmh:` `:ymmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmy:` `:hmN'
-                   \ , '         Nmdo`  :ymmmmmmmmmmmmmmmmmmmmmmmmmmmmmhsyyhmmmmmmmmmmmmmmmmmmmmmmmmmmmmy:  `+dmN'
-                   \ , '        Nmh-  .smmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmd///+odmmmmmmmmmmmmmmmmmmmmmmmmmmmms.  -hmN'
-                   \ , '       Nms`  :hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmd/////ommmmmddhhhhdmmmmmmmmmmmmmmmmmd:  `smN'
-                   \ , '      mmo  `+mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmo//+++mmdys++////+shmmmmmmmmmmmmmmmmm+`  omm'
-                   \ , '     mm+  `smmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmdo++osmh+//+///+shmmmmmmmmmmmmmmmmmmmms`  +mm'
-                   \ , '    mmo  `smmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmy+sdy+/+++/+ohmmmmmmmmmmmmmmmmmmmmmmms`  omm'
-                   \ , '   Nmy   ommmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmdhd++oo/+ohmmmmmmmmmmmmmmmmmmmmmmmmmms   ymN'
-                   \ , '  Nmd.  /mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmds+y++shmmmmmmmmmmmmmmmmmmmmmmmmmmmmm/  `dmN'
-                   \ , '  mm/  .dmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmdohyhmmmmmmmmmdddddmmmmmmmmmmmmmmmmmmd.  /mm'
-                   \ , ' Nmh   smmmmmmmmmmmmh.``.:hmmmmmmmmmmmmmmm+```.+dmmmbdmmmmmmds+:.`     `.-/ohmmmmmmmmmmmmms   hmN'
-                   \ , ' mm/  .mmmmmmmmmmmmmd     .mmmmmmmmmmmmmmmo     ommmbmmmmdo-  `:+syyso+-`    .smmmmmmmmmmmm.  /mm'
-                   \ , ' mm`  +mmmmmmmmmmmmmm`    .mmmmmmmmmmmmmmms     ommmmmmmo`  .odmmmmmmmmmds-   /mmmmmmmmmmmmo  `dm'
-                   \ , 'Nmh   hmmmmmmmmmmmmmm.    .mmmmmmmmmmmmmmmy     ommmmmh-   :dmmmmmmmmmmmmmms.:dmmmmmmmmmmmmh   ymN'
-                   \ , 'Nmo  `mmmmmmmmmmmmmmm.    .mmmmmmmmmmmmmmmh     smmmmh`   :mmmmmmmmmmmmmmmmmdmmmmmmmmmmmmmmm`  omN'
-                   \ , 'mm+  .mmmmmmmmmmmmmmm-    .mmmmmmmmmmmmmmmh     smmmd.   `hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm.  +mm'
-                   \ , 'mm+  .mmmmmmmmmmmmmmm-    .mmmmmmmmmmmmmmmh     ymmm/    -mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm.  +mm'
-                   \ , 'Nmo  `mmmmmmmmmmmmmmm-    `--:::::::::::--.     ymmm`    /mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm`  omN'
-                   \ , 'Nmy   dmmmmmmmmmmmmmm:    `:::::::::::::::-     ymmh     /mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmd   smN'
-                   \ , 'Nmd`  smmmmmmmmmmmmmm:    -mmmmmmmmmmmmmmmh     ymmh     .mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmms  `dmN'
-                   \ , ' mm-  :mmmmmmmmmmmmmm:    -mmmmmmmmmmmmmmmh     smmm`     ymmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm:  -mm'
-                   \ , ' Nms  `hmmmmmmmmmmmmm:    -mmmmmmmmmmmmmmmh     smmm+     .hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmh`  smN'
-                   \ , '  mm.  :mmmmmmmmmmmmm:    -mmmmmmmmmmmmmmmy     ommmd-     .ymmmmmmmmmmmmmmmmmmdmmmmmmmmmm/  .mm'
-                   \ , '  Nmy   smmmmmmmmmmmm-    .mmmmmmmmmmmmmmmy     +mmmmd-     `/hdmmmmmmmmmmmmhs/hmmmmmmmmmy   ymN'
-                   \ , '   mm/  `hmmmmmmmmmmm.    .mmmmmmmmmmmmmmms     +mmmmmdo.     `-/syhhhhhyo/-`.smmmmmmmmmh`  /mm'
-                   \ , '    mm-  -dmmmmmmmmmm`    .mmmmmmmmmmmmmmmy     :mmmmmmmdo-`              `.odmmmmmmmmmd-  -dmN'
-                   \ , '    Nmd-  -dmmmmmmmmd:...-ymmmmmmmmmmmmmmmm+...-+mmmmmmmmmmhs+:-.`````.-/ohmmmmmmmmmmmd-  -dmN'
-                   \ , '     Nmd-  .hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmdddddmmmmmmmmmmmmmmmh-  -dmN'
-                   \ , '      Nmd:  `smmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmms`  :dmN'
-                   \ , '       Nmm+   /dmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmd/   +mmN'
-                   \ , '         Nmy.  .smmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmms.  .ymm'
-                   \ , '          Nmm+`  -ymmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmy-  `+mmN'
-                   \ , '            Nmd/   -smmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmms-   /dmN'
-                   \ , '              Nmh/`  .odmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmdo.  `/hmN'
-                   \ , '                Nmd+.  `:sdmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmds:`  .+dmN'
-                   \ , '                  Nmdy:`  `-oydmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmyo-`  `:ydmN'
-                   \ , '                    NNmds/.  ``:+shdmmmmmmmmmmmmmmmmmmmmmmmmmmdhs+:``  ./sdmNN'
-                   \ , '                       NNmdyo:.   `.-/+syyhdddmmmmmmdddhyys+/-.`   .:oydmNN'
-                   \ , '                           NNmdhs+:.`    ```..........```    `.:+shdmNN'
-                   \ , '                               NNNmddhyo+/:----....----:/+oyhddmNNN'
-                   \ , '                                     NNNNNNmmmddddddmmmNNNNNN']
+        let s:logo = [  '                                        ######B8$OWpSKmKSpWO$8B######'
+                    \ , '                                  ####BRmni*!:`               `-!*inmEB####'
+                    \ , '                              ###Qqnr:`       .,=~^*r???r*^~=,.       `:rnpQ###'
+                    \ , '                           ##BWi!`    ."^iVK6gB@@@@@@@@@@@@@@@@86KVi^".    `=imB##'
+                    \ , '                       ###b]=    _*nq8@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@QZnr_    :]%###'
+                    \ , '                     ##R];   .=VE@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@EV^.   `]E###'
+                    \ , '                  ##Bw`   .~V0@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@02>.   ~wQ##'
+                    \ , '                ##Ql`   ,l0@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@0c,   `l8##'
+                    \ , '               #8}`   ^PB@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@BS^.  `]8##'
+                    \ , '             ##V`  .r6@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Or.  `nB#'
+                    \ , '           ##6!  .v8@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@QPK5WSB@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8i.  `d##'
+                    \ , '          #Bl`  .6@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@X}}}}Jg@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@O~  `}B#'
+                    \ , '        ##g<   nB@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@s}}}}}2B@@@@@@Q888QB@@@@@@@@@@@@@@@@@@@BV.  >0##'
+                    \ , '       ##6`  .V@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@P}}}nl}8@@BOm2l}}}}coWQ@@@@@@@@@@@@@@@@@@6.  `d##'
+                    \ , '      ##q`  .q@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Qa}}JjtB@On}}}}}}}lURQB@@@@@@@@@@@@@@@@@@@Z-  `p##'
+                    \ , '     ##e`  =g@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@gjVPRQj}}nn}}}n%B@@@@@@@@@@@@@@@@@@@@@@@@8=  `w##'
+                    \ , '    ##q`  :g@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@BRDBU}}en}}uqQ@@@@@@@@@@@@@@@@@@@@@@@@@@@8:  `5##'
+                    \ , '   ##g`  .E@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@80}nHu}VZQ@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@R-  `0##'
+                    \ , '   ##r   w@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@BQP2dtH0@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@h   r##'
+                    \ , '  ##m   r@@@@@@@@@@@@@@$ZKKbQ@@@@@@@@@@@@@@@@@@RpKPOB@@@@@Qa8SQ@@@@@@@QRHXznnVoPdgB@@@@@@@@@@@@@@@@@r   a##'
+                    \ , '  #B`  .6@@@@@@@@@@@@@@!    .}@@@@@@@@@@@@@@@@@-    _w@@@@RB@@@@@@gj`             -!vUQ@@@@@@@@@@@@@E.  !B#'
+                    \ , ' ##h   v@@@@@@@@@@@@@@@|     `R@@@@@@@@@@@@@@@@>     "B@@@@@@@@0]`  .>nZ8B@@BgZ}~.    `w@@@@@@@@@@@@@i   X##'
+                    \ , ' ##?   G@@@@@@@@@@@@@@@}     `R@@@@@@@@@@@@@@@@r     =@@@@@@@@X`  .?D@@@@@@@@@@@@0}-  `a@@@@@@@@@@@@@q   r##'
+                    \ , ' #B:  _Q@@@@@@@@@@@@@@@n     -8@@@@@@@@@@@@@@@@v     =@@@@@@8*   -S@@@@@@@@@@@@@@@@8|,X@@@@@@@@@@@@@@Q,  :B#'
+                    \ , ' #D`  <@@@@@@@@@@@@@@@@j     -8@@@@@@@@@@@@@@@@]     ~@@@@@g=   .Z@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@^  `E#'
+                    \ , '##Z   ?@@@@@@@@@@@@@@@@w     -8@@@@@@@@@@@@@@@@}     <@@@@Q~    ]@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@(   p##'
+                    \ , '##H   |@@@@@@@@@@@@@@@@K     -8@@@@@@@@@@@@@@@@n     r@@@@i    `D@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@v   K##'
+                    \ , '##b   r@@@@@@@@@@@@@@@@K     `rviii]}}]]xiiiv((:     r@@@8`    :B@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@?   W##'
+                    \ , ' #g:  !@@@@@@@@@@@@@@@@q       ````````````````      r@@@5     :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`  ,0#'
+                    \ , ' ##!  .0@@@@@@@@@@@@@@@Z     ,$QQQQBBBBBBBBBQQQ}     r@@@X     `0@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@g`  !##'
+                    \ , ' ##]   o@@@@@@@@@@@@@@@Z     ,B@@@@@@@@@@@@@@@@n     ^@@@Z      V@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@s   x##'
+                    \ , ' ##b.  ^@@@@@@@@@@@@@@@Z     ,B@@@@@@@@@@@@@@@@}     <@@@Q:     ,g@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@^  `W##'
+                    \ , '  ##?   X@@@@@@@@@@@@@@Z     ,Q@@@@@@@@@@@@@@@@x     !@@@@P.     ,E@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@a   ?##'
+                    \ , '  ##R.  :Q@@@@@@@@@@@@@S     -8@@@@@@@@@@@@@@@@v     =@@@@@V.     `zB@@@@@@@@@@@@@@@@@@$8@@@@@@@@@@Q=  .E##'
+                    \ , '   ##n   v@@@@@@@@@@@@@m     `N@@@@@@@@@@@@@@@@?     ,B@@@@@X.      :Vg@@@@@@@@@@@@B6n~!8@@@@@@@@@@i   l##'
+                    \ , '    #B^   t@@@@@@@@@@@@y     `R@@@@@@@@@@@@@@@@r     -8@@@@@@0(       `=(nXG55Pjl(~- `?8@@@@@@@@@@w`  ^B#'
+                    \ , '    ##8:  `P@@@@@@@@@@@}     `0@@@@@@@@@@@@@@@@x     `O@@@@@@@@W\_                 _vO@@@@@@@@@@@G`  :8##'
+                    \ , '     ##N,  `m@@@@@@@@@@c:-_-!X@@@@@@@@@@@@@@@@@8?-__-!6@@@@@@@@@@B6z\>-,.    .-=rnWB@@@@@@@@@@@@P`  ,D##'
+                    \ , '      ##Q<   iB@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@]   ~8##'
+                    \ , '        #Q?   `B@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@B}   ?Q#'
+                    \ , '         ##2.  `R@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@R`  .V##'
+                    \ , '          ##6!  `}Q@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Ql`  =6##'
+                    \ , '           ##Bn   `wB@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Be`   *B##'
+                    \ , '             ##$r.  `]g@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8}`  .rD##'
+                    \ , '               ##Or.  `?%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@d?`  .*d##'
+                    \ , '                 ##Rv.   =n0@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@gn=   .|E##'
+                    \ , '                   ##8V=   `~nR@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8n~`   =V8##'
+                    \ , '                     ###6].    ~}qQ@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@QZ}~`   ,]6###'
+                    \ , '                        ###6l~.   `!|ybQ@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Qdjv!`    !l6###'
+                    \ , '                            ###Wu*_     `-~r]VhWE08QBBBBQQ80EWmV]?~-`     _^cWB##'
+                    \ , '                               ####$mlr=-          ```````          .=rlm$####'
+                    \ , '                                    ####B0WXn]?^!:---___---:!<rxnXW0B####'
+                    \ , '                                          ###########B###########']
         call s:WriteLogo()
-        call s:SetColors([['#32000e',['[^M ]']], ['#9ba879',[ 'hsyyh', 'd///+od', 'd/////o', 'ddhhhhd', 'o//+++', 'dys++////+sh', 'do++os', 'h+//+///+sh', 'y+sdy+/+++/+oh', 'dhd++oo/+oh', 'ds+y++sh', 'dohyh', 'bd\?']]])
+        call s:SetColors([
+            \ ['#32200e',['\S']],
+            \ ['#000000',['\(#\S*\|\S*#\)']],
+            \ ['#9ba879',['QPK5WSB','X}}}}Jg','s}}}}}2B','Q888QB','P}}}nl}8','BOm2l}}}}coWQ','Qa}}JjtB','On}}}}}}}lURQB','gjVPRQj}}nn}}}n%B','BRDBU}}en}}uqQ','80}nHu}VZQ','BQP2dtH0','Qa8SQ','RB']]
+        \ ])
     endif
 
     " Pressing any key (numbers or letters) will exit the splash screen.
