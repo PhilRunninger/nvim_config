@@ -204,6 +204,9 @@ augroup mySetup
 augroup END
 
 " Settings for 3rd-party plugins {{{1
+    " MatchUp   {{{2
+    let g:matchup_matchparen_offscreen = {'method':'popup'}
+
     " Crease   {{{2
     let g:crease_foldtext = { 'default': '%{repeat(">",v:foldlevel)}%{repeat(" ",v:foldlevel)}%t %{gitgutter#fold#is_changed()?"⭐":""} %=[%l lines]' }
 
