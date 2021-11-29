@@ -147,11 +147,10 @@ function! s:Splash()
         \ ])
     endif
 
-    " Pressing any key (numbers, letters, or Space) will exit the splash screen.
+    " Pressing any key (numbers or letters) will exit the splash screen.
     for l:letter in range(48,57)+range(65,90)+range(97,122)
         execute 'nnoremap <buffer><silent><nowait> '.nr2char(l:letter).' :enew'.(count(['a','i','o','A','I','O'],l:letter)==1 ? '<bar>startinsert<CR>' : '<CR>')
     endfor
-    nnoremap <buffer><silent><nowait> <Space> :enew<CR>
 endfun
 
 set shortmess+=I
