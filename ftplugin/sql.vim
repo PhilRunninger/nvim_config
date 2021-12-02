@@ -29,9 +29,6 @@ nnoremap <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
 vnoremap <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
 nnoremap <buffer> <C-F5> :call <SID>SQLRunSpecial()<CR>
 nnoremap <buffer> <leader><F5> :call <SID>GetConnectionInfo()<CR>
-imap <buffer> <F5> <Esc><F5>
-imap <buffer> <S-F5> <Esc><S-F5>
-imap <buffer> <C-F5> <Esc><C-F5>
 
 function! s:SQLRun(object) " {{{1
     if !exists('b:sqlConnectionName') && !s:GetConnectionInfo()
