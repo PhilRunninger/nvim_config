@@ -21,13 +21,6 @@ function! s:SetColors(colors)
     endfor
 endfunction
 
-function! CloseSplash(...)
-    enew
-    if get(a:, 1, 0) == 1
-        startinsert
-    endif
-endfunction
-
 function! s:Splash()
     if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode
         return
@@ -154,10 +147,22 @@ function! s:Splash()
 
     " Pressing any key (numbers or letters) will exit the splash screen.
     for l:letter in range(48,57)+range(65,90)+range(97,122)
-        execute 'nnoremap <buffer><silent><nowait> '.nr2char(l:letter).' :call CloseSplash('.count(['a','i','o','A','I','O'],l:letter)==1.')'
+        execute 'nnoremap <buffer><silent><nowait> '.nr2char(l:letter).' :call CloseSplash('.count('aioAIO',nr2char(l:letter)).')<CR>'
     endfor
-    call timer_start(2000, 'CloseSplash')
+
+    let g:splashTimer = timer_start(2000, 'CloseSplash')
+    autocmd BufWipeout <buffer> unlet g:splashTimer
 endfun
+
+function! CloseSplash(...)
+    if exists('g:splashTimer')
+        call timer_stop(g:splashTimer)
+        enew
+        if get(a:, 1, 0) == 1
+            startinsert
+        endif
+    endif
+endfunction
 
 set shortmess+=I
 autocmd VimEnter * call s:Splash()
