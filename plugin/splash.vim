@@ -1,9 +1,14 @@
 function! s:WriteText(screen)
-    let l:indent = (s:wininfo['width'] - a:screen['width']) / 2
-    call map(a:screen['text'], {_,v -> repeat(' ', l:indent) . v})
-    let l:margin = (s:wininfo['height'] - a:screen['height']) / 2
-    let l:text = map(range(l:margin),{_ -> ''}) + a:screen['text'] + map(range(l:margin),{_ -> ''})
+    let l:mult = index(['l','c','r'], a:screen['align'], 0, 1)
+    let l:padding = l:mult * (s:wininfo['width'] - a:screen['width']) / 2
+    call map(a:screen['text'], {_,v -> repeat(' ', l:padding) . v})
+
+    let l:mult = index(['t','c','b'], a:screen['valign'], 0, 1)
+    let l:padding = l:mult * (s:wininfo['height'] - a:screen['height']) / 2
+    let l:text = map(range(l:padding),{_ -> ''}) + a:screen['text']
+
     call append(0,l:text)
+    normal! gg
     setlocal nomodifiable nomodified
 endfunction
 
@@ -29,24 +34,30 @@ function! s:Splash()
     endif
 
     enew
-    setlocal signcolumn=no bufhidden=wipe buftype=nofile nobuflisted nocursorcolumn nocursorline nolist noswapfile nonumber norelativenumber
+    setlocal signcolumn=no bufhidden=wipe buftype=nofile nobuflisted nocursorcolumn nocursorline nolist fillchars=eob:\  noswapfile nonumber norelativenumber
 
     let s:wininfo = getwininfo(win_getid())[0]
-    call map(s:screens, {_,f -> readfile(f)})
-    call map(s:screens, {_,f ->
-        \ {'colors':eval(f[0]),
-        \  'height':len(f)-1,
-        \  'width':max(map(copy(f[1:]), {_,l -> strchars(l)})),
-        \  'text':f[1:]} })
-    call filter(s:screens, {_,s -> s['height']<s:wininfo['height'] && s['width']<s:wininfo['width']})
+    let screens = []
+    for f in s:files
+        let data = readfile(f)
+        try
+            let attr = eval(data[0])
+            let data = data[1:]
+        catch
+            let attr = {'align':'c', 'valign':'c', 'colors':[]}
+        endtry
+            let screen = extend({'height':len(data), 'width':max(map(copy(data), {_,d -> strchars(d)})), 'text':data}, attr)
+        let screens += [screen]
+    endfor
+    call filter(screens, {_,s -> s['height']<s:wininfo['height'] && s['width']<s:wininfo['width']})
 
-    if empty(s:screens)
+    if empty(screens)
         return
     endif
 
-    let l:screen = s:screens[float2nr(reltimefloat(reltime())) % len(s:screens)]
-    call s:WriteText(l:screen)
-    call s:SetColors(l:screen['colors'])
+    let screen = screens[float2nr(reltimefloat(reltime())) % len(screens)]
+    call s:WriteText(screen)
+    call s:SetColors(screen['colors'])
 
     " Pressing any key (numbers or letters) will exit the splash screen.
     for l:letter in range(48,57)+range(65,90)+range(97,122)
@@ -68,6 +79,6 @@ function! CloseSplash(...)
     endif
 endfunction
 
-let s:screens = globpath(expand(expand('<sfile>:p:h').'/screens/'),'*.txt',1,1)
+let s:files = globpath(expand(expand('<sfile>:p:h').'/screens/'),'*.txt',0,1)
 set shortmess+=I
 autocmd VimEnter * call s:Splash()
