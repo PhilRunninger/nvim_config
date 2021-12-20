@@ -29,10 +29,6 @@ function! s:SetColors(colors)
 endfunction
 
 function! s:Splash()
-    if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode
-        return
-    endif
-
     enew
     setlocal signcolumn=no bufhidden=wipe buftype=nofile nobuflisted nocursorcolumn nocursorline nolist fillchars=eob:\  noswapfile nonumber norelativenumber
 
@@ -81,4 +77,4 @@ endfunction
 
 let s:files = globpath(expand(expand('<sfile>:p:h').'/screens/'),'*.txt',0,1)
 set shortmess+=I
-autocmd VimEnter * call s:Splash()
+autocmd VimEnter * if argc()==0 && line2byte('$') == -1 && !&insertmode | call s:Splash() | endif
