@@ -73,9 +73,10 @@ function! CloseSplash(arg)
 endfunction
 
 function AllSplashFiles(A,L,P)
-    return globpath(expand(expand('<sfile>:p:h').'/splash/'),'*.txt',0,1)
+    return globpath(s:splashDir,'*.txt',0,1)
 endfunction
 
+let s:splashDir = expand(expand('<sfile>:p:h').'/splash/')
 let s:files = AllSplashFiles(0,0,0)
 set shortmess+=I
 command -nargs=1 -complete=customlist,AllSplashFiles Splash let s:files=[expand('<args>')] | call <SID>Splash()
