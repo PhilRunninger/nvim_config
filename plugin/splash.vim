@@ -57,21 +57,18 @@ function! s:Splash()
 
     " Pressing any key (numbers or letters) will exit the splash screen.
     for l:letter in range(48,57)+range(65,90)+range(97,122)
-        execute 'nnoremap <buffer><silent><nowait> '.nr2char(l:letter).' :call CloseSplash('.count('aioAIO',nr2char(l:letter)).')<CR>'
+        execute 'nnoremap <buffer><silent><nowait> '.nr2char(l:letter).' :call CloseSplash("'.nr2char(l:letter).'")<CR>'
     endfor
     nnoremap <buffer><silent><nowait> <Esc> :call timer_stop(g:splashTimer)<CR>
 
     let g:splashTimer = timer_start(5000, 'CloseSplash')
-    autocmd BufWipeout <buffer> unlet g:splashTimer
+    autocmd BufWipeout <buffer> call timer_stop(g:splashTimer) | unlet! g:splashTimer
 endfun
 
-function! CloseSplash(...)
-    if exists('g:splashTimer')
-        call timer_stop(g:splashTimer)
-        enew
-        if get(a:, 1, 0) == 1
-            startinsert
-        endif
+function! CloseSplash(arg)
+    enew
+    if count('aioAIO',a:arg)
+        startinsert
     endif
 endfunction
 
