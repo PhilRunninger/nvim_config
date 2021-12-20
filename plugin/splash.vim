@@ -72,6 +72,11 @@ function! CloseSplash(arg)
     endif
 endfunction
 
-let s:files = globpath(expand(expand('<sfile>:p:h').'/screens/'),'*.txt',0,1)
+function AllSplashFiles(A,L,P)
+    return globpath(expand(expand('<sfile>:p:h').'/splash/'),'*.txt',0,1)
+endfunction
+
+let s:files = AllSplashFiles(0,0,0)
 set shortmess+=I
+command -nargs=1 -complete=customlist,AllSplashFiles Splash let s:files=[expand('<args>')] | call <SID>Splash()
 autocmd VimEnter * if argc()==0 && line2byte('$') == -1 && !&insertmode | call s:Splash() | endif
