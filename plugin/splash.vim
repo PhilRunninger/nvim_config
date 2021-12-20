@@ -41,7 +41,7 @@ function! s:Splash()
     for f in s:files
         let data = readfile(f)
         try
-            let attr = eval(data[0])
+            let attr = eval(json_decode(data[0]))
             let data = data[1:]
         catch
             let attr = {'align':'c', 'valign':'c', 'colors':[]}
