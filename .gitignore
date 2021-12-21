@@ -1,3 +1,4 @@
 cache/
 after/*
 ftplugin/.sqlConnections.json
+plugin/splash/*.txt
