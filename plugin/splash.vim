@@ -57,27 +57,27 @@ function! s:Splash()
 
     " Pressing any key (numbers or letters) will exit the splash screen.
     for l:letter in range(48,57)+range(65,90)+range(97,122)
-        execute 'nnoremap <buffer><silent><nowait> '.nr2char(l:letter).' :call CloseSplash("'.nr2char(l:letter).'")<CR>'
+        execute 'nnoremap <buffer><silent><nowait> '.nr2char(l:letter).' :call <SID>CloseSplash("'.nr2char(l:letter).'")<CR>'
     endfor
     nnoremap <buffer><silent><nowait> <Esc> :call timer_stop(g:splashTimer)<CR>
 
-    let g:splashTimer = timer_start(5000, 'CloseSplash')
+    let g:splashTimer = timer_start(5000, function('s:CloseSplash'))
     autocmd BufWipeout <buffer> call timer_stop(g:splashTimer) | unlet! g:splashTimer
 endfun
 
-function! CloseSplash(arg)
+function! s:CloseSplash(arg)
     enew
     if count('aioAIO',a:arg)
         startinsert
     endif
 endfunction
 
-function AllSplashFiles(A,L,P)
+function s:AllSplashFiles(A,L,P)
     return globpath(s:splashDir,'*.txt',0,1)
 endfunction
 
 let s:splashDir = expand(expand('<sfile>:p:h').'/splash/')
-let s:files = AllSplashFiles(0,0,0)
+let s:files = s:AllSplashFiles(0,0,0)
 set shortmess+=I
-command -nargs=1 -complete=customlist,AllSplashFiles Splash let s:files=[expand('<args>')] | call <SID>Splash()
+command -nargs=1 -complete=customlist,<SID>AllSplashFiles Splash let s:files=[expand('<args>')] | call <SID>Splash()
 autocmd VimEnter * if argc()==0 && line2byte('$') == -1 && !&insertmode | call s:Splash() | endif
