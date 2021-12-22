@@ -37,12 +37,12 @@ function! s:Splash()
     for f in s:files
         let data = readfile(f)
         try
-            let attr = eval(json_decode(data[0]))
+            let attr = eval(data[0])
             let data = data[1:]
         catch
             let attr = {'align':'c', 'valign':'c', 'colors':[]}
         endtry
-            let screen = extend({'height':len(data), 'width':max(map(copy(data), {_,d -> strchars(d)})), 'text':data}, attr)
+        let screen = extend({'height':len(data), 'width':max(map(copy(data), {_,d -> strchars(d)})), 'text':data}, attr)
         let screens += [screen]
     endfor
     call filter(screens, {_,s -> s['height']<s:wininfo['height'] && s['width']<s:wininfo['width']})
