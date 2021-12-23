@@ -1,168 +1,83 @@
-function! s:WriteLogo()
-    let l:indent = (s:wininfo['width'] - max(map(copy(s:logo),{_,v -> strchars(v)}))) / 2
-    call map(s:logo, {_,v -> repeat(' ', l:indent) . v})
-    let l:lines = (s:wininfo['height'] - len(s:logo))/2
-    let s:logo = map(range(l:lines),{_ -> ''}) + s:logo + map(range(l:lines),{_ -> ''})
-    call append(0,s:logo)
+function! s:WriteText(screen)
+    let l:mult = index(['l','c','r'], a:screen['align'], 0, 1)
+    let l:padding = l:mult * (s:wininfo['width'] - a:screen['width']) / 2
+    call map(a:screen['text'], {_,v -> repeat(' ', l:padding) . v})
+
+    let l:mult = index(['t','c','b'], a:screen['valign'], 0, 1)
+    let l:padding = l:mult * (s:wininfo['height'] - a:screen['height']) / 2
+    let l:text = map(range(l:padding),{_ -> ''}) + a:screen['text']
+
+    call append(0,l:text)
+    normal! gg
     setlocal nomodifiable nomodified
 endfunction
 
 " a:colors is a list of lists in this format
-" [[name, guifg, [pattern,...]], ...] for one foreground color always or
-" [[name, [light, dark], [pattern,...]], ...] if you want different guifg
+" [[[guifg], [pattern,...]], ...] for one foreground color always or
+" [[[light, dark], [pattern,...]], ...] if you want different guifg
 " colors for dark and light backgrounds
 function! s:SetColors(colors)
-    for [l:name, l:color,l:matches] in a:colors
+    let l:index = 0
+    for [l:color,l:matches] in a:colors
         for l:match in l:matches
-            execute 'syntax match '.l:name.' /'.l:match.'/'
+            execute 'syntax match Splash'.l:index.' /'.l:match.'/'
         endfor
-        execute 'highlight '.l:name.' guifg='.(type(l:color)==v:t_list ? (&background=='light' ? l:color[0] : l:color[1]) : l:color)
-        execute 'autocmd BufWipeout <buffer> highlight clear '.l:name
+        execute 'highlight Splash'.l:index.' guifg='.(&background=='light' ? l:color[0] : l:color[-1])
+        execute 'autocmd BufWipeout <buffer> highlight clear Splash'.l:index
+        let l:index += 1
     endfor
 endfunction
 
 function! s:Splash()
-    if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode
+    enew
+    setlocal signcolumn=no bufhidden=wipe buftype=nofile nobuflisted nocursorcolumn nocursorline nolist fillchars=eob:\  noswapfile nonumber norelativenumber
+
+    let s:wininfo = getwininfo(win_getid())[0]
+    let screens = []
+    for f in s:files
+        let data = readfile(f)
+        try
+            let attr = eval(data[0])
+            let data = data[1:]
+        catch
+            let attr = {'align':'c', 'valign':'c', 'colors':[]}
+        endtry
+        let screen = extend({'height':len(data), 'width':max(map(copy(data), {_,d -> strchars(d)})), 'text':data}, attr)
+        let screens += [screen]
+    endfor
+    call filter(screens, {_,s -> s['height']<s:wininfo['height'] && s['width']<s:wininfo['width']})
+
+    if empty(screens)
         return
     endif
 
-    enew
-    setlocal signcolumn=no bufhidden=wipe buftype=nofile nobuflisted nocursorcolumn nocursorline nolist noswapfile nonumber norelativenumber
-
-    let s:wininfo = getwininfo(win_getid())[0]
-
-    if float2nr(reltimefloat(reltime()))%2 || s:wininfo['height'] < 55
-        let s:logo = [  '           .             .'
-                    \ , '         ⎽⎺\            |⎺⎽'
-                    \ , '       ⎽⎺\           |⎺⎽'
-                    \ , '     ⎽⎺\          |⎺⎽'
-                    \ , '   ⎽⎺\         |⎺⎽'
-                    \ , ' ⎽⎺\\        |⎺⎽'
-                    \ , '|\\       ||'
-                    \ , '|\\      ||'
-                    \ , '|\\     ||'
-                    \ , '|\\    ||'
-                    \ , '|\\   ||'
-                    \ , '|\\  ||'
-                    \ , '|\\ ||'
-                    \ , '||\\||'
-                    \ , '|| \||'
-                    \ , '||  \||'
-                    \ , '||   \||'
-                    \ , '||    \||'
-                    \ , '||     \||'
-                    \ , '||      \||'
-                    \ , '||       \||'
-                    \ , ' ⎺⎽|        \|⎽⎺'
-                    \ , '   ⎺⎽|         \|⎽⎺'
-                    \ , '     ⎺⎽|          \|⎽⎺'
-                    \ , '       ⎺⎽|           \|⎽⎺'
-                    \ , '         ⎺⎽|            \|⎽⎺']
-        let l:name = [  '', '', '', '', '', ''
-                    \ , '                                                                            ...'
-                    \ , '                                                                           shhhy'
-                    \ , '                                                                           +ssso'
-                    \ , '                                                       `...`          ....  ```    ````   `...`     `....`'
-                    \ , '    `o- `-/+++o+:`       .:/+++//:.       .:++++++/-`  .yyyy:        oyyyo oyyys   yyys./syhhhy+``:syyhhhys:'
-                    \ , '    `h+/+:.````-sy.    .oo:.`````-++`   `os/.````.-oy+` /hhhh.      /hhhy` shhhy   hhhhhyo++shhhsshyo++shhhho'
-                    \ , '    `hs.        `yy   -y/`         +o  .ys`         -hs` ohhhs`    .hhhh-  shhhy   hhhho.    :hhhhy.    :hhhh-'
-                    \ , '    `ho          +h.  yy...........-h. oh.           /h/ `yhhh+   `shhh:   shhhy   hhhh/     `hhhh+     `hhhh/'
-                    \ , '    `ho          +h. `hs////////////+. hy            .hs  .yhhh-  +hhh+    shhhy   hhhh/      hhhh/     `hhhh/'
-                    \ , '    `ho          +h. `ho               hy            .hs   :hhhy`:hhhs`    shhhy   hhhh/      hhhh/     `hhhh/'
-                    \ , '    `ho          +h.  sy`              oh.           /h/    +hhh+yhhy.     shhhy   hhhh/      hhhh/     `hhhh/'
-                    \ , '    `ho          +h.  .ys.          `  `ys`         -hs`     shhhhhh-      shhhy   hhhh/      hhhh/     `hhhh/'
-                    \ , '    `ho          +h.   `+s+-.```.-/o/   `+s/.`````-+s/`      `yhhhh/       shhhy   hhhh/      hhhh/     `hhhh/'
-                    \ , '     +:          -+`     `-/+++++/-`      `-///////-`         .::::        :////   ////-      ////-      ////.'
-                    \ , '', '', '', '', '', '']
-        if s:wininfo['width'] >= 150
-            call map(s:logo, {i,v -> v.l:name[i]})
-        endif
-        call s:WriteLogo()
-        call s:SetColors([
-            \ ['N0', '#2fa8e4', ['']],
-            \ ['N1', '#6dbc61', ['']],
-            \ ['N2', '#91ca61', ['']],
-            \ ['N3', '#519e39', ['']],
-            \ ['N4', '#76b237', ['']]
-        \ ])
-    else
-        let s:logo = [  '                                      ######B8$OWpSKmKSpWO$8B######'
-                    \ , '                                ####BRmni*!-                 -!*inmEB####'
-                    \ , '                            ###Qqnr:`       .,=~^*r???r*^~=,.       `:rnpQ###'
-                    \ , '                         ##BWi!`    ."^iVK6gB@@@@@@@@@@@@@@@@86KVi^".    `=imB##'
-                    \ , '                     ###b]=    _*nq8@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@QZnr_    :]%###'
-                    \ , '                   ##R];   .=VE@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@EV^.   `]E###'
-                    \ , '                ##Bw`   .~V0@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@02>.   ~wQ##'
-                    \ , '              ##Ql`   ,l0@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@0c,   `l8##'
-                    \ , '             #8}`   ^PB@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@BS^.  `]8##'
-                    \ , '           ##6!  .v8@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\`````\@@@@@@@@@@@@@@@@@@@@@@@@@@8i.  `d##'
-                    \ , '          #Bl`  .6@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|     \@@@@@@@@@@@@@@@@@@@@@@@@@@@O~  `}B#'
-                    \ , '        ##g<   nB@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|      |@@@@@@/````\@@@@@@@@@@@@@@@BV.  >0##'
-                    \ , '       ##6`  .V@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|   \  |@@/```      ``\@@@@@@@@@@@@@@6.  `d##'
-                    \ , '      ##q`  .q@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`.   | |@/   _     ___/@@@@@@@@@@@@@@@Z-  `p##'
-                    \ , '     ##e`  =g@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\  | |/   /    .`@@@@@@@@@@@@@@@@@@@@8=  `w##'
-                    \ , '    ##q`  :g@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\_| /   /   .`@@@@@@@@@@@@@@@@@@@@@@@8:  `5##'
-                    \ , '   ##g`  .E@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\/   / _.`@@@@@@@@@@@@@@@@@@@@@@@@@@R-  `0##'
-                    \ , '   ##r   w@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@/   /.`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@h   r##'
-                    \ , '  ##m   r@@@@@@@@@@@@@@$ZKKbQ@@@@@@@@@@@@@@@@@@RpKPOB@@@@@| .`/@@@@@@@QRHXznnVoPdgB@@@@@@@@@@@@@r   a##'
-                    \ , '  #B`  .6@@@@@@@@@@@@@@!    .}@@@@@@@@@@@@@@@@@-    _w@@@@|/@@@@@@gj`             -!vUQ@@@@@@@@@E.  !B#'
-                    \ , ' ##h   v@@@@@@@@@@@@@@@|     :R@@@@@@@@@@@@@@@@>     "B@@@@@@@@0]`  .>nZ8B@@BgZ}~.    `w@@@@@@@@@i   X##'
-                    \ , ' ##?   G@@@@@@@@@@@@@@@}     `R@@@@@@@@@@@@@@@@r     =@@@@@@@@X`  .?D@@@@@@@@@@@@0}-  `a@@@@@@@@@q   r##'
-                    \ , ' #B:  _Q@@@@@@@@@@@@@@@n     -8@@@@@@@@@@@@@@@@v     =@@@@@@8*   -S@@@@@@@@@@@@@@@@8|,X@@@@@@@@@@Q,  :B#'
-                    \ , ' #D`  <@@@@@@@@@@@@@@@@j     -8@@@@@@@@@@@@@@@@]     ~@@@@@g=   .Z@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@^  `E#'
-                    \ , '##Z   ?@@@@@@@@@@@@@@@@w     -8@@@@@@@@@@@@@@@@}     <@@@@Q~    ]@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@(   p##'
-                    \ , '##H   |@@@@@@@@@@@@@@@@K     -8@@@@@@@@@@@@@@@@n     r@@@@i    `D@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@v   K##'
-                    \ , '##b   r@@@@@@@@@@@@@@@@K     `rviii]}}]]xiiiv((:     r@@@8`    :B@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@?   W##'
-                    \ , ' #g:  !@@@@@@@@@@@@@@@@q                             r@@@5     :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`  ,0#'
-                    \ , ' ##!  .0@@@@@@@@@@@@@@@Z     ,$QQQQBBBBBBBBBQQQ}     r@@@X     `0@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@g`  !##'
-                    \ , ' ##]   o@@@@@@@@@@@@@@@Z     ,B@@@@@@@@@@@@@@@@n     ^@@@Z      V@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@s   x##'
-                    \ , ' ##b.  ^@@@@@@@@@@@@@@@Z     ,B@@@@@@@@@@@@@@@@}     <@@@Q:     ,g@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@^  `W##'
-                    \ , '  ##?   X@@@@@@@@@@@@@@Z     ,Q@@@@@@@@@@@@@@@@x     !@@@@P.     ,E@@@@@@@@@@@@@@@@@@@@@@@@@@@@@a   ?##'
-                    \ , '  ##R.  :Q@@@@@@@@@@@@@S     -8@@@@@@@@@@@@@@@@v     =@@@@@V.     `zB@@@@@@@@@@@@@@@@@@$8@@@@@@Q=  .E##'
-                    \ , '   ##n   v@@@@@@@@@@@@@m     `N@@@@@@@@@@@@@@@@?     ,B@@@@@X.      :Vg@@@@@@@@@@@@B6n~!8@@@@@@i   l##'
-                    \ , '    #B^   t@@@@@@@@@@@@y     `R@@@@@@@@@@@@@@@@r     -8@@@@@@0(       `=(nXG55Pjl(~- `?8@@@@@@w`  ^B#'
-                    \ , '    ##8:  `P@@@@@@@@@@@}     `0@@@@@@@@@@@@@@@@x     `O@@@@@@@@W\_                 _vO@@@@@@@G`  :8##'
-                    \ , '     ##N,  `m@@@@@@@@@@c:-_-!X@@@@@@@@@@@@@@@@@8?-__-!6@@@@@@@@@@B6z\>-,.    .-=rnWB@@@@@@@@P`  ,D##'
-                    \ , '      ##Q<   iB@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@]   ~8##'
-                    \ , '        #Q?   `B@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@B}   ?Q#'
-                    \ , '         ##2.  `R@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@R`  .V##'
-                    \ , '          ##6!  `}Q@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Ql`  =6##'
-                    \ , '           ##$r.  `]g@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8}`  .rD##'
-                    \ , '             ##Or.  `?%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@d?`  .*d##'
-                    \ , '               ##Rv.   =n0@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@gn=   .|E##'
-                    \ , '                 ##8V=   `~nR@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8n~`   =V8##'
-                    \ , '                   ###6].    ~}qQ@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@QZ}~`   ,]6###'
-                    \ , '                      ###6l~.   `!|ybQ@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Qdjv!`    !l6###'
-                    \ , '                          ###Wu*_     `-~r]VhWE08QBBBBQQ80EWmV]?~-`     _^cWB##'
-                    \ , '                             ####$mlr=-          ~~~~~~~          .=rlm$####'
-                    \ , '                                  ####B0WXn]?^!:---___---:!<rxnXW0B####'
-                    \ , '                                        ###########B###########']
-        call s:WriteLogo()
-        call s:SetColors([
-            \ ['Background', '#64401c',            ['\S']],
-            \ ['Ring',      ['#32200e','#c88038'], ['\(#\S*\|\S*#\)']],
-            \ ['Leaves',     '#9ba879',            ['[\\|`/][|\/ `._]*[\/\\\|`]']]
-        \ ])
-    endif
+    let screen = screens[float2nr(reltimefloat(reltime())) % len(screens)]
+    call s:WriteText(screen)
+    call s:SetColors(screen['colors'])
 
     " Pressing any key (numbers or letters) will exit the splash screen.
     for l:letter in range(48,57)+range(65,90)+range(97,122)
-        execute 'nnoremap <buffer><silent><nowait> '.nr2char(l:letter).' :call CloseSplash('.count('aioAIO',nr2char(l:letter)).')<CR>'
+        execute 'nnoremap <buffer><silent><nowait> '.nr2char(l:letter).' :call <SID>CloseSplash("'.nr2char(l:letter).'")<CR>'
     endfor
+    nnoremap <buffer><silent><nowait> <Esc> :call timer_stop(g:splashTimer)<CR>
 
-    let g:splashTimer = timer_start(2000, 'CloseSplash')
-    autocmd BufWipeout <buffer> unlet g:splashTimer
+    let g:splashTimer = timer_start(5000, function('s:CloseSplash'))
+    autocmd BufWipeout <buffer> call timer_stop(g:splashTimer) | unlet! g:splashTimer
 endfun
 
-function! CloseSplash(...)
-    if exists('g:splashTimer')
-        call timer_stop(g:splashTimer)
-        enew
-        if get(a:, 1, 0) == 1
-            startinsert
-        endif
+function! s:CloseSplash(arg)
+    enew
+    if count('aioAIO',a:arg)
+        startinsert
     endif
 endfunction
 
+function s:AllSplashFiles(A,L,P)
+    return globpath(s:splashDir,'*.txt',0,1)
+endfunction
+
+let s:splashDir = expand(expand('<sfile>:p:h').'/splash/')
+let s:files = s:AllSplashFiles(0,0,0)
 set shortmess+=I
-autocmd VimEnter * call s:Splash()
+command -nargs=1 -complete=customlist,<SID>AllSplashFiles Splash let s:files=[expand('<args>')] | call <SID>Splash()
+autocmd VimEnter * if argc()==0 && line2byte('$') == -1 && !&insertmode | call s:Splash() | endif
