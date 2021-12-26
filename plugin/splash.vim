@@ -29,15 +29,15 @@ endfunction
 function! s:Splash(...)
     let l:screens = []
     for l:file in (a:0 && !empty(a:1) && filereadable(a:1)) ? [a:1] : s:AllSplashFiles(0,0,0)
+        let l:attr = {'align':'c', 'valign':'c', 'colors':[]}
         let l:data = readfile(l:file)
         try
-            let l:attr = eval(l:data[0])
+            let l:attr = extend(eval(l:data[0]), l:attr, 'keep')
             let l:data = l:data[1:]
         catch
-            let l:attr = {'align':'c', 'valign':'c', 'colors':[]}
+        finally
+            let l:screens += [extend({'height':len(l:data), 'width':max(map(copy(l:data), {_,d -> strchars(d)})), 'text':l:data}, l:attr, 'keep')]
         endtry
-        let l:screen = extend({'height':len(l:data), 'width':max(map(copy(l:data), {_,d -> strchars(d)})), 'text':l:data}, l:attr)
-        let l:screens += [l:screen]
     endfor
     let l:wininfo = getwininfo(win_getid())[0]
     call filter(l:screens, {_,s -> s['height']<l:wininfo['height'] && s['width']<l:wininfo['width']})
