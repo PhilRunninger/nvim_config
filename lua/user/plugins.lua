@@ -68,12 +68,17 @@ map('n', '<leader>k', ':UnicodeSearch!<space>', noremapSilent)
 cmd('packadd! nvim-cmp')
 cmd('packadd! cmp-buffer')
 cmd('packadd! cmp-path')
--- cmd('packadd! cmp-cmdline')
 cmd('packadd! cmp_luasnip')
+cmd('packadd! cmp-nvim-lsp')
+cmd('packadd! cmp-nvim-lua')
 
 -- SNIPPETS ######################################################################
 cmd('packadd! LuaSnip')
 cmd('packadd! friendly-snippets')
+
+-- LSP ###########################################################################
+cmd('packadd! nvim-lspconfig')
+cmd('packadd! nvim-lsp-installer')
 
 -- ALL OTHERS ####################################################################
 cmd('packadd! ldraw.vim')

@@ -1,6 +1,3 @@
-[submodule "pack/bundle/opt/coc.nvim"]
-	path = pack/bundle/opt/coc.nvim
-	url = git@github.com:neoclide/coc.nvim.git
 [submodule "pack/bundle/opt/vim-fugitive"]
 	path = pack/bundle/opt/vim-fugitive
 	url = git@github.com:tpope/vim-fugitive
@@ -85,3 +82,12 @@
 [submodule "pack/bundle/opt/nvim-cmp"]
 	path = pack/bundle/opt/nvim-cmp
 	url = git@github.com:hrsh7th/nvim-cmp.git
+[submodule "pack/bundle/opt/nvim-lspconfig"]
+	path = pack/bundle/opt/nvim-lspconfig
+	url = git@github.com:neovim/nvim-lspconfig.git
+[submodule "pack/bundle/opt/nvim-lsp-installer"]
+	path = pack/bundle/opt/nvim-lsp-installer
+	url = git@github.com:williamboman/nvim-lsp-installer.git
+[submodule "pack/bundle/opt/cmp-nvim-lsp"]
+	path = pack/bundle/opt/cmp-nvim-lsp
+	url = git@github.com:hrsh7th/cmp-nvim-lsp.git
