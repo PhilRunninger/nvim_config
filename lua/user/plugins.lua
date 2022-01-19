@@ -64,6 +64,17 @@ cmd('packadd! unicode.vim')
 map('n', 'ga', '<Cmd>UnicodeName<CR>', noremapSilent)
 map('n', '<leader>k', ':UnicodeSearch!<space>', noremapSilent)
 
+-- COMPLETION ####################################################################
+cmd('packadd! nvim-cmp')
+cmd('packadd! cmp-buffer')
+cmd('packadd! cmp-path')
+-- cmd('packadd! cmp-cmdline')
+cmd('packadd! cmp_luasnip')
+
+-- SNIPPETS ######################################################################
+cmd('packadd! LuaSnip')
+cmd('packadd! friendly-snippets')
+
 -- ALL OTHERS ####################################################################
 cmd('packadd! ldraw.vim')
 cmd('packadd! papercolor-theme')

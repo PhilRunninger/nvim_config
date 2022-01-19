@@ -64,3 +64,24 @@
 [submodule "pack/bundle/opt/vim-matchup"]
 	path = pack/bundle/opt/vim-matchup
 	url = git@github.com:andymass/vim-matchup.git
+[submodule "pack/bundle/opt/cmp-nvim-lua"]
+	path = pack/bundle/opt/cmp-nvim-lua
+	url = git@github.com:hrsh7th/cmp-nvim-lua.git
+[submodule "pack/bundle/opt/LuaSnip"]
+	path = pack/bundle/opt/LuaSnip
+	url = git@github.com:L3MON4D3/LuaSnip.git
+[submodule "pack/bundle/opt/cmp-buffer"]
+	path = pack/bundle/opt/cmp-buffer
+	url = git@github.com:hrsh7th/cmp-buffer.git
+[submodule "pack/bundle/opt/cmp-path"]
+	path = pack/bundle/opt/cmp-path
+	url = git@github.com:hrsh7th/cmp-path.git
+[submodule "pack/bundle/opt/cmp_luasnip"]
+	path = pack/bundle/opt/cmp_luasnip
+	url = git@github.com:saadparwaiz1/cmp_luasnip.git
+[submodule "pack/bundle/opt/friendly-snippets"]
+	path = pack/bundle/opt/friendly-snippets
+	url = git@github.com:rafamadriz/friendly-snippets.git
+[submodule "pack/bundle/opt/nvim-cmp"]
+	path = pack/bundle/opt/nvim-cmp
+	url = git@github.com:hrsh7th/nvim-cmp.git

@@ -9,6 +9,7 @@ noremapSilent = {noremap=true, silent=true}
 require "user.options"
 require "user.keymaps"
 require "user.plugins"
+require "user.cmp"
 
 cmd([[
     augroup auGeneral
@@ -41,6 +42,8 @@ cmd([[
     colorscheme PaperColor
 ]])
 
+-- map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {expr = true})
+-- map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})
 --     inoremap <nowait><expr> <PageDown> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : ""
 --     inoremap <nowait><expr> <PageUp>   coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : ""
 --     inoremap <nowait><expr> <Down> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1,1)\<cr>" : ""
