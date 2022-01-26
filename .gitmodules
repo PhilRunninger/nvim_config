@@ -91,3 +91,24 @@
 [submodule "pack/bundle/opt/cmp-nvim-lsp"]
 	path = pack/bundle/opt/cmp-nvim-lsp
 	url = git@github.com:hrsh7th/cmp-nvim-lsp.git
+[submodule "pack/bundle/opt/telescope.nvim"]
+	path = pack/bundle/opt/telescope.nvim
+	url = git@github.com:nvim-telescope/telescope.nvim.git
+[submodule "pack/bundle/opt/plenary.nvim"]
+	path = pack/bundle/opt/plenary.nvim
+	url = git@github.com:nvim-lua/plenary.nvim.git
+[submodule "pack/bundle/opt/nvim-treesitter"]
+	path = pack/bundle/opt/nvim-treesitter
+	url = git@github.com:nvim-treesitter/nvim-treesitter.git
+[submodule "pack/bundle/opt/Comment.nvim"]
+	path = pack/bundle/opt/Comment.nvim
+	url = git@github.com:numToStr/Comment.nvim.git
+[submodule "pack/bundle/opt/gitsigns.nvim"]
+	path = pack/bundle/opt/gitsigns.nvim
+	url = git@github.com:lewis6991/gitsigns.nvim.git
+[submodule "pack/bundle/opt/nvim-tree.lua"]
+	path = pack/bundle/opt/nvim-tree.lua
+	url = git@github.com:kyazdani42/nvim-tree.lua.git
+[submodule "pack/bundle/opt/nvim-web-devicons"]
+	path = pack/bundle/opt/nvim-web-devicons
+	url = git@github.com:kyazdani42/nvim-web-devicons.git

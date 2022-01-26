@@ -11,9 +11,15 @@ require "user.keymaps"
 require "user.plugins"
 require "user.cmp"
 require "user.lsp"
+require "user.telescope"
+require "user.treesitter"
+require "user.comment"
+require "user.gitsigns"
+require "user.nvim-tree"
 
+-- AUTO COMMANDS (and other Vimscript) #########################################
 cmd([[
-    augroup auGeneral
+    augroup userAuGeneral
         autocmd!
 
         " Remove, display/hide trailing whitespace
@@ -39,9 +45,8 @@ cmd([[
         autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif
     augroup END
 
-    syntax on
-    colorscheme PaperColor
 ]])
+
 
 -- map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {expr = true})
 -- map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})

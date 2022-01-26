@@ -1,8 +1,8 @@
 -- BUFSELECT #####################################################################
-cmd('packadd! bufselect.vim')
-g.BufSelectKeyDeleteBuffer='w'
-g.BufSelectKeyOpen='l'
-map('n', '<leader>b', '<Cmd>ShowBufferList<CR>', noremapSilent)
+-- cmd('packadd! bufselect.vim')
+-- g.BufSelectKeyDeleteBuffer='w'
+-- g.BufSelectKeyOpen='l'
+-- map('n', '<leader>b', '<Cmd>ShowBufferList<CR>', noremapSilent)
 
 -- CREASE ########################################################################
 cmd('packadd! crease.vim')
@@ -30,17 +30,17 @@ g.markdown_fenced_languages = {'vim','sql','cs','ps1'}
 cmd('packadd! vim-matchup')
 g.matchup_matchparen_offscreen = {method='popup'}
 
--- MINTREE #######################################################################
-cmd('packadd! mintree')
-g.MinTreeExpanded='▼'
-g.MinTreeCollapsed='▶'
-g.MinTreeOpen='l'
-g.MinTreeCloseParent='h'
-g.MinTreeOpenTab='T'
-g.MinTreeTagAFile='t'
-map('n', '<leader>o', '<Cmd>MinTree<CR>', noremapSilent)
-map('n', '<leader>f', '<Cmd>MinTreeFind<CR>', noremapSilent)
-
+-- -- MINTREE #######################################################################
+-- cmd('packadd! mintree')
+-- g.MinTreeExpanded='▼'
+-- g.MinTreeCollapsed='▶'
+-- g.MinTreeOpen='l'
+-- g.MinTreeCloseParent='h'
+-- g.MinTreeOpenTab='T'
+-- g.MinTreeTagAFile='t'
+-- map('n', '<leader>o', '<Cmd>MinTree<CR>', noremapSilent)
+-- map('n', '<leader>f', '<Cmd>MinTreeFind<CR>', noremapSilent)
+--
 -- PRESENTING ####################################################################
 cmd('packadd! presenting.vim')
 g.presenting_quit = '<Esc>'
@@ -80,12 +80,31 @@ cmd('packadd! friendly-snippets')
 cmd('packadd! nvim-lspconfig')
 cmd('packadd! nvim-lsp-installer')
 
+-- TELESCOPE #####################################################################
+cmd('packadd! plenary.nvim')
+cmd('packadd! telescope.nvim')
+map('n', '<leader>b', '<Cmd>Telescope buffers<CR>', noremapSilent)
+-- map('n', '<leader>o', '<Cmd>Telescope find_files<CR>', noremapSilent)
+
+-- TREESITTER ####################################################################
+cmd('packadd! nvim-treesitter')
+
+-- COMMENT #######################################################################
+cmd('packadd! Comment.nvim')
+
+-- GITSIGNS ######################################################################
+cmd('packadd! gitsigns.nvim')
+
+-- NVIM-TREE #####################################################################
+cmd('packadd! nvim-tree.lua')
+map('n', '<leader>o', '<Cmd>NvimTreeFocus<CR>', noremapSilent)
+
 -- ALL OTHERS ####################################################################
 cmd('packadd! ldraw.vim')
 cmd('packadd! papercolor-theme')
-cmd('packadd! vim-commentary')
+-- cmd('packadd! vim-commentary')
 cmd('packadd! vim-exchange')
-cmd('packadd! vim-gitgutter')
+--cmd('packadd! vim-gitgutter')
 cmd('packadd! vim-repeat')
 cmd('packadd! vim-sessions')
 cmd('packadd! vim-signature')

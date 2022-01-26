@@ -22,8 +22,6 @@ local options = {
     listchars = {tab='●·', extends='→', precedes='←', trail='■'},
     laststatus = 2,
     undofile = true,
-    undodir = fn.fnamemodify(vim.env.MYVIMRC, ':p:h') .. '/cache/undo//',
-    directory = fn.fnamemodify(vim.env.MYVIMRC, ':p:h') .. '/cache/swapfiles//',
     splitbelow = true,
     splitright = true,
     winminheight = 0,
@@ -45,9 +43,6 @@ for k,v in pairs(options) do
     opt[k] = v
 end
 
-if fn.isdirectory(vim.o.undodir) then cmd('call mkdir(&undodir, "p")') end
-if fn.isdirectory(vim.o.directory) then cmd('call mkdir(&directory, "p")') end
-
 -- Color, Tabline, and Statusline Settings
 cmd([[
     function! s:StatuslineColor(insertMode)
@@ -67,10 +62,11 @@ cmd([[
                           \ | highlight Insert         gui=none guifg=#ffffff guibg=#005fff
                           \ | highlight NormalMod      gui=none guifg=#ffffff guibg=#af0000
                           \ | highlight NormalNoMod    gui=none guifg=#000000 guibg=#00df00
-]])
+    augroup END
 
--- Custom tabline, showing active window in each tab.
-cmd([[
+    syntax on
+    colorscheme PaperColor
+
     function! Tabline()
       let s = ''
       for i in range(1,tabpagenr('$'))
