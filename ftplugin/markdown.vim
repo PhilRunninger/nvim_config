@@ -4,9 +4,20 @@ if !executable("grip") || exists('g:started_by_firenvim')
     finish
 endif
 
-if confirm("Launch previewer? ", "&Yes\n&no") != 1
-    finish
-endif
+function MarkdownPreview()
+  call s:Refresh(string(bufnr('%')))
+
+  if !exists("s:markdownJob") || jobwait([s:markdownJob],0)[0] != -1
+    let password = exists("$GRIP_TOKEN") ? printf('--pass %s', $GRIP_TOKEN) : ''
+    let s:markdownJob = jobstart(printf('grip -b --title=MarkdownPreview %s %s', password, s:markdownTempFile))
+  endif
+
+  augroup _markdownPreviewer
+    autocmd!
+    autocmd BufEnter,BufWinEnter,CursorHold,CursorHoldI <buffer> call s:Refresh(expand('<abuf>'))
+    autocmd BufUnload <buffer> call s:CleanUp(expand('<abuf>'))
+  augroup END
+endfunction
 
 function! s:Refresh(buffer)
     call uniq(sort(add(s:markdownBuffers,a:buffer)))
@@ -22,12 +33,5 @@ endfunction
 
 let s:markdownBuffers = get(s:, 'markdownBuffers', [])
 let s:markdownTempFile = get(s:, 'markdownTempFile', tempname())
-call s:Refresh(string(bufnr('%')))
 
-if !exists("s:markdownJob") || jobwait([s:markdownJob],0)[0] != -1
-    let password = exists("$GRIP_TOKEN") ? printf('--pass %s', $GRIP_TOKEN) : ''
-    let s:markdownJob = jobstart(printf('grip -b --title=MarkdownPreview %s %s', password, s:markdownTempFile))
-endif
-
-autocmd BufEnter,BufWinEnter,CursorHold,CursorHoldI <buffer> call s:Refresh(expand('<abuf>'))
-autocmd BufUnload <buffer> call s:CleanUp(expand('<abuf>'))
+command! -buffer MarkdownPreview :call MarkdownPreview()
