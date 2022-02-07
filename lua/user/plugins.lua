@@ -104,6 +104,9 @@ require "gitsigns".setup {
     end,
 }
 
+cmd('packadd! nvim-colorizer.lua') -- ############################################### NVIM-COLORIZER
+require 'colorizer'.setup()
+
 -- ###################################################################################### ALL OTHERS
 cmd('packadd! ldraw.vim')
 cmd('packadd! papercolor-theme')

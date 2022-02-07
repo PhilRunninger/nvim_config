@@ -112,3 +112,6 @@
 [submodule "pack/bundle/opt/nvim-web-devicons"]
 	path = pack/bundle/opt/nvim-web-devicons
 	url = git@github.com:kyazdani42/nvim-web-devicons.git
+[submodule "pack/bundle/opt/nvim-colorizer.lua"]
+	path = pack/bundle/opt/nvim-colorizer.lua
+	url = git@github.com:norcalli/nvim-colorizer.lua.git
