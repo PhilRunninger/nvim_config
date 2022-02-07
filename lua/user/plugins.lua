@@ -9,8 +9,8 @@ g.crease_foldtext = {default='%{repeat(">",v:foldlevel)}%{repeat(" ",v:foldlevel
 cmd('packadd! csv.vim') -- ##################################################################### CSV
 g.no_csv_maps = 1
 
-map('v', '<Enter>', '<Plug>(LiveEasyAlign)', noremapSilent)
 cmd('packadd! vim-easy-align') -- ######################################################## EASYALIGN
+map('v', '<Enter>', '<Plug>(LiveEasyAlign)', noremap)
 
 cmd('packadd! vim-fugitive') -- ########################################################### FUGITIVE
 map('n', '<F3>', '"zyiw/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>', noremapSilent)
@@ -51,7 +51,7 @@ g.undotree_ShortIndicators = 1
 
 cmd('packadd! unicode.vim') -- ############################################################# UNICODE
 map('n', 'ga', '<Cmd>UnicodeName<CR>', noremapSilent)
-map('n', '<leader>k', ':UnicodeSearch!<space>', noremapSilent)
+map('n', '<leader>k', ':UnicodeSearch!<space>', noremap)
 
 cmd('packadd! LuaSnip') -- ################################################################ SNIPPETS
 cmd('packadd! friendly-snippets')

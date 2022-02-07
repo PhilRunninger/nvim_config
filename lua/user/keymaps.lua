@@ -1,7 +1,7 @@
 g.mapleader = ' '
 
 -- An alternate keystroke for <C-W>
-map('n', '<leader>w', '<C-W>', noremapSilent)
+map('n', '<leader>w', '<C-W>', noremap)
 
 -- Resize windows
 map('n', '<Up>', '5<C-W>+', noremapSilent)
