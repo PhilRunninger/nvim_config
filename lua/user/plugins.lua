@@ -1,116 +1,119 @@
--- BUFSELECT #####################################################################
--- cmd('packadd! bufselect.vim')
--- g.BufSelectKeyDeleteBuffer='w'
--- g.BufSelectKeyOpen='l'
--- map('n', '<leader>b', '<Cmd>ShowBufferList<CR>', noremapSilent)
+cmd('packadd! bufselect.vim') -- ######################################################### BUFSELECT
+g.BufSelectKeyDeleteBuffer='w'
+g.BufSelectKeyOpen='l'
+map('n', '<leader>b', '<Cmd>ShowBufferList<CR>', noremapSilent)
 
--- CREASE ########################################################################
-cmd('packadd! crease.vim')
-g.crease_foldtext = {default='%{repeat(">",v:foldlevel)}%{repeat(" ",v:foldlevel)}%t %{gitgutter#fold#is_changed()?"⭐":""} %=[%l lines]'}
+cmd('packadd! crease.vim') -- ############################################################### CREASE
+g.crease_foldtext = {default='%{repeat(">",v:foldlevel)}%{repeat(" ",v:foldlevel)}%t%=[%l lines]'}
 
--- CSV ###########################################################################
-cmd('packadd! csv.vim')
+cmd('packadd! csv.vim') -- ##################################################################### CSV
 g.no_csv_maps = 1
 
--- EASYALIGN #####################################################################
-cmd('packadd! vim-easy-align')
 map('v', '<Enter>', '<Plug>(LiveEasyAlign)', noremapSilent)
+cmd('packadd! vim-easy-align') -- ######################################################## EASYALIGN
 
--- FUGITIVE ######################################################################
-cmd('packadd! vim-fugitive')
+cmd('packadd! vim-fugitive') -- ########################################################### FUGITIVE
 map('n', '<F3>', '"zyiw/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>', noremapSilent)
 map('v', '<F3>', '"zy/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>', noremapSilent)
 map('n', '<leader>G', '<Cmd>Git<CR>', noremapSilent)
 
--- MARKDOWN ######################################################################
+-- This plugin (tpope's) ships with Neovim. ############################################### MARKDOWN
 g.markdown_folding = 1
 g.markdown_fenced_languages = {'vim','sql','cs','ps1'}
 
--- MATCHUP #######################################################################
-cmd('packadd! vim-matchup')
+cmd('packadd! vim-matchup') -- ############################################################# MATCHUP
 g.matchup_matchparen_offscreen = {method='popup'}
 
--- -- MINTREE #######################################################################
--- cmd('packadd! mintree')
--- g.MinTreeExpanded='▼'
--- g.MinTreeCollapsed='▶'
--- g.MinTreeOpen='l'
--- g.MinTreeCloseParent='h'
--- g.MinTreeOpenTab='T'
--- g.MinTreeTagAFile='t'
--- map('n', '<leader>o', '<Cmd>MinTree<CR>', noremapSilent)
--- map('n', '<leader>f', '<Cmd>MinTreeFind<CR>', noremapSilent)
---
--- PRESENTING ####################################################################
-cmd('packadd! presenting.vim')
+cmd('packadd! mintree') -- ################################################################# MINTREE
+g.MinTreeExpanded='▼'
+g.MinTreeCollapsed='▶'
+g.MinTreeOpen='l'
+g.MinTreeCloseParent='h'
+g.MinTreeOpenTab='T'
+g.MinTreeTagAFile='t'
+map('n', '<leader>o', '<Cmd>MinTree<CR>', noremapSilent)
+map('n', '<leader>f', '<Cmd>MinTreeFind<CR>', noremapSilent)
+
+cmd('packadd! presenting.vim') -- ####################################################### PRESENTING
 g.presenting_quit = '<Esc>'
 g.presenting_next = '<Right>'
 g.presenting_prev = '<Left>'
 
--- REST CONSOLE ##################################################################
-cmd('packadd! vim-rest-console')
+cmd('packadd! vim-rest-console') -- ################################################### REST CONSOLE
 g.vrc_show_command = 1
 g.vrc_trigger = '<leader>r'
 
--- UNDOTREE ######################################################################
-cmd('packadd! undotree')
+cmd('packadd! undotree') -- ############################################################### UNDOTREE
 map('n', '<leader>u', '<Cmd>UndotreeToggle<CR>', noremapSilent)
 g.undotree_WindowLayout = 2
 g.undotree_HelpLine = 0
 g.undotree_ShortIndicators = 1
 
--- UNICODE #######################################################################
-cmd('packadd! unicode.vim')
+cmd('packadd! unicode.vim') -- ############################################################# UNICODE
 map('n', 'ga', '<Cmd>UnicodeName<CR>', noremapSilent)
 map('n', '<leader>k', ':UnicodeSearch!<space>', noremapSilent)
 
--- COMPLETION ####################################################################
-cmd('packadd! nvim-cmp')
+cmd('packadd! LuaSnip') -- ################################################################ SNIPPETS
+cmd('packadd! friendly-snippets')
+
+cmd('packadd! nvim-cmp') -- ############################################################# COMPLETION
 cmd('packadd! cmp-buffer')
 cmd('packadd! cmp-path')
 cmd('packadd! cmp_luasnip')
 cmd('packadd! cmp-nvim-lsp')
 cmd('packadd! cmp-nvim-lua')
+require "user.cmp"
 
--- SNIPPETS ######################################################################
-cmd('packadd! LuaSnip')
-cmd('packadd! friendly-snippets')
-
--- LSP ###########################################################################
-cmd('packadd! nvim-lspconfig')
+cmd('packadd! nvim-lspconfig') -- ############################################################## LSP
 cmd('packadd! nvim-lsp-installer')
+require "user.lsp"
 
--- TELESCOPE #####################################################################
-cmd('packadd! plenary.nvim')
+cmd('packadd! plenary.nvim') -- ########################################################## TELESCOPE
 cmd('packadd! telescope.nvim')
-map('n', '<leader>b', '<Cmd>Telescope buffers<CR>', noremapSilent)
--- map('n', '<leader>o', '<Cmd>Telescope find_files<CR>', noremapSilent)
+require "user.telescope"
 
--- TREESITTER ####################################################################
-cmd('packadd! nvim-treesitter')
+cmd('packadd! nvim-treesitter') -- ###################################################### TREESITTER
+require "nvim-treesitter.configs".setup {
+  ensure_installed = "maintained",
+  sync_install = false,
+  ignore_install = { "" }, -- List of parsers to ignore installing
+  highlight = {
+    enable = true, -- false will disable the whole extension
+    disable = { "" }, -- list of language that will be disabled
+    additional_vim_regex_highlighting = true,
+  },
+  indent = { enable = true, disable = { "yaml" } },
+}
 
--- COMMENT #######################################################################
-cmd('packadd! Comment.nvim')
+cmd('packadd! Comment.nvim') -- ############################################################ COMMENT
+require "Comment".setup()
 
--- GITSIGNS ######################################################################
-cmd('packadd! gitsigns.nvim')
+cmd('packadd! gitsigns.nvim') -- ########################################################## GITSIGNS
+require "gitsigns".setup {
+    signs = {
+        add = { hl = 'GitSignsAdd', text = '▊', numhl = 'GitSignsAddNr', linehl = 'GitSignsAddLn' },
+        change = { hl = 'GitSignsChange', text = '▌', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn' },
+        delete = { hl = 'GitSignsDelete', text = '▎', numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn' },
+        topdelete = { hl = 'GitSignsDelete', text = '▎', numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn' },
+        changedelete = { hl = 'GitSignsChange', text = '▌', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn' },
+    },
+    on_attach = function (bufnr)
+        bufmap(bufnr, 'n', ']c', '<CMD>Gitsigns next_hunk<CR>', noremapSilent)
+        bufmap(bufnr, 'n', '[c', '<CMD>Gitsigns prev_hunk<CR>', noremapSilent)
+        bufmap(bufnr, 'n', '<leader>hp', '<CMD>Gitsigns preview_hunk<CR>', noremapSilent)
+    end,
+}
 
--- NVIM-TREE #####################################################################
-cmd('packadd! nvim-tree.lua')
-map('n', '<leader>o', '<Cmd>NvimTreeFocus<CR>', noremapSilent)
-
--- ALL OTHERS ####################################################################
+-- ###################################################################################### ALL OTHERS
 cmd('packadd! ldraw.vim')
 cmd('packadd! papercolor-theme')
--- cmd('packadd! vim-commentary')
 cmd('packadd! vim-exchange')
---cmd('packadd! vim-gitgutter')
 cmd('packadd! vim-repeat')
 cmd('packadd! vim-sessions')
 cmd('packadd! vim-signature')
 cmd('packadd! vim-surround')
 cmd('packadd! vim-unimpaired')
 
--- Must come AFTER the :packadd! calls above; otherwise, the contents of package 'ftdetect'
--- directories won't be evaluated.
+-- Must come AFTER the :packadd! calls above; otherwise, the contents of
+-- package 'ftdetect' directories won't be evaluated.
 cmd('filetype indent plugin on')
