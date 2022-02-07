@@ -9,14 +9,10 @@
 " 2. Copy the inner HTML of the $('pre') element, and paste in a new buffer.
 " 3. :SplashGenGetAllColors    to put the color codes into the Python
 "    code's input file.
-" 4. :term python SplashGenKMeans.py    to cluster the color codes. If you
-"    want more or fewer than 16 colors, edit the Python code. 36 is the max
-"    without changing s:characters too.
-" 5. Copy the 1st line and paste it into the s:newColors list.
-" 6. Copy the generated function calls and paste them into SplashGenConvert.
-" 7. Save and source this script. Go back into the file containing the HTML.
-" 8. :SplashGenConvert
-" 9. Clean up the image and the give it a try.
+" 4. Go to the s:SplashGenConvert function, and follow steps 4a and 4b.
+" 5. Save and source this script. Go back into the file containing the HTML.
+" 6. :SplashGenConvert
+" 7. You may need to tweak the text a bit. Clean it up and see how it looks.
 
 " Low-level code lives here.  {{{1
     function! s:SplashGenGetAllColors()
@@ -26,6 +22,14 @@
         while l:end != -1
             if l:color =~ '^#'
                 call add(l:colors, printf('%d,%d,%d',str2nr('0x'.l:color[1:2],16),str2nr('0x'.l:color[3:4],16),str2nr('0x'.l:color[5:6],16)))
+            elseif l:color == 'black'
+                call add(l:colors,'0,0,0')
+            elseif l:color == 'gray'
+                call add(l:colors,'128,128,128')
+            elseif l:color == 'silver'
+                call add(l:colors,'192,192,192')
+            elseif l:color == 'white'
+                call add(l:colors,'225,225,225')
             else
                 call add(l:colors,l:color)
             endif
@@ -60,14 +64,23 @@
     command! SplashGenConvert call s:SplashGenConvert()
 " }}} 1
 
-let s:characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'  " 36 colors (clusters) is the maximum.
-let s:newColors = [ '#419039','#f1f2f1','#182117','#828282','#5ec861','#444544','#a3a3a3','#31692a','#80e58f','#6adf33','#090d09','#d8d8d8','#bebfbe','#253d23','#50ab4c','#616161',
-                  \ '#ffffff'] " Keep #ffffff here so the background characters can be removed.
 
 function! s:SplashGenConvert()
-    execute '%s/<br>/\r/g'
-    " Paste generated function calls from Python output below this line.
+    " .--------------------------------------------------------------.
+    " | 4a. Remove any leftover code between the two comment blocks. |
+    " | 4b. With your cursor between the blocks, run this command.   |
+    " |          :r! python SplashGenKMeans.py k                     |
+    " |     where k is the number of clusters, up to 62. Default: 16 |
+    " '--------------------------------------------------------------'
 
-    call s:ChangeColor('white', '#ffffff') " Keep #ffffff here so the background characters can be removed.
+    " .--------------------------------------------------------------.
+    " | Closing comment block.                                       |
+    " '--------------------------------------------------------------'
+    call s:ChangeColor('black',  '#000000')
+    call s:ChangeColor('gray',   '#808080')
+    call s:ChangeColor('silver', '#c0c0c0')
+    call s:ChangeColor('white',  '#ffffff')
+    execute '%s/<br>/\r/g'
+    let s:characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
     call s:SubstituteCharacters()  " This must be the last statement.
 endfunction
