@@ -8,7 +8,7 @@ bufmap = vim.api.nvim_buf_set_keymap
 noremapSilent = {noremap=true, silent=true}
 noremap = {noremap=true}
 
-require "user.options"
-require "user.keymaps"
-require "user.plugins"
-require "user.autocmd"
+require "user.my-options"
+require "user.my-keymaps"
+require "user.my-plugins"
+require "user.my-autocmd"
