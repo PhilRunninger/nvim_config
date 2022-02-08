@@ -1,12 +1,6 @@
 [submodule "pack/bundle/opt/vim-fugitive"]
 	path = pack/bundle/opt/vim-fugitive
 	url = git@github.com:tpope/vim-fugitive
-[submodule "pack/bundle/opt/vim-gitgutter"]
-	path = pack/bundle/opt/vim-gitgutter
-	url = git@github.com:airblade/vim-gitgutter
-[submodule "pack/bundle/opt/vim-commentary"]
-	path = pack/bundle/opt/vim-commentary
-	url = git@github.com:tpope/vim-commentary.git
 [submodule "pack/bundle/opt/vim-rest-console"]
 	path = pack/bundle/opt/vim-rest-console
 	url = git@github.com:diepm/vim-rest-console.git
@@ -58,9 +52,6 @@
 [submodule "pack/bundle/opt/crease.vim"]
 	path = pack/bundle/opt/crease.vim
 	url = git@github.com:scr1pt0r/crease.vim.git
-[submodule "pack/bundle/opt/vim-matchup"]
-	path = pack/bundle/opt/vim-matchup
-	url = git@github.com:andymass/vim-matchup.git
 [submodule "pack/bundle/opt/cmp-nvim-lua"]
 	path = pack/bundle/opt/cmp-nvim-lua
 	url = git@github.com:hrsh7th/cmp-nvim-lua.git
@@ -106,12 +97,9 @@
 [submodule "pack/bundle/opt/gitsigns.nvim"]
 	path = pack/bundle/opt/gitsigns.nvim
 	url = git@github.com:lewis6991/gitsigns.nvim.git
-[submodule "pack/bundle/opt/nvim-tree.lua"]
-	path = pack/bundle/opt/nvim-tree.lua
-	url = git@github.com:kyazdani42/nvim-tree.lua.git
-[submodule "pack/bundle/opt/nvim-web-devicons"]
-	path = pack/bundle/opt/nvim-web-devicons
-	url = git@github.com:kyazdani42/nvim-web-devicons.git
 [submodule "pack/bundle/opt/nvim-colorizer.lua"]
 	path = pack/bundle/opt/nvim-colorizer.lua
 	url = git@github.com:norcalli/nvim-colorizer.lua.git
+[submodule "pack/bundle/opt/vim-matchup"]
+	path = pack/bundle/opt/vim-matchup
+	url = git@github.com:andymass/vim-matchup.git
