@@ -6,7 +6,12 @@ with open('SplashGenPoints.csv', mode ='r')as file:
     csvFile = csv.reader(file)
     points = list(csvFile)
 
-k = 16 if len(sys.argv) == 0 else int(sys.argv[1])
+print(len(sys.argv));
+if len(sys.argv) == 0:
+    k = 16
+else:
+    k = int(sys.argv[1])
+
 kmeans = KMeans(n_clusters=k)
 y_km = kmeans.fit_predict(points)
 clusters = kmeans.cluster_centers_

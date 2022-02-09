@@ -18,7 +18,7 @@
     function! s:SplashGenGetAllColors()
         let l:colors=[]
         let l:allText = join(getline(1,line('$')),'')
-        let [l:color,l:start,l:end] = matchstrpos(l:allText,'color="\zs[^"]\{-}\ze"')
+        let [l:color,l:start,l:end] = matchstrpos(l:allText,'style="color:\zs[^"]\{-}\ze"')
         while l:end != -1
             if l:color =~ '^#'
                 call add(l:colors, printf('%d,%d,%d',str2nr('0x'.l:color[1:2],16),str2nr('0x'.l:color[3:4],16),str2nr('0x'.l:color[5:6],16)))
@@ -33,7 +33,7 @@
             else
                 call add(l:colors,l:color)
             endif
-            let [l:color,l:start,l:end] = matchstrpos(l:allText,'color="\zs[^"]\{-}\ze"',l:end)
+            let [l:color,l:start,l:end] = matchstrpos(l:allText,'style="color:\zs[^"]\{-}\ze"',l:end)
         endwhile
         edit SplashGenPoints.csv
         normal! 1GdG
@@ -44,10 +44,10 @@
 
     function! s:SubstituteCharacters()
         for l:i in range(len(s:newColors))
-            let ok = search('<font color="'.s:newColors[l:i],'w')
+            let ok = search('<b style="color:'.s:newColors[l:i].'"','w')
             while ok
                 execute 'normal vitr'.s:characters[l:i].'dst'
-                let ok = search('<font color="'.s:newColors[l:i],'w')
+                let ok = search('<b style="color:'.s:newColors[l:i].'"','w')
             endwhile
             redraw!
         endfor
@@ -70,7 +70,7 @@ function! s:SplashGenConvert()
     " | 4a. Remove any leftover code between the two comment blocks. |
     " | 4b. With your cursor between the blocks, run this command.   |
     " |          :r! python SplashGenKMeans.py k                     |
-    " |     where k is the number of clusters, up to 62. Default: 16 |
+    " |     where k is the number of clusters, up to 62.             |
     " '--------------------------------------------------------------'
 
     " .--------------------------------------------------------------.
@@ -80,7 +80,7 @@ function! s:SplashGenConvert()
     call s:ChangeColor('gray',   '#808080')
     call s:ChangeColor('silver', '#c0c0c0')
     call s:ChangeColor('white',  '#ffffff')
-    execute '%s/<br>/\r/g'
+"    execute '%s/<br>/\r/g'
     let s:characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
     call s:SubstituteCharacters()  " This must be the last statement.
 endfunction
