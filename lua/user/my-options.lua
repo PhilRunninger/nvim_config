@@ -29,7 +29,6 @@ local options = {
     shell = string.find(vim.o.shell,'bash') and 'bash' or vim.o.shell,
     guifont = 'DroidSansMono NF:h9',
     termguicolors = true,
-    background = 'light',
     statusline = '%3l/%3L %3v %#GitBranch#%( %{fugitive#head(8)} %)%* %{&ft} %{&ff}%( %{&readonly?"":""}%{&modified?"":""}%) %f%=%#Session#%( %{SessionNameStatusLineFlag()} %)%*',
     tabline = '%!Tabline()'
 }
@@ -54,7 +53,7 @@ cmd([[
         autocmd!
         autocmd TermOpen,WinEnter * execute 'setlocal winhighlight='.(&buftype=='terminal'?'StatusLine:StatusLineTerm':'')
         autocmd InsertEnter,InsertChange,TextChangedI * call <SID>StatuslineColor(1)
-        autocmd VimEnter,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
+        autocmd ColorScheme,VimEnter,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
         autocmd ColorScheme * highlight! link VertSplit StatusLineNC
                           \ | highlight StatusLineTerm gui=none guifg=#000000 guibg=#ffaf00
                           \ | highlight GitBranch      gui=none guifg=#efefe7 guibg=#f54d27
@@ -62,10 +61,13 @@ cmd([[
                           \ | highlight Insert         gui=none guifg=#ffffff guibg=#005fff
                           \ | highlight NormalMod      gui=none guifg=#ffffff guibg=#af0000
                           \ | highlight NormalNoMod    gui=none guifg=#000000 guibg=#00df00
+        autocmd VimEnter * call timer_start(1, 'DeferredColorSchemeSet')
     augroup END
 
-    syntax on
-    colorscheme PaperColor
+    function! DeferredColorSchemeSet(timer)
+        colorscheme PaperColor
+        syntax on
+    endfunction
 
     function! Tabline()
       let s = ''
