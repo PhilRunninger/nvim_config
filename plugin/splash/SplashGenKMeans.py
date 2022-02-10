@@ -6,8 +6,7 @@ with open('SplashGenPoints.csv', mode ='r')as file:
     csvFile = csv.reader(file)
     points = list(csvFile)
 
-print(len(sys.argv));
-if len(sys.argv) == 0:
+if len(sys.argv) == 1:
     k = 16
 else:
     k = int(sys.argv[1])
