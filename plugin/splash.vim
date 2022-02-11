@@ -28,9 +28,9 @@ endfunction
 
 function! s:Splash(...)
     let l:screens = []
-    for l:file in (a:0 && !empty(a:1) && filereadable(a:1)) ? [a:1] : s:AllSplashFiles(0,0,0)
+    for l:file in (a:0 && !empty(a:1)) ? [a:1] : split(s:AllSplashFiles(0,0,0), "\n")
         let l:attr = {'align':'c', 'valign':'c', 'colors':[]}
-        let l:data = readfile(l:file)
+        let l:data = readfile(printf('%s/%s.txt', s:splashDir,l:file))
         try
             let l:attr = extend(eval(l:data[0]), l:attr, 'keep')
             let l:data = l:data[1:]
@@ -54,32 +54,21 @@ function! s:Splash(...)
     call s:WriteText(l:screen, l:wininfo)
     call s:SetColors(l:screen['colors'])
 
-    " Pressing any key (numbers or letters) will exit the splash screen.
-    for l:letter in range(48,57)+range(65,90)+range(97,122)
-        execute 'nnoremap <buffer><silent><nowait> '.nr2char(l:letter).' :call <SID>CloseSplash("'.nr2char(l:letter).'")<CR>'
-    endfor
-    nnoremap <buffer><silent><nowait> <Esc> :call timer_stop(g:splashTimer)<CR>
-
-    let g:splashTimer = timer_start(5000, function('s:CloseSplash'))
-    autocmd BufWipeout <buffer> call timer_stop(g:splashTimer) | unlet! g:splashTimer
+    let g:timer = timer_start(5000, function('s:CloseSplash'))
+    nnoremap <buffer><silent><nowait> <Space> :call timer_stop(g:timer)<CR>
+    autocmd BufWipeout <buffer> call timer_stop(g:timer) | unlet! g:timer
+    nnoremap <buffer><silent><nowait> <Esc> :call <SID>CloseSplash()<CR>
 endfun
 
-function! s:CloseSplash(arg)
-    if empty(filter(range(bufnr('$')),{_,v -> buflisted(v)}))
-        enew
-        if count('aioAIO',a:arg)
-            startinsert
-        endif
-    else
-        bprevious
-    endif
+function! s:CloseSplash(...)
+    execute empty(filter(range(bufnr('$')),{_,v -> buflisted(v)})) ? 'enew' : 'bprevious'
 endfunction
 
-function s:AllSplashFiles(A,L,P)
-    return globpath(s:splashDir,'*.txt',0,1)
+function s:AllSplashFiles(ArgLead,CmdLine,CursorPos)
+    return join(map(readdir(s:splashDir, {f -> f =~ '\.txt$'}), {_,f -> fnamemodify(f, ':r')}),"\n")
 endfunction
 
 let s:splashDir = expand(expand('<sfile>:p:h').'/splash/')
 set shortmess+=I
-command -nargs=? -complete=customlist,<SID>AllSplashFiles Splash call <SID>Splash('<args>')
+command -nargs=? -complete=custom,<SID>AllSplashFiles Splash call <SID>Splash('<args>')
 autocmd VimEnter * if argc()==0 && line2byte('$') == -1 && !&insertmode | call s:Splash() | endif

@@ -7,11 +7,11 @@
 " 1. Go to https://www.text-image.com/convert/pic2html.cgi to generate HTML
 "    text from the supplied picture.
 " 2. Copy the inner HTML of the $('pre') element, and paste in a new buffer.
-" 3. :SplashGenGetAllColors    to put the color codes into the Python
+" 3. Run :SplashGenGetAllColors to put the color codes into the Python
 "    code's input file.
 " 4. Go to the s:SplashGenConvert function, and follow steps 4a and 4b.
 " 5. Save and source this script. Go back into the file containing the HTML.
-" 6. :SplashGenConvert
+" 6. Run :SplashGenConvert
 " 7. You may need to tweak the text a bit. Clean it up and see how it looks.
 
 " Low-level code lives here.  {{{1
@@ -42,17 +42,17 @@
         normal! /^[^,]*$\<CR>
     endfunction
 
-    function! s:SubstituteCharacters()
+    function! s:SubstituteCharacters(characters)
         for l:i in range(len(s:newColors))
             let ok = search('<b style="color:'.s:newColors[l:i].'"','w')
             while ok
-                execute 'normal vitr'.s:characters[l:i].'dst'
+                execute 'normal vitr'.a:characters[l:i].'dst'
                 let ok = search('<b style="color:'.s:newColors[l:i].'"','w')
             endwhile
             redraw!
         endfor
         call append(0, "{'align':'c','valign':'c','colors':[" .
-                      \ join(map(copy(s:newColors), {i,c -> printf("[['%s'],['%s']]",c,s:characters[i])}),',') .
+                      \ join(map(copy(s:newColors), {i,c -> printf("[['%s'],['%s']]",c,a:characters[i])}),',') .
                       \ "]}")
     endfunction
 
@@ -66,8 +66,13 @@
 
 
 function! s:SplashGenConvert()
+    call s:ChangeColor('black',  '#000000')
+    call s:ChangeColor('gray',   '#808080')
+    call s:ChangeColor('silver', '#c0c0c0')
+    call s:ChangeColor('white',  '#ffffff')
     " .--------------------------------------------------------------.
-    " | 4a. Remove any leftover code between the two comment blocks. |
+    " | 4a. Remove any leftover code between this and the closing    |
+    " |     comment blocks.                                          |
     " | 4b. With your cursor between the blocks, run this command.   |
     " |          :r! python SplashGenKMeans.py k                     |
     " |     where k is the number of clusters, up to 62.             |
@@ -76,11 +81,5 @@ function! s:SplashGenConvert()
     " .--------------------------------------------------------------.
     " | Closing comment block.                                       |
     " '--------------------------------------------------------------'
-    call s:ChangeColor('black',  '#000000')
-    call s:ChangeColor('gray',   '#808080')
-    call s:ChangeColor('silver', '#c0c0c0')
-    call s:ChangeColor('white',  '#ffffff')
-"    execute '%s/<br>/\r/g'
-    let s:characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-    call s:SubstituteCharacters()  " This must be the last statement.
+    call s:SubstituteCharacters('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz')  " This must be the last statement.
 endfunction
