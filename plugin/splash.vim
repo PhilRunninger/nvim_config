@@ -71,4 +71,4 @@ endfunction
 let s:splashDir = expand(expand('<sfile>:p:h').'/splash/')
 set shortmess+=I
 command -nargs=? -complete=custom,<SID>AllSplashFiles Splash call <SID>Splash('<args>')
-autocmd VimEnter * if argc()==0 && line2byte('$') == -1 && !&insertmode | call s:Splash() | endif
+"autocmd VimEnter * if argc()==0 && line2byte('$') == -1 && !&insertmode | call s:Splash() | endif

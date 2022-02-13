@@ -65,6 +65,9 @@ cmd([[
     augroup END
 
     function! DeferredColorSchemeSet(timer)
+        if has('windows')
+            set background=dark
+        endif
         colorscheme PaperColor
         syntax on
     endfunction
