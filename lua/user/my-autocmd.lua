@@ -1,4 +1,4 @@
-cmd([[
+Cmd([[
     augroup userAuGeneral
         autocmd!
 

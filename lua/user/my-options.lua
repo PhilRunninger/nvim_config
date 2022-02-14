@@ -33,17 +33,17 @@ local options = {
     tabline = '%!Tabline()'
 }
 
-opt.path:append('**')
-opt.diffopt:append('iwhite')
-opt.sessionoptions:remove('help')
-opt.sessionoptions:remove('blank')
+Opt.path:append('**')
+Opt.diffopt:append('iwhite')
+Opt.sessionoptions:remove('help')
+Opt.sessionoptions:remove('blank')
 
 for k,v in pairs(options) do
-    opt[k] = v
+    Opt[k] = v
 end
 
 -- Color, Tabline, and Statusline Settings
-cmd([[
+Cmd([[
     function! s:StatuslineColor(insertMode)
         execute 'highlight! link StatusLine ' . (a:insertMode ? 'Insert' : (&modified ? 'NormalMod' : 'NormalNoMod'))
         redraw!
