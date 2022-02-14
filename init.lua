@@ -10,7 +10,7 @@ NoremapSilent = {noremap=true, silent=true}
 Noremap = {noremap=true}
 
 -- Split the rest of the setup into separate files.
-require "user.my-options"
-require "user.my-keymaps"
-require "user.my-plugins"
-require "user.my-autocmd"
+require "my-options"
+require "my-keymaps"
+require "my-plugins"
+require "my-autocmd"

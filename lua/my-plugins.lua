@@ -62,15 +62,15 @@ Cmd('packadd! cmp-path')
 Cmd('packadd! cmp_luasnip')
 Cmd('packadd! cmp-nvim-lsp')
 Cmd('packadd! cmp-nvim-lua')
-require "user.my-cmp"
+require "my-cmp"
 
 Cmd('packadd! nvim-lspconfig') -- ############################################################## LSP
 Cmd('packadd! nvim-lsp-installer')
-require "user.my-lsp"
+require "my-lsp"
 
 Cmd('packadd! plenary.nvim') -- ########################################################## TELESCOPE
 Cmd('packadd! telescope.nvim')
-require "user.my-telescope"
+require "my-telescope"
 
 Cmd('packadd! nvim-treesitter') -- ###################################################### TREESITTER
 require "nvim-treesitter.configs".setup {
