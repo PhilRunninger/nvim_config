@@ -1,3 +1,6 @@
+local opt = vim.opt
+local cmd = vim.cmd
+
 local options = {
     sidescroll = 1,
     hidden = true,
@@ -29,21 +32,21 @@ local options = {
     shell = string.find(vim.o.shell,'bash') and 'bash' or vim.o.shell,
     guifont = 'DroidSansMono NF:h9',
     termguicolors = true,
-    statusline = '%3l/%3L %3v %#GitBranch#%( %{fugitive#head(8)} %)%* %{&ft} %{&ff}%( %{&readonly?"":""}%{&modified?"":""}%) %f%=%#Session#%( %{SessionNameStatusLineFlag()} %)%*',
+    statusline = '%3l/%3L %3v %#GitBranch#%( %{fugitive#head(8)} %)%* %{&ft} %{&ff}%( %{&readonly?"":""}%{&modified?"":""}%) #%n:%f%=%#Session#%( %{SessionNameStatusLineFlag()} %)%*',
     tabline = '%!Tabline()'
 }
 
-Opt.path:append('**')
-Opt.diffopt:append('iwhite')
-Opt.sessionoptions:remove('help')
-Opt.sessionoptions:remove('blank')
+opt.path:append('**')
+opt.diffopt:append('iwhite')
+opt.sessionoptions:remove('help')
+opt.sessionoptions:remove('blank')
 
 for k,v in pairs(options) do
-    Opt[k] = v
+    opt[k] = v
 end
 
 -- Color, Tabline, and Statusline Settings
-Cmd([[
+cmd([[
     function! s:StatuslineColor(insertMode)
         execute 'highlight! link StatusLine ' . (a:insertMode ? 'Insert' : (&modified ? 'NormalMod' : 'NormalNoMod'))
         redraw!

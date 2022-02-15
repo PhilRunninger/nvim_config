@@ -1,4 +1,6 @@
-Cmd([[
+local cmd = vim.cmd
+
+cmd([[
     augroup userAuGeneral
         autocmd!
 
@@ -24,5 +26,4 @@ Cmd([[
         " Restart with cursor in the location from last session.
         autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif
     augroup END
-
 ]])
