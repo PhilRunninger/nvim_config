@@ -39,15 +39,21 @@ G.presenting_quit = '<Esc>'
 G.presenting_next = '<Right>'
 G.presenting_prev = '<Left>'
 
+
 Cmd('packadd! vim-rest-console') -- ################################################### REST CONSOLE
 G.vrc_show_command = 1
 G.vrc_trigger = '<leader>r'
 
 Cmd('packadd! undotree') -- ############################################################### UNDOTREE
-Map('n', '<leader>u', '<Cmd>UndotreeToggle<CR>', NoremapSilent)
+Map('n', '<leader>u', '<Cmd>UndotreeShow<CR>', NoremapSilent)
 G.undotree_WindowLayout = 2
 G.undotree_HelpLine = 0
 G.undotree_ShortIndicators = 1
+G.undotree_TreeNodeShape = '●'
+G.undotree_TreeVertShape = '│'
+G.undotree_TreeSplitShape = '╱'
+G.undotree_TreeReturnShape = '╲'
+G.undotree_SetFocusWhenToggle = 1
 
 Cmd('packadd! unicode.vim') -- ############################################################# UNICODE
 Map('n', 'ga', '<Cmd>UnicodeName<CR>', NoremapSilent)
