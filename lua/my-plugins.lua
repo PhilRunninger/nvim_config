@@ -51,10 +51,15 @@ g.vrc_show_command = 1
 g.vrc_trigger = '<leader>r'
 
 cmd('packadd! undotree') -- ############################################################### UNDOTREE
-map('n', '<leader>u', '<Cmd>UndotreeToggle<CR>', noremapSilent)
+map('n', '<leader>u', '<Cmd>UndotreeShow<CR>', noremapSilent)
 g.undotree_WindowLayout = 2
 g.undotree_HelpLine = 0
 g.undotree_ShortIndicators = 1
+g.undotree_TreeNodeShape = '●'
+g.undotree_TreeVertShape = '│'
+g.undotree_TreeSplitShape = '╱'
+g.undotree_TreeReturnShape = '╲'
+g.undotree_SetFocusWhenToggle = 1
 
 cmd('packadd! unicode.vim') -- ############################################################# UNICODE
 map('n', 'ga', '<Cmd>UnicodeName<CR>', noremapSilent)
