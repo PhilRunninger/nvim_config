@@ -32,7 +32,7 @@ local options = {
     shell = string.find(vim.o.shell,'bash') and 'bash' or vim.o.shell,
     guifont = 'DroidSansMono NF:h9',
     termguicolors = true,
-    statusline = '%3l/%3L %3v %#GitBranch#%( %{fugitive#head(8)} %)%* %{&ft} %{&ff}%( %{&readonly?"":""}%{&modified?"":""}%) #%n:%f%=%#Session#%( %{SessionNameStatusLineFlag()} %)%*',
+    statusline = '%3l/%3L %3v %#GitBranch#%( %{fugitive#head(8)} %)%* %{&ft} %{&ff}%( %{&readonly?\'\':\'\'}%{&modified?\'\':\'\'}%) #%n:%f%=%#Session#%( %{SessionNameStatusLineFlag()} %)%*',
     tabline = '%!Tabline()'
 }
 
