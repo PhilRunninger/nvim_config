@@ -14,9 +14,3 @@ git submodule --quiet foreach '
 
 echo "▶ UPDATING HELP TAGS ━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-"
 nvim -u NONE -N --headless -c "helptags ALL" -c "qa!"
-
-echo "▶ REBUILDING CoC ━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-"
-cd ./pack/bundle/opt/coc.nvim
-git checkout release
-git pull
-yarn install --frozen-lockfile
