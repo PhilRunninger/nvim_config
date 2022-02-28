@@ -17,7 +17,7 @@ cmd('packadd! csv.vim') -- #####################################################
 g.no_csv_maps = 1
 
 cmd('packadd! vim-easy-align') -- ######################################################## EASYALIGN
-map('v', '<Enter>', '<Plug>(LiveEasyAlign)', noremap)
+map('v', '<Enter>', '<Plug>(LiveEasyAlign)', {})
 
 cmd('packadd! vim-fugitive') -- ########################################################### FUGITIVE
 map('n', '<F3>', '"zyiw/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>', noremapSilent)
