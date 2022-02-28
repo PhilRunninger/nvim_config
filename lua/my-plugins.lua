@@ -119,9 +119,12 @@ require "gitsigns".setup {
 cmd('packadd! nvim-colorizer.lua') -- ############################################### NVIM-COLORIZER
 require 'colorizer'.setup()
 
+cmd('packadd! neovim-ayu') -- ####################################################### NVIM-COLORIZER
+require 'ayu'.setup({})
+
 -- ###################################################################################### ALL OTHERS
 cmd('packadd! ldraw.vim')
-cmd('packadd! papercolor-theme')
+-- cmd('packadd! papercolor-theme')
 cmd('packadd! vim-exchange')
 cmd('packadd! vim-repeat')
 cmd('packadd! vim-sessions')

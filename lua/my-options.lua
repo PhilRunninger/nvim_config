@@ -56,7 +56,7 @@ cmd([[
         autocmd!
         autocmd TermOpen,WinEnter * execute 'setlocal winhighlight='.(&buftype=='terminal'?'StatusLine:StatusLineTerm':'')
         autocmd InsertEnter,InsertChange,TextChangedI * call <SID>StatuslineColor(1)
-        autocmd ColorScheme,VimEnter,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
+        autocmd ColorScheme,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
         autocmd ColorScheme * highlight! link VertSplit StatusLineNC
                           \ | highlight StatusLineTerm gui=none guifg=#000000 guibg=#ffaf00
                           \ | highlight GitBranch      gui=none guifg=#efefe7 guibg=#f54d27
@@ -68,11 +68,9 @@ cmd([[
     augroup END
 
     function! DeferredColorSchemeSet(timer)
-        if has('windows')
-            set background=dark
-        endif
-        colorscheme PaperColor
+        colorscheme ayu
         syntax on
+        call <SID>StatuslineColor(0)
     endfunction
 
     function! Tabline()
