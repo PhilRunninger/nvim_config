@@ -5,7 +5,7 @@ cmd([[
         autocmd!
 
         " Remove, display/hide trailing whitespace
-        autocmd BufWrite * %s/\s\+$//ce
+        autocmd BufWrite    * %s/\s\+$//ce
         autocmd InsertEnter * :set listchars-=trail:■
         autocmd InsertLeave * :set listchars+=trail:■
 
@@ -25,5 +25,8 @@ cmd([[
 
         " Restart with cursor in the location from last session.
         autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif
+
+        " Additional nvim-qt Settings
+        autocmd UIEnter * lua require('my-ginit')
     augroup END
 ]])
