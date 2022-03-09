@@ -47,20 +47,14 @@ end
 -- Color, Tabline, and Statusline Settings
 cmd([[
     function! s:StatuslineColor(insertMode)
-        execute 'highlight! link StatusLine ' . (a:insertMode ? 'Insert' : (&modified ? 'NormalMod' : 'NormalNoMod'))
+        execute 'highlight! link StatusLine ' . (&buftype=='terminal' ? 'SLTerm' : (a:insertMode ? 'SLInsert' : (&modified ? 'SLNormalMod' : 'SLNormal')))
         redraw!
     endfunction
 
     augroup auColors
         autocmd!
-        autocmd TermOpen,WinEnter * execute 'setlocal winhighlight='.(&buftype=='terminal'?'StatusLine:StatusLineTerm':'')
-        autocmd InsertEnter,InsertChange,TextChangedI * call <SID>StatuslineColor(1)
-        autocmd ColorScheme,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
-        autocmd ColorScheme * highlight GitBranch      gui=none guifg=#efefe7 guibg=#f54d27
-                          \ | highlight Session        gui=none guifg=#000000 guibg=#ffaf00
-                          \ | highlight Insert         gui=none guifg=#ffffff guibg=#005fff
-                          \ | highlight NormalMod      gui=none guifg=#ffffff guibg=#af0000
-                          \ | highlight NormalNoMod    gui=none guifg=#000000 guibg=#00df00
+        autocmd InsertEnter * call <SID>StatuslineColor(1)
+        autocmd TermOpen,ColorScheme,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
         autocmd VimEnter * call timer_start(1, 'DeferredColorSchemeSet')
     augroup END
 

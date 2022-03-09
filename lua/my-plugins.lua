@@ -119,17 +119,23 @@ require "gitsigns".setup {
 cmd('packadd! nvim-colorizer.lua') -- ############################################### NVIM-COLORIZER
 require 'colorizer'.setup()
 
-cmd('packadd! neovim-ayu') -- ####################################################### NVIM-COLORIZER
+cmd('packadd! neovim-ayu') -- ########################################################### NEOVIM-AYU
 require 'ayu'.setup({
     overrides = {
-        Visual = {bg = '#404040'},
+        Visual       = {bg = '#404040'},
         StatusLineNC = {bg = '#3a3a3a', fg = '#bcbcbc'},
         VertSplit    = {bg = '#3a3a3a', fg = '#bcbcbc'},
-        LineNr = {fg = '#90a4c9'},
-        CursorLine = {bg = '#31334b'},
+        LineNr       = {fg = '#90a4c9'},
+        CursorLine   = {bg = '#31334b'},
         CursorColumn = {bg = '#31334b'},
-        ColorColumn = {bg = '#31334b'},
-        StatusLineTerm = {fg = '#000000', bg = '#ffaf00'},
+        ColorColumn  = {bg = '#31334b'},
+        -- Add my custom highlight groups for the statusline.
+        GitBranch    = {bg = '#f54d27', fg = '#efefe7'},
+        Session      = {bg = '#ffaf00', fg = '#000000'},
+        SLTerm       = {bg = '#ffaf00', fg = '#000000'},
+        SLInsert     = {bg = '#005fff', fg = '#ffffff'},
+        SLNormalMod  = {bg = '#af0000', fg = '#ffffff'},
+        SLNormal     = {bg = '#00df00', fg = '#000000'},
     }
 })
 
