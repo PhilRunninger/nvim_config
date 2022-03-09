@@ -32,8 +32,8 @@ cmd('packadd! vim-matchup') -- #################################################
 g.matchup_matchparen_offscreen = {method='popup'}
 
 cmd('packadd! mintree') -- ################################################################# MINTREE
-g.MinTreeExpanded='▼'
-g.MinTreeCollapsed='▶'
+g.MinTreeExpanded='◢'
+g.MinTreeCollapsed='▷'
 g.MinTreeOpen='l'
 g.MinTreeCloseParent='h'
 g.MinTreeOpenTab='T'
@@ -48,7 +48,7 @@ g.presenting_prev = '<Left>'
 
 cmd('packadd! vim-rest-console') -- ################################################### REST CONSOLE
 g.vrc_show_command = 1
-g.vrc_trigger = '<leader>r'
+g.vrc_trigger = '<F5>'
 
 cmd('packadd! undotree') -- ############################################################### UNDOTREE
 map('n', '<leader>u', '<Cmd>UndotreeShow<CR>', noremapSilent)
