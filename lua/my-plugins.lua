@@ -120,11 +120,21 @@ cmd('packadd! nvim-colorizer.lua') -- ##########################################
 require 'colorizer'.setup()
 
 cmd('packadd! neovim-ayu') -- ####################################################### NVIM-COLORIZER
-require 'ayu'.setup({})
+require 'ayu'.setup({
+    overrides = {
+        Visual = {bg = '#404040'},
+        StatusLineNC = {bg = '#3a3a3a', fg = '#bcbcbc'},
+        VertSplit    = {bg = '#3a3a3a', fg = '#bcbcbc'},
+        LineNr = {fg = '#90a4c9'},
+        CursorLine = {bg = '#31334b'},
+        CursorColumn = {bg = '#31334b'},
+        ColorColumn = {bg = '#31334b'},
+        StatusLineTerm = {fg = '#000000', bg = '#ffaf00'},
+    }
+})
 
 -- ###################################################################################### ALL OTHERS
 cmd('packadd! ldraw.vim')
--- cmd('packadd! papercolor-theme')
 cmd('packadd! vim-exchange')
 cmd('packadd! vim-repeat')
 cmd('packadd! vim-sessions')
