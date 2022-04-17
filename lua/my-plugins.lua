@@ -80,10 +80,6 @@ cmd('packadd! nvim-lspconfig') -- ##############################################
 cmd('packadd! nvim-lsp-installer')
 require "my-lsp"
 
-cmd('packadd! plenary.nvim') -- ########################################################## TELESCOPE
-cmd('packadd! telescope.nvim')
-require "my-telescope"
-
 cmd('packadd! nvim-treesitter') -- ###################################################### TREESITTER
 require "nvim-treesitter.configs".setup {
   ensure_installed = "maintained",
