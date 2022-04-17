@@ -4,8 +4,11 @@ set -e
 
 echo "▶ PULLING SUBMODULES ━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-"
 git submodule --quiet foreach '
-    echo $name
-    BRANCH=$(git config -f $toplevel/.gitmodules submodule."$path".branch || echo master)
+    BRANCH=$(git remote show origin | sed -n "/HEAD branch/s/.* //p")
+
+    echo
+    echo "▶▶ $name @ origin/$BRANCH"
+
     git checkout --quiet $BRANCH
     OLDHASH=$(git rev-parse HEAD)
     git pull --quiet --recurse-submodules || :
@@ -14,3 +17,9 @@ git submodule --quiet foreach '
 
 echo "▶ UPDATING HELP TAGS ━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-"
 nvim -u NONE -N --headless -c "helptags ALL" -c "qa!"
+
+echo "▶ UPDATING TREESITTER (manual step) -━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-"
+echo ""
+echo "Per https://github.com/nvim-treesitter/nvim-treesitter/wiki/Windows-support#msvc,"
+echo "open x64 Native Tools Command Prompt for VS 2019. Then launch nvim.exe. The TreeSitter"
+echo "plugin should take care of the rest. If not, then you have some work to do."
