@@ -135,6 +135,7 @@ require 'ayu'.setup({
         SLNormal     = {bg = '#00df00', fg = '#000000'},
     }
 })
+cmd('colorscheme ayu')
 
 -- ###################################################################################### ALL OTHERS
 cmd('packadd! ldraw.vim')

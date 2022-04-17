@@ -54,15 +54,8 @@ cmd([[
     augroup auColors
         autocmd!
         autocmd InsertEnter * call <SID>StatuslineColor(1)
-        autocmd TermOpen,ColorScheme,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
-        autocmd VimEnter * call timer_start(1, 'DeferredColorSchemeSet')
+        autocmd TermOpen,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
     augroup END
-
-    function! DeferredColorSchemeSet(timer)
-        colorscheme ayu
-        syntax on
-        call <SID>StatuslineColor(0)
-    endfunction
 
     function! Tabline()
       let s = ''
