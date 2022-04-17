@@ -82,7 +82,7 @@ require "my-lsp"
 
 cmd('packadd! nvim-treesitter') -- ###################################################### TREESITTER
 require "nvim-treesitter.configs".setup {
-  ensure_installed = "maintained",
+  ensure_installed = "all",
   sync_install = false,
   ignore_install = { "" }, -- List of parsers to ignore installing
   highlight = {
