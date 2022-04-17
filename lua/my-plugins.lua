@@ -82,15 +82,15 @@ require "my-lsp"
 
 cmd('packadd! nvim-treesitter') -- ###################################################### TREESITTER
 require "nvim-treesitter.configs".setup {
-  ensure_installed = "all",
+  ensure_installed = {"bash", "c_sharp", "css", "erlang", "graphql", "help", "html", "javascript", "json", "lua", "make", "markdown", "python", "regex", "ruby", "typescript", "vim", "yaml"},
   sync_install = false,
-  ignore_install = { "" }, -- List of parsers to ignore installing
+  ignore_install = {}, -- List of parsers to ignore installing
   highlight = {
     enable = true, -- false will disable the whole extension
-    disable = { "" }, -- list of language that will be disabled
+    disable = {}, -- list of language that will be disabled
     additional_vim_regex_highlighting = true,
   },
-  indent = { enable = true, disable = { "yaml" } },
+  indent = {enable = true, disable = {"yaml"}},
 }
 
 cmd('packadd! Comment.nvim') -- ############################################################ COMMENT
