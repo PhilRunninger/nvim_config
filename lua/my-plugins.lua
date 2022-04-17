@@ -119,12 +119,13 @@ cmd('packadd! neovim-ayu') -- ##################################################
 require 'ayu'.setup({
     overrides = {
         Visual       = {bg = '#404040'},
-        StatusLineNC = {bg = '#3a3a3a', fg = '#bcbcbc'},
-        VertSplit    = {bg = '#3a3a3a', fg = '#bcbcbc'},
+        WinSeparator = {bg = 'NONE'},
         LineNr       = {fg = '#90a4c9'},
         CursorLine   = {bg = '#31334b'},
         CursorColumn = {bg = '#31334b'},
         ColorColumn  = {bg = '#31334b'},
+        NormalNC     = {bg = '#0f151e', fg = '#808080'},
+        Search       = {bg = '#0080c0', fg = '#ffffff'},
         -- Add my custom highlight groups for the statusline.
         GitBranch    = {bg = '#f54d27', fg = '#efefe7'},
         Session      = {bg = '#ffaf00', fg = '#000000'},
