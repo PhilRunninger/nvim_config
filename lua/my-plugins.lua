@@ -117,25 +117,35 @@ require 'colorizer'.setup()
 
 cmd('packadd! neovim-ayu') -- ########################################################### NEOVIM-AYU
 require 'ayu'.setup({
-    overrides = {
-        Visual       = {bg = '#404040'},
-        WinSeparator = {bg = 'NONE'},
-        LineNr       = {fg = '#90a4c9'},
-        CursorLine   = {bg = '#31334b'},
-        CursorColumn = {bg = '#31334b'},
-        ColorColumn  = {bg = '#31334b'},
-        NormalNC     = {bg = '#0f151e', fg = '#808080'},
-        Search       = {bg = '#0080c0', fg = '#ffffff'},
-        -- Add my custom highlight groups for the statusline.
-        GitBranch    = {bg = '#f54d27', fg = '#efefe7'},
-        Session      = {bg = '#ffaf00', fg = '#000000'},
-        SLTerm       = {bg = '#ffaf00', fg = '#000000'},
-        SLInsert     = {bg = '#005fff', fg = '#ffffff'},
-        SLNormalMod  = {bg = '#af0000', fg = '#ffffff'},
-        SLNormal     = {bg = '#00df00', fg = '#000000'},
-    }
+    overrides = function()
+        return vim.tbl_extend('force',
+          { -- My custom highlight groups for the statusline.
+            GitBranch    = {bg = '#f54d27', fg = '#efefe7'},
+            Session      = {bg = '#ffaf00', fg = '#000000'},
+            SLTerm       = {bg = '#ffaf00', fg = '#000000'},
+            SLInsert     = {bg = '#005fff', fg = '#ffffff'},
+            SLNormalMod  = {bg = '#af0000', fg = '#ffffff'},
+            SLNormal     = {bg = '#00df00', fg = '#000000'},
+            -- Override builtin colors
+            WinSeparator = {bg = 'NONE'},
+            LineNr       = {fg = '#90a4c9'},
+            Search       = {bg = '#0080c0', fg = '#ffffff'}, },
+          vim.o.background == 'dark' and
+          { Visual       = {bg = '#404040'},
+            CursorLine   = {bg = '#31334b'},
+            CursorColumn = {bg = '#31334b'},
+            ColorColumn  = {bg = '#31334b'},
+            NormalNC     = {bg = '#0f151e', fg = '#808080'}, }
+          or
+          { Visual       = {bg = '#c0c0c0'},
+            CursorLine   = {bg = '#e0e0e0'},
+            CursorColumn = {bg = '#e0e0e0'},
+            ColorColumn  = {bg = '#e0e0e0'},
+            NormalNC     = {bg = '#f0f0f0', fg = '#808080'}, }
+        )
+      end
 })
-cmd('colorscheme ayu')
+require 'ayu'.colorscheme()
 
 -- ###################################################################################### ALL OTHERS
 cmd('packadd! ldraw.vim')
