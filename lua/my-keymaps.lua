@@ -75,11 +75,11 @@ map('n', '<leader>cd', '<Cmd>cd %:p:h<Bar>pwd<CR>', noremapSilent)
 -- Focus on the current fold, opening it and closing all others.
 map('n', '<leader>z', 'zMzvzz', noremapSilent)
 
--- Insert current date and/or time in insert mode
-map('i', 'Dt', '=strftime("%m/%d/%y %H:%M:%S")<CR><Space>', noremapSilent)
-map('i', 'Dd', '=strftime("%m/%d/%y")<CR><Space>', noremapSilent)
-map('i', 'Tt', '=strftime("%H:%M:%S")<CR><Space>', noremapSilent)
-map('i', 'Dj', '* **=strftime("%d")<CR>**:<Space>', noremapSilent)
+-- Insert current date and/or time
+map('n', '<leader>Dt', 'i=strftime("%m/%d/%y %H:%M:%S")<CR><Space>', noremapSilent)
+map('n', '<leader>Dd', 'i=strftime("%m/%d/%y")<CR><Space>', noremapSilent)
+map('n', '<leader>Tt', 'i=strftime("%H:%M:%S")<CR><Space>', noremapSilent)
+map('n', '<leader>Dj', 'i* **=strftime("%d")<CR>**:<Space>', noremapSilent)
 
 -- Fix the closest prior misspelling
 map('n', '<F2>', '★<Esc>[s1z=/★<CR>s', noremapSilent)
