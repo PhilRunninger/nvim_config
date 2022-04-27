@@ -30,8 +30,7 @@ function! s:ClearSearchString()
 endfunction
 
 nnoremap <silent> * <Cmd>call <SID>ToggleWord()<CR>n
-nnoremap <silent> <leader>* <Cmd>call <SID>ClearSearchString()<CR>
-nnoremap <silent> <leader><leader>* <Cmd>nohlsearch<CR>
+nnoremap <silent> <leader>* <Cmd>call <SID>ClearSearchString()<CR><Cmd>nohlsearch<CR>
 
 nnoremap <silent> <leader>/ :vimgrep "<C-R>/" %<CR>n:copen<CR>
 vnoremap <silent> <leader>/ y:vimgrep "<C-R>0" %<CR>/<C-R>0<CR>:copen<CR>
