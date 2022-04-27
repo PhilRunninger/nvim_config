@@ -1,32 +1,32 @@
-local cmd = vim.cmd
+local group = vim.api.nvim_create_augroup('myAuGroup', {clear = true})
 
-cmd([[
-    augroup userAuGeneral
-        autocmd!
+-- Remove, display/hide trailing whitespace
+vim.api.nvim_create_autocmd('BufWrite', {command = '%s/\\s\\+$//ce', group = group})
+vim.api.nvim_create_autocmd('InsertEnter', {command = ':set listchars-=trail:■', group = group})
+vim.api.nvim_create_autocmd('InsertLeave', {command = ':set listchars+=trail:■', group = group})
 
-        " Remove, display/hide trailing whitespace
-        autocmd BufWrite    * %s/\s\+$//ce
-        autocmd InsertEnter * :set listchars-=trail:■
-        autocmd InsertLeave * :set listchars+=trail:■
+-- Turn off line numbers in Terminal windows.
+vim.api.nvim_create_autocmd('TermOpen', {command = 'setlocal nonumber | startinsert', group = group})
 
-        " Turn off line numbers in Terminal windows.
-        autocmd TermOpen * setlocal nonumber | startinsert
+-- Keep cursor in original position when switching buffers
+if not vim.o.diff then
+    vim.api.nvim_create_autocmd('BufLeave', {command = 'let b:winview = winsaveview()', group = group})
+    vim.api.nvim_create_autocmd('BufEnter', {command = 'if exists("b:winview") | call winrestview(b:winview) | endif', group = group})
+end
 
-        " Keep cursor in original position when switching buffers
-        if !&diff
-            autocmd BufLeave * let b:winview = winsaveview()
-            autocmd BufEnter * if exists('b:winview') | call winrestview(b:winview) | endif
-        endif
+-- Make 'autoread' work more responsively
+vim.api.nvim_create_autocmd('BufEnter',    {command = 'silent! checktime', group = group})
+vim.api.nvim_create_autocmd('CursorHold',  {command = 'silent! checktime', group = group})
+vim.api.nvim_create_autocmd('CursorMoved', {command = 'silent! checktime', group = group})
 
-        " Make 'autoread' work more responsively
-        autocmd BufEnter    * silent! checktime
-        autocmd CursorHold  * silent! checktime
-        autocmd CursorMoved * silent! checktime
+-- Restart with cursor in the location from last session.
+vim.api.nvim_create_autocmd('BufReadPost', {command = 'if line("\'\\\"") > 1 && line("\'\\\"") <= line("$") | execute "normal! g`\\\"" | endif', group = group})
 
-        " Restart with cursor in the location from last session.
-        autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif
+-- Additional nvim-qt Settings
+vim.api.nvim_create_autocmd('UIEnter', {callback = function() require('my-ginit') end, group = group})
 
-        " Additional nvim-qt Settings
-        autocmd UIEnter * lua require('my-ginit')
-    augroup END
-]])
+-- Change the statusline color depending on mode and buffer's modified state.
+vim.api.nvim_create_autocmd('InsertEnter',
+    {callback = function() vim.cmd('highlight! link StatusLine '..(vim.o.buftype == 'terminal' and 'SLTerm' or 'SLInsert')) end, group = group})
+vim.api.nvim_create_autocmd({'TermOpen', 'InsertLeave', 'TextChanged', 'BufWritePost', 'BufEnter'},
+    {callback = function() vim.cmd('highlight! link StatusLine '..(vim.o.buftype == 'terminal' and 'SLTerm' or (vim.o.modified and 'SLNormalMod' or 'SLNormal'))) end, group = group})

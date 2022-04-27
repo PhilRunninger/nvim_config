@@ -46,17 +46,6 @@ end
 
 -- Color, Tabline, and Statusline Settings
 cmd([[
-    function! s:StatuslineColor(insertMode)
-        execute 'highlight! link StatusLine ' . (&buftype=='terminal' ? 'SLTerm' : (a:insertMode ? 'SLInsert' : (&modified ? 'SLNormalMod' : 'SLNormal')))
-        redraw!
-    endfunction
-
-    augroup auColors
-        autocmd!
-        autocmd InsertEnter * call <SID>StatuslineColor(1)
-        autocmd TermOpen,InsertLeave,TextChanged,BufWritePost,BufEnter * call <SID>StatuslineColor(0)
-    augroup END
-
     function! Tabline()
       let s = ''
       for i in range(1,tabpagenr('$'))
@@ -69,4 +58,3 @@ cmd([[
       return s . '%#TabLineFill#'
     endfunction
 ]])
-
