@@ -76,7 +76,7 @@ map('n', '<leader>cd', '<Cmd>cd %:p:h<Bar>pwd<CR>', noremapSilent)
 map('n', '<leader>z', 'zMzvzz', noremapSilent)
 
 -- Fix the closest prior misspelling
-map('n', '<F2>', '★<Esc>[s1z=/★<CR>s', noremapSilent)
+map('i', '<F2>', '★<Esc>[s1z=/★<CR>s', noremapSilent)
 map('n', '<F2>', 'i★<Esc>[s1z=/★<CR>x', noremapSilent)
 
 -- Make an easier redo mapping. Who uses the default U anyway?

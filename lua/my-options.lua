@@ -31,7 +31,7 @@ local options = {
     winminwidth = 0,
     shell = string.find(vim.o.shell,'bash') and 'bash' or vim.o.shell,
     termguicolors = true,
-    statusline = '%3l/%3L %3v %#GitBranch#%( %{fugitive#head(8)} %)%* %{&ft} %{&ff}%( %{&readonly?\'\':\'\'}%{&modified?\'\':\'\'}%) #%n:%f%=%#Session#%( %{SessionNameStatusLineFlag()} %)%*',
+    statusline = '%3l/%3L %3v %#GitBranch#%( %{FugitiveHead(8)} %)%* %{&ft} %{&ff}%( %{&readonly?\'\':\'\'}%{&modified?\'\':\'\'}%) #%n:%f%=%#Session#%( %{SessionNameStatusLineFlag()} %)%*',
     tabline = '%!Tabline()'
 }
 
@@ -52,7 +52,7 @@ cmd([[
         let bufnr = tabpagebuflist(i)[tabpagewinnr(i) - 1]
         let bufname = bufname(bufnr)
         let s .= '%'.i.'T' . (i == tabpagenr() ? '%#TabLineSel#' : '%#TabLine#')
-        let s .= ' ' . (bufname!='' ? fnamemodify(bufname,':t') : '?')
+        let s .= ' ' . (bufname!='' ? fnamemodify(bufname,':t') : 'New…')
         let s .= (getbufvar(bufnr,'&modified') ? '  ' : ' ')
       endfor
       return s . '%#TabLineFill#'

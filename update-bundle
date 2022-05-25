@@ -12,7 +12,7 @@ git submodule --quiet foreach '
     git checkout --quiet $BRANCH
     OLDHASH=$(git rev-parse HEAD)
     git pull --quiet --recurse-submodules || :
-    git log --oneline $OLDHASH..HEAD
+    git --no-pager log --oneline $OLDHASH..HEAD
 '
 
 echo "▶ UPDATING HELP TAGS ━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-"
@@ -21,5 +21,5 @@ nvim -u NONE -N --headless -c "helptags ALL" -c "qa!"
 echo "▶ UPDATING TREESITTER (manual step) -━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-━-"
 echo ""
 echo "Per https://github.com/nvim-treesitter/nvim-treesitter/wiki/Windows-support#msvc,"
-echo "open x64 Native Tools Command Prompt for VS 2019. Then launch nvim.exe. The TreeSitter"
-echo "plugin should take care of the rest. If not, then you have some work to do."
+echo "  1. Open x64 Native Tools Command Prompt for VS 2019."
+echo "  2. Run the command: nvim -c \"TSUpdate\"."

@@ -5,21 +5,21 @@ local bufmap = vim.api.nvim_buf_set_keymap
 local noremapSilent = {noremap=true, silent=true}
 local noremap = {noremap=true}
 
-cmd('packadd! bufselect.vim') -- ######################################################### BUFSELECT
+cmd('packadd! bufselect.vim') -- #################### https://github.com/PhilRunninger/bufselect.vim
 g.BufSelectKeyDeleteBuffer='w'
 g.BufSelectKeyOpen='l'
 map('n', '<leader>b', '<Cmd>ShowBufferList<CR>', noremapSilent)
 
-cmd('packadd! crease.vim') -- ############################################################### CREASE
+cmd('packadd! crease.vim') -- ############################### https://github.com/scr1pt0r/crease.vim
 g.crease_foldtext = {default='%{repeat(">",v:foldlevel)}%{repeat(" ",v:foldlevel)}%t%=[%l lines]'}
 
-cmd('packadd! csv.vim') -- ##################################################################### CSV
+cmd('packadd! csv.vim') -- ##################################### https://github.com/chrisbra/csv.vim
 g.no_csv_maps = 1
 
-cmd('packadd! vim-easy-align') -- ######################################################## EASYALIGN
+cmd('packadd! vim-easy-align') -- ####################### https://github.com/junegunn/vim-easy-align
 map('v', '<Enter>', '<Plug>(LiveEasyAlign)', {})
 
-cmd('packadd! vim-fugitive') -- ########################################################### FUGITIVE
+cmd('packadd! vim-fugitive') -- ############################## https://github.com/tpope/vim-fugitive
 map('n', '<F3>', '"zyiw/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>', noremapSilent)
 map('v', '<F3>', '"zy/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>', noremapSilent)
 map('n', '<leader>G', '<Cmd>Git<CR>', noremapSilent)
@@ -28,10 +28,10 @@ map('n', '<leader>G', '<Cmd>Git<CR>', noremapSilent)
 g.markdown_folding = 1
 g.markdown_fenced_languages = {'vim','sql','cs','ps1'}
 
-cmd('packadd! vim-matchup') -- ############################################################# MATCHUP
+cmd('packadd! vim-matchup') -- ############################# https://github.com/andymass/vim-matchup
 g.matchup_matchparen_offscreen = {method='popup'}
 
-cmd('packadd! mintree') -- ################################################################# MINTREE
+cmd('packadd! mintree') -- ################################ https://github.com/PhilRunninger/mintree
 g.MinTreeExpanded='◢'
 g.MinTreeCollapsed='▷'
 g.MinTreeOpen='l'
@@ -41,16 +41,16 @@ g.MinTreeTagAFile='t'
 map('n', '<leader>o', '<Cmd>MinTree<CR>', noremapSilent)
 map('n', '<leader>f', '<Cmd>MinTreeFind<CR>', noremapSilent)
 
-cmd('packadd! presenting.vim') -- ####################################################### PRESENTING
+cmd('packadd! presenting.vim') -- ########################## https://github.com/sotte/presenting.vim
 g.presenting_quit = '<Esc>'
 g.presenting_next = '<Right>'
 g.presenting_prev = '<Left>'
 
-cmd('packadd! vim-rest-console') -- ################################################### REST CONSOLE
+cmd('packadd! vim-rest-console') -- ###################### https://github.com/diepm/vim-rest-console
 g.vrc_show_command = 1
 g.vrc_trigger = '<F5>'
 
-cmd('packadd! undotree') -- ############################################################### UNDOTREE
+cmd('packadd! undotree') -- ##################################### https://github.com/mbbill/undotree
 map('n', '<leader>u', '<Cmd>UndotreeShow<CR>', noremapSilent)
 g.undotree_WindowLayout = 2
 g.undotree_HelpLine = 0
@@ -61,26 +61,26 @@ g.undotree_TreeSplitShape = '╱'
 g.undotree_TreeReturnShape = '╲'
 g.undotree_SetFocusWhenToggle = 1
 
-cmd('packadd! unicode.vim') -- ############################################################# UNICODE
+cmd('packadd! unicode.vim') -- ############################# https://github.com/chrisbra/unicode.vim
 map('n', 'ga', '<Cmd>UnicodeName<CR>', noremapSilent)
 map('n', '<leader>k', ':UnicodeSearch!<space>', noremap)
 
-cmd('packadd! LuaSnip') -- ################################################################ SNIPPETS
-cmd('packadd! friendly-snippets')
+cmd('packadd! LuaSnip') -- ##################################### https://github.com/L3MON4D3/LuaSnip
+cmd('packadd! friendly-snippets') --                 https://github.com/rafamadriz/friendly-snippets
 
-cmd('packadd! nvim-cmp') -- ############################################################# COMPLETION
-cmd('packadd! cmp-buffer')
-cmd('packadd! cmp-path')
-cmd('packadd! cmp_luasnip')
-cmd('packadd! cmp-nvim-lsp')
-cmd('packadd! cmp-nvim-lua')
+cmd('packadd! nvim-cmp') -- #################################### https://github.com/hrsh7th/nvim-cmp
+cmd('packadd! cmp-buffer') --                                  https://github.com/hrsh7th/cmp-buffer
+cmd('packadd! cmp-path') --                                      https://github.com/hrsh7th/cmp-path
+cmd('packadd! cmp_luasnip') --                           https://github.com/saadparwaiz1/cmp_luasnip
+cmd('packadd! cmp-nvim-lsp') --                              https://github.com/hrsh7th/cmp-nvim-lsp
+cmd('packadd! cmp-nvim-lua') --                              https://github.com/hrsh7th/cmp-nvim-lua
 require "my-cmp"
 
-cmd('packadd! nvim-lspconfig') -- ############################################################## LSP
-cmd('packadd! nvim-lsp-installer')
+cmd('packadd! nvim-lspconfig') -- ######################### https://github.com/neovim/nvim-lspconfig
+cmd('packadd! nvim-lsp-installer') --             https://github.com/williamboman/nvim-lsp-installer
 require "my-lsp"
 
-cmd('packadd! nvim-treesitter') -- ###################################################### TREESITTER
+cmd('packadd! nvim-treesitter') -- ############## https://github.com/nvim-treesitter/nvim-treesitter
 require "nvim-treesitter.configs".setup {
   ensure_installed = {"bash", "c_sharp", "css", "erlang", "graphql", "help", "html", "javascript", "json", "lua", "make", "markdown", "python", "regex", "ruby", "typescript", "vim", "yaml"},
   sync_install = false,
@@ -93,10 +93,10 @@ require "nvim-treesitter.configs".setup {
   indent = {enable = true, disable = {"yaml"}},
 }
 
-cmd('packadd! Comment.nvim') -- ############################################################ COMMENT
+cmd('packadd! Comment.nvim') -- ########################### https://github.com/numToStr/Comment.nvim
 require "Comment".setup()
 
-cmd('packadd! gitsigns.nvim') -- ########################################################## GITSIGNS
+cmd('packadd! gitsigns.nvim') -- ######################## https://github.com/lewis6991/gitsigns.nvim
 require "gitsigns".setup {
     signs = {
         add = { hl = 'GitSignsAdd', text = '▊', numhl = 'GitSignsAddNr', linehl = 'GitSignsAddLn' },
@@ -112,10 +112,11 @@ require "gitsigns".setup {
     end,
 }
 
-cmd('packadd! nvim-colorizer.lua') -- ############################################### NVIM-COLORIZER
+
+cmd('packadd! nvim-colorizer.lua') -- ############### https://github.com/norcalli/nvim-colorizer.lua
 require 'colorizer'.setup()
 
-cmd('packadd! neovim-ayu') -- ########################################################### NEOVIM-AYU
+cmd('packadd! neovim-ayu') -- ################################# https://github.com/Shatur/neovim-ayu
 require 'ayu'.setup({
     overrides = function()
         return vim.tbl_extend('force',
@@ -148,13 +149,13 @@ require 'ayu'.setup({
 require 'ayu'.colorscheme()
 
 -- ###################################################################################### ALL OTHERS
-cmd('packadd! ldraw.vim')
-cmd('packadd! vim-exchange')
-cmd('packadd! vim-repeat')
-cmd('packadd! vim-sessions')
-cmd('packadd! vim-signature')
-cmd('packadd! vim-surround')
-cmd('packadd! vim-unimpaired')
+cmd('packadd! ldraw.vim') --                                https://github.com/vim-scripts/ldraw.vim
+cmd('packadd! vim-exchange') --                              https://github.com/tommcdo/vim-exchange
+cmd('packadd! vim-repeat') --                                    https://github.com/tpope/vim-repeat
+cmd('packadd! vim-sessions') --                        https://github.com/PhilRunninger/vim-sessions
+cmd('packadd! vim-signature') --                            https://github.com/kshenoy/vim-signature
+cmd('packadd! vim-surround') --                                https://github.com/tpope/vim-surround
+cmd('packadd! vim-unimpaired') --                            https://github.com/tpope/vim-unimpaired
 
 -- Must come AFTER the :packadd! calls above; otherwise, the contents of
 -- package 'ftdetect' directories won't be evaluated.
