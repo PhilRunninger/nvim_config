@@ -149,13 +149,16 @@ require 'ayu'.setup({
 require 'ayu'.colorscheme()
 
 -- ###################################################################################### ALL OTHERS
-cmd('packadd! ldraw.vim') --                                https://github.com/vim-scripts/ldraw.vim
-cmd('packadd! vim-exchange') --                              https://github.com/tommcdo/vim-exchange
-cmd('packadd! vim-repeat') --                                    https://github.com/tpope/vim-repeat
-cmd('packadd! vim-sessions') --                        https://github.com/PhilRunninger/vim-sessions
-cmd('packadd! vim-signature') --                            https://github.com/kshenoy/vim-signature
-cmd('packadd! vim-surround') --                                https://github.com/tpope/vim-surround
-cmd('packadd! vim-unimpaired') --                            https://github.com/tpope/vim-unimpaired
+cmd([[
+    packadd! ldraw.vim                           "          https://github.com/vim-scripts/ldraw.vim
+    packadd! markdown-preview.nvim               "   https://github.com/iamcco/markdown-preview.nvim
+    packadd! vim-exchange                        "           https://github.com/tommcdo/vim-exchange
+    packadd! vim-repeat                          "               https://github.com/tpope/vim-repeat
+    packadd! vim-sessions                        "     https://github.com/PhilRunninger/vim-sessions
+    packadd! vim-signature                       "          https://github.com/kshenoy/vim-signature
+    packadd! vim-surround                        "             https://github.com/tpope/vim-surround
+    packadd! vim-unimpaired                      "           https://github.com/tpope/vim-unimpaired
+]])
 
 -- Must come AFTER the :packadd! calls above; otherwise, the contents of
 -- package 'ftdetect' directories won't be evaluated.

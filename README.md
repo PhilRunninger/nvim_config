@@ -3,8 +3,7 @@
 ## Installation
 1. Clone the repository.
 1. Initialize and update the submodules.
-1. Start neovim. If your system is setup correctly with Node.js, a CoC prerequisite, running `:InstallCocExtensions` wil install CoC's extensions.
-1. CoC has its own set of instructions to installing or upgrading it.
+1. See submodules' READMEs for additional setup instructions.
 
 ### Linux or Mac
 ```

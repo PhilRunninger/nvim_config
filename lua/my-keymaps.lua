@@ -35,8 +35,6 @@ cmd([[
         endif
     endfunction
 ]])
-
--- Switch Between Windows and Tabs
 map('n', '<C-h>', '<Cmd>call WinTabSwitch("h")<CR>', noremapSilent)
 map('n', '<C-j>', '<Cmd>call WinTabSwitch("j")<CR>', noremapSilent)
 map('n', '<C-k>', '<Cmd>call WinTabSwitch("k")<CR>', noremapSilent)
@@ -74,6 +72,10 @@ map('n', '<leader>cd', '<Cmd>cd %:p:h<Bar>pwd<CR>', noremapSilent)
 
 -- Focus on the current fold, opening it and closing all others.
 map('n', '<leader>z', 'zMzvzz', noremapSilent)
+
+-- Open or close folds with l and h
+map('n', 'h', 'foldclosed(line("."))==-1 && col(".")==1 ? "zc" : "h"', {expr = true})
+map('n', 'l', 'foldclosed(line("."))!=-1 ? "zo" : "l"', {expr = true})
 
 -- Fix the closest prior misspelling
 map('i', '<F2>', '★<Esc>[s1z=/★<CR>s', noremapSilent)
