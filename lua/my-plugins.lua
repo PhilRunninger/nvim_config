@@ -11,7 +11,7 @@ g.BufSelectKeyOpen='l'
 map('n', '<leader>b', '<Cmd>ShowBufferList<CR>', noremapSilent)
 
 cmd('packadd! crease.vim') -- ############################### https://github.com/scr1pt0r/crease.vim
-g.crease_foldtext = {default='%{repeat(">",v:foldlevel)}%{repeat(" ",v:foldlevel)}%t%=[%l lines]'}
+g.crease_foldtext = {default='%{repeat("▶",v:foldlevel)}%{repeat(" ",v:foldlevel)}%t%=[%l lines]'}
 
 cmd('packadd! csv.vim') -- ##################################### https://github.com/chrisbra/csv.vim
 g.no_csv_maps = 1
