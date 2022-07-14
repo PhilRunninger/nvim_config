@@ -1,9 +1,9 @@
 local group = vim.api.nvim_create_augroup('myAuGroup', {clear = true})
 
 -- Remove, display/hide trailing whitespace
-vim.api.nvim_create_autocmd('BufWrite', {command = '%s/\\s\\+$//ce', group = group})
-vim.api.nvim_create_autocmd('InsertEnter', {command = ':set listchars-=trail:■', group = group})
-vim.api.nvim_create_autocmd('InsertLeave', {command = ':set listchars+=trail:■', group = group})
+vim.api.nvim_create_autocmd('BufWritePre', {command = 'let [v,c,l]=[winsaveview(),&cuc,&cul]|set cuc cul|keeppatterns %s/\\s\\+$//ce|let [&cuc,&cul]=[c,l]|call winrestview(v)|unlet v l c', group = group})
+vim.api.nvim_create_autocmd('InsertEnter', {command = 'set listchars-=trail:■', group = group})
+vim.api.nvim_create_autocmd('InsertLeave', {command = 'set listchars+=trail:■', group = group})
 
 -- Turn off line numbers in Terminal windows.
 vim.api.nvim_create_autocmd('TermOpen', {command = 'setlocal nonumber | startinsert', group = group})
