@@ -44,8 +44,9 @@ function! s:SQLRunSpecial() " {{{1
     let [pick,_] = s:Choose('Select a special instruction to perform.', 0, 0,
         \ ['List all tables'
         \ ,'Describe table/view under cursor (sp_help)'
-        \ ,'List all stored procedures'
         \ ,'List all views'
+        \ ,'SELECT TOP 100 FROM...'
+        \ ,'List all stored procedures'
         \ ,'List all triggers'
         \ ,'T-SQL definition of object (procs, views, triggers, etc.)'
         \ ])
@@ -155,13 +156,16 @@ function! s:WriteTempFile(object) " {{{1
     elseif a:object == '1'  " Describe table/view
         normal! "zyiw
         call writefile(["sp_help '" . @z ."';"], b:sqlTempFile)
-    elseif a:object == '2'  " List stored procedures
-        call writefile(['SELECT name FROM sys.procedures'], b:sqlTempFile)
-    elseif a:object == '3'  " List views
+    elseif a:object == '2'  " List views
         call writefile(['SELECT name FROM sys.views'], b:sqlTempFile)
-    elseif a:object == '4'  " List triggers
+    elseif a:object == '3'  " SELECT TOP 100 FROM...
+        normal! "zyiw
+        call writefile(["SELECT TOP 100 * FROM " . @z .";"], b:sqlTempFile)
+    elseif a:object == '4'  " List stored procedures
+        call writefile(['SELECT name FROM sys.procedures'], b:sqlTempFile)
+    elseif a:object == '5'  " List triggers
         call writefile(['SELECT name FROM sys.triggers'], b:sqlTempFile)
-    elseif a:object == '5'  " View or Stored Procedure definition
+    elseif a:object == '6'  " View or Stored Procedure definition
         normal! "zyiw
         call writefile(["select c.text"
                      \ ,"from syscomments c"
