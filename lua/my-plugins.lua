@@ -119,7 +119,8 @@ require 'colorizer'.setup()
 cmd('packadd! neovim-ayu') -- ################################# https://github.com/Shatur/neovim-ayu
 require 'ayu'.setup({
     overrides = function()
-        return vim.tbl_extend('force',
+        local colors = require('ayu.colors')
+        return
           { -- My custom highlight groups for the statusline.
             GitBranch    = {bg = '#f54d27', fg = '#efefe7'},
             Session      = {bg = '#ffaf00', fg = '#000000'},
@@ -130,21 +131,17 @@ require 'ayu'.setup({
             -- Override builtin colors
             WinSeparator = {bg = 'NONE'},
             LineNr       = {fg = '#90a4c9'},
-            Search       = {bg = '#0080c0', fg = '#ffffff'}, },
-          vim.o.background == 'dark' and
-          { Visual       = {bg = '#404040'},
-            CursorLine   = {bg = '#31334b'},
-            CursorColumn = {bg = '#31334b'},
-            ColorColumn  = {bg = '#31334b'},
-            NormalNC     = {bg = '#0f151e', fg = '#808080'}, }
-          or
-          { Visual       = {bg = '#c0c0c0'},
-            CursorLine   = {bg = '#e0e0e0'},
-            CursorColumn = {bg = '#e0e0e0'},
-            ColorColumn  = {bg = '#e0e0e0'},
-            NormalNC     = {bg = '#f0f0f0', fg = '#808080'}, }
-        )
-      end
+            Search       = {bg = '#0080c0',           fg = '#ffffff'},
+            TabLine      = {bg = colors.panel_border, fg = colors.comment, underline=true},
+            TabLineFill  = {bg = colors.panel_border, fg = colors.comment, underline=true },
+            TabLineSel   = {bg = colors.bg,           fg = colors.accent},
+            CursorLine   = {bg = colors.gutter_normal},
+            CursorColumn = {bg = colors.gutter_normal},
+            ColorColumn  = {bg = colors.gutter_normal},
+            Visual       = {bg = colors.guide_active},
+            NormalNC     = {bg = colors.selection_inactive},
+        }
+    end
 })
 require 'ayu'.colorscheme()
 
