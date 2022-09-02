@@ -4,9 +4,6 @@
 [submodule "pack/bundle/opt/vim-rest-console"]
 	path = pack/bundle/opt/vim-rest-console
 	url = git@github.com:diepm/vim-rest-console.git
-[submodule "pack/bundle/opt/ldraw.vim"]
-	path = pack/bundle/opt/ldraw.vim
-	url = git@github.com:vim-scripts/ldraw.vim.git
 [submodule "pack/bundle/opt/csv.vim"]
 	path = pack/bundle/opt/csv.vim
 	url = git@github.com:chrisbra/csv.vim

@@ -150,7 +150,6 @@ require 'ayu'.colorscheme()
 
 -- ###################################################################################### ALL OTHERS
 cmd([[
-    packadd! ldraw.vim                           "          https://github.com/vim-scripts/ldraw.vim
     packadd! markdown-preview.nvim               "   https://github.com/iamcco/markdown-preview.nvim
     packadd! vim-exchange                        "           https://github.com/tommcdo/vim-exchange
     packadd! vim-repeat                          "               https://github.com/tpope/vim-repeat
