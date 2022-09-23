@@ -84,7 +84,7 @@
 	url = git@github.com:lewis6991/gitsigns.nvim.git
 [submodule "pack/bundle/opt/nvim-colorizer.lua"]
 	path = pack/bundle/opt/nvim-colorizer.lua
-	url = git@github.com:norcalli/nvim-colorizer.lua.git
+	url = git@github.com:NvChad/nvim-colorizer.lua.git
 [submodule "pack/bundle/opt/vim-matchup"]
 	path = pack/bundle/opt/vim-matchup
 	url = git@github.com:andymass/vim-matchup.git
