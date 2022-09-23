@@ -143,7 +143,7 @@ require 'ayu'.setup({
             SLNormalMod  = {bg = '#af0000', fg = '#ffffff'},
             SLNormal     = {bg = '#00df00', fg = '#000000'},
             -- Override builtin colors
-            WinSeparator = {bg = 'NONE'},
+            VertSplit    = {bg = 'NONE',    fg = colors.accent},
             LineNr       = {fg = '#90a4c9'},
             Search       = {bg = '#0080c0',           fg = '#ffffff'},
             TabLine      = {bg = colors.panel_border, fg = colors.comment, underline=true},
