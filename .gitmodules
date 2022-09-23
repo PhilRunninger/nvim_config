@@ -37,9 +37,6 @@
 [submodule "pack/bundle/opt/presenting.vim"]
 	path = pack/bundle/opt/presenting.vim
 	url = git@github.com:sotte/presenting.vim.git
-[submodule "pack/bundle/opt/mintree"]
-	path = pack/bundle/opt/mintree
-	url = git@github.com:PhilRunninger/mintree.git
 [submodule "pack/bundle/opt/bufselect.vim"]
 	path = pack/bundle/opt/bufselect.vim
 	url = git@github.com:PhilRunninger/bufselect.vim.git
@@ -97,3 +94,6 @@
 [submodule "pack/bundle/opt/markdown-preview.nvim"]
 	path = pack/bundle/opt/markdown-preview.nvim
 	url = git@github.com:iamcco/markdown-preview.nvim.git
+[submodule "pack/bundle/opt/nvim-tree.lua"]
+	path = pack/bundle/opt/nvim-tree.lua
+	url = git@github.com:kyazdani42/nvim-tree.lua.git

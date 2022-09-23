@@ -31,16 +31,6 @@ g.markdown_fenced_languages = {'vim','sql','cs','ps1'}
 cmd('packadd! vim-matchup') -- ############################# https://github.com/andymass/vim-matchup
 g.matchup_matchparen_offscreen = {method='popup'}
 
-cmd('packadd! mintree') -- ################################ https://github.com/PhilRunninger/mintree
-g.MinTreeExpanded='◢'
-g.MinTreeCollapsed='▷'
-g.MinTreeOpen='l'
-g.MinTreeCloseParent='h'
-g.MinTreeOpenTab='T'
-g.MinTreeTagAFile='t'
-map('n', '<leader>o', '<Cmd>MinTree<CR>', noremapSilent)
-map('n', '<leader>f', '<Cmd>MinTreeFind<CR>', noremapSilent)
-
 cmd('packadd! presenting.vim') -- ########################## https://github.com/sotte/presenting.vim
 g.presenting_quit = '<Esc>'
 g.presenting_next = '<Right>'
@@ -49,6 +39,30 @@ g.presenting_prev = '<Left>'
 cmd('packadd! vim-rest-console') -- ###################### https://github.com/diepm/vim-rest-console
 g.vrc_show_command = 1
 g.vrc_trigger = '<F5>'
+
+cmd('packadd! nvim-tree.lua') -- ########################https://github.com/kyazdani42/nvim-tree.lua
+require('nvim-tree').setup({
+    disable_netrw = true,
+    hijack_cursor = true,
+    git = {
+        ignore = false
+    },
+    remove_keymaps = {"<BS>", "<CR>", "o", "<C-x>", "<C-t>", "<C-v>"},
+    view = {
+        adaptive_size = true,
+        mappings = {
+            list = {
+                {key='l', action='edit'},
+                {key='h', action='close_node'},
+                {key='v', action='vsplit'},
+                {key='s', action='split'},
+                {key='t', action='tabnew'}
+            }
+        },
+    },
+})
+map('n', '<leader>o', '<Cmd>NvimTreeOpen<CR>', noremapSilent)
+map('n', '<leader>f', '<Cmd>NvimTreeFindFile<CR>', noremapSilent)
 
 cmd('packadd! undotree') -- ##################################### https://github.com/mbbill/undotree
 map('n', '<leader>u', '<Cmd>UndotreeShow<CR>', noremapSilent)
