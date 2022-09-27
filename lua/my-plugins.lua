@@ -40,29 +40,8 @@ cmd('packadd! vim-rest-console') -- ###################### https://github.com/di
 g.vrc_show_command = 1
 g.vrc_trigger = '<F5>'
 
-cmd('packadd! nvim-tree.lua') -- ########################https://github.com/kyazdani42/nvim-tree.lua
-require('nvim-tree').setup({
-    disable_netrw = true,
-    hijack_cursor = true,
-    git = {
-        ignore = false
-    },
-    remove_keymaps = {"<BS>", "<CR>", "o", "<C-x>", "<C-t>", "<C-v>"},
-    view = {
-        adaptive_size = true,
-        mappings = {
-            list = {
-                {key='l', action='edit'},
-                {key='h', action='close_node'},
-                {key='v', action='vsplit'},
-                {key='s', action='split'},
-                {key='t', action='tabnew'}
-            }
-        },
-    },
-})
-map('n', '<leader>o', '<Cmd>NvimTreeOpen<CR>', noremapSilent)
-map('n', '<leader>f', '<Cmd>NvimTreeFindFile<CR>', noremapSilent)
+cmd('packadd! vifm.vim') -- ######################################  https://github.com/vifm/vifm.vim
+map('n', '<leader>o', '<Cmd>Vifm<CR>', noremapSilent)
 
 cmd('packadd! undotree') -- ##################################### https://github.com/mbbill/undotree
 map('n', '<leader>u', '<Cmd>UndotreeShow<CR>', noremapSilent)

@@ -94,6 +94,6 @@
 [submodule "pack/bundle/opt/markdown-preview.nvim"]
 	path = pack/bundle/opt/markdown-preview.nvim
 	url = git@github.com:iamcco/markdown-preview.nvim.git
-[submodule "pack/bundle/opt/nvim-tree.lua"]
-	path = pack/bundle/opt/nvim-tree.lua
-	url = git@github.com:kyazdani42/nvim-tree.lua.git
+[submodule "pack/bundle/opt/vifm.vim"]
+	path = pack/bundle/opt/vifm.vim
+	url = git@github.com:vifm/vifm.vim.git
