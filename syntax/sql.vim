@@ -59,4 +59,4 @@ syn keyword sqlFunction columns_updated eventdata trigger_nestlevel update()
 " Windowing clauses
 syn keyword sqlFunction over rows range unbounded preceding following current row partition by
 
-highlight Function guifg=#ff7f00
+highlight sqlFunction guifg=#ff7f00
