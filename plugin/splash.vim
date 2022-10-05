@@ -28,7 +28,7 @@ endfunction
 
 function! s:Splash(...)
     let l:screens = []
-    for l:file in (a:0 && !empty(a:1)) ? [a:1] : split(s:AllSplashFiles(0,0,0), "\n")
+    for l:file in (a:0 && !empty(a:1)) ? [a:1] : s:AllSplashFiles('',0,0)
         let l:attr = {'align':'c', 'valign':'c', 'colors':[]}
         let l:data = readfile(printf('%s/%s.txt', s:splashDir,l:file))
         try
@@ -65,10 +65,11 @@ function! s:CloseSplash(...)
 endfunction
 
 function s:AllSplashFiles(ArgLead,CmdLine,CursorPos)
-    return join(map(readdir(s:splashDir, {f -> f =~ '\.txt$'}), {_,f -> fnamemodify(f, ':r')}),"\n")
+    let files = map(readdir(s:splashDir, {f -> f =~ '\.txt$'}), {_,f -> fnamemodify(f, ':r')})
+    return filter(files, {_,v -> v =~ a:ArgLead})
 endfunction
 
 let s:splashDir = expand(expand('<sfile>:p:h').'/splash/')
 set shortmess+=I
-command -nargs=? -complete=custom,<SID>AllSplashFiles Splash call <SID>Splash('<args>')
+command! -nargs=? -complete=customlist,<SID>AllSplashFiles Splash call <SID>Splash('<args>')
 "autocmd VimEnter * if argc()==0 && line2byte('$') == -1 && !&insertmode | call s:Splash() | endif
