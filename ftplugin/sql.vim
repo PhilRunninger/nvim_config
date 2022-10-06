@@ -52,12 +52,31 @@ function! s:SQLRunSpecial(arg) " {{{1
 endfunction
 
 function! s:FilterConnections(ArgLead, CmdLine, CursorPos) " {{{1
-    return filter(copy(s:sqlConnections), {_,v -> v =~ a:ArgLead})
+    let s:sqlConnections = []
+    if filereadable(s:sqlConnectionsFile)
+        let s:sqlConnections = sort(eval(join(readfile(s:sqlConnectionsFile),'')))
+    endif
+    return filter(copy(s:sqlConnections) + ['New…', 'Edit…'], {_,v -> v =~ a:ArgLead})
 endfunction
 
 function! s:SetConnection(arg) " {{{1
-    let b:sqlInstance = split(a:arg, '\.')[0]
-    let b:sqlDatabase = split(a:arg, '\.')[1]
+    let b:sqlInstance = ''
+    let b:sqlDatabase = ''
+
+    if a:arg =~? 'new…\?'
+        let db = input('Enter the new Server.Database or Server\Instance.Database: ')
+        if db =~ '^[^.\\]\+\(\\[^.\\]\+\)\?\.[^.\\]\+$'
+            let b:sqlInstance = split(db, '\.')[0]
+            let b:sqlDatabase = split(db, '\.')[1]
+            call add(s:sqlConnections, db)
+            call writefile(split(json_encode(s:sqlConnections),',\zs'), s:sqlConnectionsFile)
+        endif
+    elseif a:arg =~? 'edit…\?'
+        execute 'vsplit '.s:sqlConnectionsFile
+    elseif count(s:sqlConnections, a:arg) == 1
+        let b:sqlInstance = split(a:arg, '\.')[0]
+        let b:sqlDatabase = split(a:arg, '\.')[1]
+    endif
 endfunction
 
 function! s:WriteTempFile(object) " {{{1
@@ -231,10 +250,6 @@ endif
 setlocal wildcharm=<C-Z>
 
 let s:sqlConnectionsFile = expand('<sfile>:p:h').'/.sqlConnections.json'
-let s:sqlConnections = []
-if filereadable(s:sqlConnectionsFile)
-    let s:sqlConnections = sort(eval(join(readfile(s:sqlConnectionsFile),'')))
-endif
 
 let s:specialCommands = [
             \  {'id':'listTables',   'desc':'List all tables'}
