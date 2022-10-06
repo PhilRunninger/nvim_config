@@ -121,13 +121,9 @@ require 'ayu'.setup({
             SLInsert     = {bg = '#005fff', fg = '#ffffff'},
             SLNormalMod  = {bg = '#af0000', fg = '#ffffff'},
             SLNormal     = {bg = '#00df00', fg = '#000000'},
-            -- Override builtin colors
-            VertSplit    = {bg = 'NONE',    fg = colors.accent},
-            LineNr       = {fg = '#90a4c9'},
-            Search       = {bg = '#0080c0',           fg = '#ffffff'},
-            TabLine      = {bg = colors.panel_border, fg = colors.comment, underline=true},
-            TabLineFill  = {bg = colors.panel_border, fg = colors.comment, underline=true },
-            TabLineSel   = {bg = colors.bg,           fg = colors.accent},
+            -- Override builtin colors, for better contrast.
+            VertSplit    = {bg = 'NONE',              fg = colors.accent},
+            LineNr       = {                          fg = colors.gutter_active},
             CursorLine   = {bg = colors.gutter_normal},
             CursorColumn = {bg = colors.gutter_normal},
             ColorColumn  = {bg = colors.gutter_normal},

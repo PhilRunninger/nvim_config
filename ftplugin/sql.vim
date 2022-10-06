@@ -9,10 +9,9 @@
 " <leader>F5 - select from, or add to, list of servers and databases
 " F5 (in the query results buffer) - rerun the same query
 "
-" Servers and databases are stored as a nested list in the
-" .sqlConnections.json file in this file's folder. It is .gitignored to keep
-" that information private. The login to the database is assumed to use
-" Windows authentication.
+" Servers and databases are stored as a list in the .sqlConnections.json file
+" in this file's folder. It is .gitignored to keep that information private.
+" The login to the database is assumed to use Windows authentication.
 "
 " Prerequisite
 "   - sqlcmd command-line utility (comes with SSMS or maybe Visual Studio)
@@ -22,15 +21,18 @@
 "   - csv.vim, among MANY other things, highlights the columns.
 "         https://github.com/chrisbra/csv.vim
 
-" Mappings {{{1
-nnoremap <buffer> <F5> :call <SID>SQLRun('file')<CR>
-nnoremap <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
-vnoremap <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
-nnoremap <buffer> <C-F5> :call <SID>SQLRunSpecial()<CR>
-nnoremap <buffer> <leader><F5> :call <SID>GetConnectionInfo()<CR>
+" Commands and Mappings {{{1
+command! -buffer -nargs=1 -complete=customlist,<SID>FilterConnections SetConnection :call <SID>SetConnection('<args>')
+command! -buffer -nargs=1 -complete=customlist,<SID>FilterSpecials RunSpecialCommand :call <SID>SQLRunSpecial('<args>')
+nnoremap <silent> <buffer> <F5> :call <SID>SQLRun('file')<CR>
+nnoremap <silent> <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
+vnoremap <silent> <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
+nnoremap <buffer> <C-F5> :RunSpecialCommand<space>
+nnoremap <buffer> <leader><F5> :SetConnection<space>
 
 function! s:SQLRun(object) " {{{1
-    if !s:ConnectionIsSet() && !s:GetConnectionInfo()
+    if !s:ConnectionIsSet()
+        echo 'Connect to a database first.'
         return
     endif
 
@@ -40,101 +42,22 @@ function! s:SQLRun(object) " {{{1
     wincmd p
 endfunction
 
-function! s:SQLRunSpecial() " {{{1
-    let [pick,_] = s:Choose('Select a special instruction to perform.', 0, 0,
-        \ ['List all tables'
-        \ ,'Describe table/view under cursor (sp_help)'
-        \ ,'List all views'
-        \ ,'SELECT TOP 100 FROM...'
-        \ ,'List all stored procedures'
-        \ ,'List all triggers'
-        \ ,'T-SQL definition of object (procs, views, triggers, etc.)'
-        \ ])
-    if pick > -1
-        call s:SQLRun(string(pick))
-    endif
+function! s:FilterSpecials(ArgLead, CmdLine, CursorPos) " {{{1
+    return map(filter(copy(s:specialCommands), {_,v -> v.desc =~ a:ArgLead}), {_,w -> w.desc})
 endfunction
 
-function! s:GetConnectionInfo() " {{{1
-    let [pickInstance,pickDatabase] = s:Choose('Pick or add a server and database. Esc to cancel.', 1, 1, s:sqlConnections)
-    if pickInstance == -2
-        return 0
-    endif
-    let b:sqlInstance = pickInstance == -1 ? input('Enter the name of the new server or server\instance: ') : s:sqlConnections[pickInstance][0]
-    let b:sqlDatabase = (pickDatabase == -1 && b:sqlInstance != '') ? input('Enter the name of the new database: ') : s:sqlConnections[pickInstance][1][pickDatabase]
-    if s:ConnectionIsSet()
-        if pickInstance == -1
-            call add(s:sqlConnections, [b:sqlInstance, [b:sqlDatabase] ])
-            call writefile([json_encode(s:sqlConnections)], s:sqlConnectionsFile)
-        elseif pickDatabase == -1
-            call add(s:sqlConnections[pickInstance][1], b:sqlDatabase)
-            call writefile([json_encode(s:sqlConnections)], s:sqlConnectionsFile)
-        endif
-        return 1
-    endif
-    return 0
+function! s:SQLRunSpecial(arg) " {{{1
+    let pick = filter(copy(s:specialCommands), {_,v -> v.desc == a:arg})[0].id
+    call s:SQLRun(pick)
 endfunction
 
-function! s:Choose(prompt, allowNew, twoDPick, choices) " {{{1
-    " a:choices must be either:
-    "   1) a list of strings - ['milk','bread','eggs']
-    "   2) a list of lists, each containing a row value and a list of related
-    "      column values - [ ['pets',['Spot','Fido']], ['cars',['Mustang']] ]
-    " A dictionary would make this structure easier to understand, but they
-    " are not sortable.
-    let rowCount = len(a:choices)
-    let width = a:twoDPick ? max(map(copy(a:choices), {_,v -> strchars(v[0])})) : 0
-    let pick = [0, 0]
-    let cmdheight = &cmdheight
-    let &cmdheight = rowCount + 1 + a:allowNew
-    while 1
-        mode
-        echo a:prompt . '    [Keys: ' . (a:twoDPick ? 'h/j/k/l' : 'j/k') . '/Enter/Esc]'
+function! s:FilterConnections(ArgLead, CmdLine, CursorPos) " {{{1
+    return filter(copy(s:sqlConnections), {_,v -> v =~ a:ArgLead})
+endfunction
 
-        for i in range(len(a:choices))
-            if a:twoDPick
-                let text = printf('  %'.width.'s%s', a:choices[i][0], i==pick[0] ? '🟥' : '  ')
-                for j in range(len(a:choices[i][1]))
-                    let text = printf('%s%s%s ', text, (i==pick[0] && j==pick[1]) ? '🟠' : '  ', a:choices[i][1][j])
-                endfor
-                if a:allowNew && i==pick[0]
-                    let text = printf('%s%sNew...', text, pick[1]==len(a:choices[i][1]) ?  '🟠' : '  ')
-                endif
-                echo text
-            else
-                echo printf(' %s%s', i==pick[0] ? '🟥' : '  ', a:choices[i])
-            endif
-        endfor
-        if a:allowNew
-            if a:twoDPick
-                echo printf('  %'.width.'s%s', 'New...', rowCount == pick[0] ? '🟥' : '  ')
-            else
-                echo printf(' %s%s', rowCount==pick[0] ? '🟥' : '  ', 'New...')
-            endif
-        endif
-
-        let colCount = (pick[0] == rowCount || !a:twoDPick) ? 0 : len(a:choices[pick[0]][1])
-        let key = nr2char(getchar())
-        if key ==# 'j'
-            let pick = [(pick[0] + 1) % (rowCount + a:allowNew), 0]
-        elseif key ==# 'k'
-            let pick = [(pick[0] + rowCount - 1 + a:allowNew) % (rowCount + a:allowNew), 0]
-        elseif key ==# 'l' && a:twoDPick
-            let pick[1] = (pick[1] + 1) % (colCount + a:allowNew)
-        elseif key ==# 'h' && a:twoDPick
-            let pick[1] = (pick[1] + colCount - 1 + a:allowNew) % (colCount + a:allowNew)
-        elseif key ==# nr2char(27)
-            let pick = [-2,-2]  " -2 == no selection
-            break
-        elseif key ==# nr2char(13)
-            let pick[0] = pick[0] == rowCount ? -1 : pick[0]  " -1 == New row
-            let pick[1] = pick[1] == colCount ? -1 : pick[1]  " -1 == New column
-            break
-        endif
-    endwhile
-    let &cmdheight = cmdheight
-    mode
-    return pick
+function! s:SetConnection(arg) " {{{1
+    let b:sqlInstance = split(a:arg, '\.')[0]
+    let b:sqlDatabase = split(a:arg, '\.')[1]
 endfunction
 
 function! s:WriteTempFile(object) " {{{1
@@ -145,34 +68,45 @@ function! s:WriteTempFile(object) " {{{1
     set iskeyword+=93
     if a:object == 'file'
         call writefile(getline(1,line('$')), b:sqlTempFile)
+
     elseif a:object == 'paragraph'
         call writefile(getline(line("'{"),line("'}")), b:sqlTempFile)
+
     elseif a:object == 'selection'
         normal! gv"zy
         call writefile(split(@z,'\n'), b:sqlTempFile)
-    elseif a:object == '0'  " List tables
+
+    elseif a:object == 'listTables'
         call writefile(["SELECT table_schema + '.' + table_name"
                      \ ,'FROM information_schema.tables'], b:sqlTempFile)
-    elseif a:object == '1'  " Describe table/view
+
+    elseif a:object == 'descTable'
         normal! "zyiw
         call writefile(["sp_help '" . @z ."';"], b:sqlTempFile)
-    elseif a:object == '2'  " List views
+
+    elseif a:object == 'listViews'
         call writefile(['SELECT name FROM sys.views'], b:sqlTempFile)
-    elseif a:object == '3'  " SELECT TOP 100 FROM...
+
+    elseif a:object == 'preview'
         normal! "zyiw
-        call writefile(["SELECT TOP 100 * FROM " . @z .";"], b:sqlTempFile)
-    elseif a:object == '4'  " List stored procedures
+        call writefile(['SELECT TOP 100 * FROM ' . @z .';'], b:sqlTempFile)
+
+    elseif a:object == 'listProcs'
         call writefile(['SELECT name FROM sys.procedures'], b:sqlTempFile)
-    elseif a:object == '5'  " List triggers
+
+    elseif a:object == 'listTriggers'
         call writefile(['SELECT name FROM sys.triggers'], b:sqlTempFile)
-    elseif a:object == '6'  " View or Stored Procedure definition
+
+    elseif a:object == 'objectT-SQL'
         normal! "zyiw
         call writefile(["select c.text"
                      \ ,"from syscomments c"
                      \ ,"join sysobjects o on o.id = c.id"
                      \ ,"where o.name = '" . substitute(split(@z,'\.')[-1],'[\[\]]','','g') . "';"], b:sqlTempFile)
+
     else
         throw 'Invalid object type.'
+
     endif
     let @z = z
     let &iskeyword = iskeyword
@@ -276,7 +210,7 @@ function! s:AlignColumns() " {{{1
         let b:delimiter = '|'
         CSVInit!
     endif
-    silent execute '%s/^$\n^\s*(\(\d\+ rows affected\))\(\n^$\)\?/|\1|' . repeat('-._.-\~',40) . '\r/e'
+    silent execute '%s/^$\n^\s*(\(\d\+ rows affected\))\(\n^$\)\?/|\1|' . repeat('-._.',60) . '\r/e'
     silent 1delete _
 
     return reltimefloat(reltime(startTime))
@@ -298,11 +232,18 @@ endif
 let s:sqlConnectionsFile = expand('<sfile>:p:h').'/.sqlConnections.json'
 let s:sqlConnections = []
 if filereadable(s:sqlConnectionsFile)
-    let s:sqlConnections = eval(join(readfile(s:sqlConnectionsFile),''))
-    if !empty(s:sqlConnections)
-        let s:sqlConnections = map(sort(copy(s:sqlConnections)), {_,v -> [v[0], sort(v[1])]})
-    endif
+    let s:sqlConnections = sort(eval(join(readfile(s:sqlConnectionsFile),'')))
 endif
+
+let s:specialCommands = [
+            \  {'id':'listTables',   'desc':'List all tables'}
+            \ ,{'id':'descTable',    'desc':'Describe table/view under cursor (sp_help)'}
+            \ ,{'id':'listViews',    'desc':'List all views'}
+            \ ,{'id':'preview',      'desc':'SELECT TOP 100 * FROM...'}
+            \ ,{'id':'listProcs',    'desc':'List all stored procedures'}
+            \ ,{'id':'listTriggers', 'desc':'List all triggers'}
+            \ ,{'id':'objectT-SQL',  'desc':'T-SQL definition of object (procs, views, triggers, etc.)'}
+            \ ]
 
 let b:sqlTempFile = tempname()
 
