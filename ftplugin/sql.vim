@@ -27,7 +27,7 @@ command! -buffer -nargs=1 -complete=customlist,<SID>FilterSpecials RunSpecialCom
 nnoremap <silent> <buffer> <F5> :call <SID>SQLRun('file')<CR>
 nnoremap <silent> <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
 vnoremap <silent> <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
-nnoremap <buffer> <C-F5> :RunSpecialCommand<space>
+nnoremap <buffer> <C-F5> :RunSpecialCommand<space><C-Z>
 nnoremap <buffer> <leader><F5> :SetConnection<space>
 
 function! s:SQLRun(object) " {{{1
@@ -228,6 +228,7 @@ endfunction
 if &statusline !~? '@ %{SqlConnection()}'
     execute 'setlocal statusline='.escape(substitute(&statusline, '%f', '%f @ %{SqlConnection()}', ''),' ')
 endif
+setlocal wildcharm=<C-Z>
 
 let s:sqlConnectionsFile = expand('<sfile>:p:h').'/.sqlConnections.json'
 let s:sqlConnections = []
