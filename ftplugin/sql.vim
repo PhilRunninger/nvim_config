@@ -92,7 +92,7 @@ function! s:WriteTempFile(object) " {{{1
         call writefile(getline(line("'{"),line("'}")), b:sqlTempFile)
 
     elseif a:object == 'selection'
-        normal! gv"zy
+        silent normal! gv"zy
         call writefile(split(@z,'\n'), b:sqlTempFile)
 
     elseif a:object == 'listTables'
@@ -100,14 +100,14 @@ function! s:WriteTempFile(object) " {{{1
                      \ ,'FROM information_schema.tables'], b:sqlTempFile)
 
     elseif a:object == 'descTable'
-        normal! "zyiw
+        silent normal! "zyiw
         call writefile(["sp_help '" . @z ."';"], b:sqlTempFile)
 
     elseif a:object == 'listViews'
         call writefile(['SELECT name FROM sys.views'], b:sqlTempFile)
 
     elseif a:object == 'preview'
-        normal! "zyiw
+        silent normal! "zyiw
         call writefile(['SELECT TOP 100 * FROM ' . @z .';'], b:sqlTempFile)
 
     elseif a:object == 'listProcs'
@@ -117,7 +117,7 @@ function! s:WriteTempFile(object) " {{{1
         call writefile(['SELECT name FROM sys.triggers'], b:sqlTempFile)
 
     elseif a:object == 'objectT-SQL'
-        normal! "zyiw
+        silent normal! "zyiw
         call writefile(["select c.text"
                      \ ,"from syscomments c"
                      \ ,"join sysobjects o on o.id = c.id"
@@ -155,14 +155,14 @@ function! s:RunQuery() " {{{1
     let querying = s:SQLServer()
     let joining = s:JoinLines()
     let aligning = s:AlignColumns()
-    echon printf('Elapsed: %f seconds (Query: %f  Join: %f  Align: %f)', reltimefloat(reltime(startTime)), querying, joining, aligning)
+    echomsg printf('Elapsed: %f seconds (Query: %f  Join: %f  Align: %f)', reltimefloat(reltime(startTime)), querying, joining, aligning)
 endfunction
 
 function! s:SQLServer() " {{{1
     let startTime = reltime()
     echon 'Querying...  '
     redraw!
-    silent execute 'r! sqlcmd -S' . b:sqlInstance . ' -d' . b:sqlDatabase.' -s"|" -W -i ' . b:sqlTempFile
+    silent execute 'r! sqlcmd -S' . b:sqlInstance . ' -d' . b:sqlDatabase.' -s"|" -W -I -i ' . b:sqlTempFile
     return reltimefloat(reltime(startTime))
 endfunction
 
