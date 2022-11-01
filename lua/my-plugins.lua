@@ -41,6 +41,9 @@ g.vrc_show_command = 1
 g.vrc_trigger = '<F5>'
 
 cmd('packadd! vifm.vim') -- ######################################  https://github.com/vifm/vifm.vim
+-- vifm/vifm.vim.rc sets up mappings s, v, t, and q for quicker file picker operations.
+-- $VIFM is a vifm-internal variable that points to ~/AppData/Roaming/Vifm or ~/.config/vifm.
+g.vifm_exec_args = '-c "source $VIFM/vifm.vim.rc"'
 map('n', '<leader>o', '<Cmd>Vifm<CR>', noremapSilent)
 
 cmd('packadd! undotree') -- ##################################### https://github.com/mbbill/undotree
