@@ -136,7 +136,7 @@ function! s:GotoResultsBuffer(sqlQueryBuffer, sqlInstance, sqlDatabase, sqlTempF
     let bufNum = bufnr(bufferName, 1)
     let winnr = bufwinnr(bufferName)
     if winnr == -1
-        execute 'silent split ' . bufferName
+        execute 'silent buffer ' . bufferName
         silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv
         nnoremap <buffer> <F5> <Cmd>call <SID>RunQuery()<CR>
         nnoremap <buffer> <C-F5> <Cmd>call <SID>SQLRunSpecial()<CR>
