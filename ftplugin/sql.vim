@@ -39,7 +39,6 @@ function! s:SQLRun(object) " {{{1
     call s:WriteTempFile(a:object)
     call s:GotoResultsBuffer(expand('%:t'), b:sqlInstance, b:sqlDatabase, b:sqlTempFile)
     call s:RunQuery()
-    wincmd p
 endfunction
 
 function! s:FilterSpecials(ArgLead, CmdLine, CursorPos) " {{{1
