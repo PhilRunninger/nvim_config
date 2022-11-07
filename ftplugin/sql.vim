@@ -21,15 +21,6 @@
 "   - csv.vim, among MANY other things, highlights the columns.
 "         https://github.com/chrisbra/csv.vim
 
-" Commands and Mappings {{{1
-command! -buffer -nargs=1 -complete=customlist,<SID>FilterConnections SetConnection :call <SID>SetConnection('<args>')
-command! -buffer -nargs=1 -complete=customlist,<SID>FilterSpecials RunSpecialCommand :call <SID>SQLRunSpecial('<args>')
-nnoremap <silent> <buffer> <F5> :call <SID>SQLRun('file')<CR>
-nnoremap <silent> <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
-vnoremap <silent> <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
-nnoremap <buffer> <C-F5> :RunSpecialCommand<space><C-Z>
-nnoremap <buffer> <leader><F5> :SetConnection<space>
-
 function! s:SQLRun(object) " {{{1
     if !s:ConnectionIsSet()
         echo 'Connect to a database first.'
@@ -64,7 +55,7 @@ function! s:SetConnection(arg) " {{{1
 
     if a:arg =~? 'new…\?'
         let db = input('Enter the new Server.Database or Server\Instance.Database: ')
-        if db =~ '^[^.\\]\+\(\\[^.\\]\+\)\?\.[^.\\]\+$'
+        if db =~ '^'.s:connectionStringPattern
             let b:sqlInstance = split(db, '\.')[0]
             let b:sqlDatabase = split(db, '\.')[1]
             call add(s:sqlConnections, db)
@@ -75,6 +66,15 @@ function! s:SetConnection(arg) " {{{1
     elseif count(s:sqlConnections, a:arg) == 1
         let b:sqlInstance = split(a:arg, '\.')[0]
         let b:sqlDatabase = split(a:arg, '\.')[1]
+    endif
+
+    if s:ConnectionIsSet()
+        let tagline = matchlist(getline(1), '-- Connection: '.s:connectionStringPattern)
+
+        if !empty(tagline)
+            silent normal! ggdd
+        endif
+        call append(0, printf("-- Connection: %s.%s", b:sqlInstance, b:sqlDatabase))
     endif
 endfunction
 
@@ -137,8 +137,9 @@ function! s:GotoResultsBuffer(sqlQueryBuffer, sqlInstance, sqlDatabase, sqlTempF
     if winnr == -1
         execute 'silent buffer ' . bufferName
         silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv
-        nnoremap <buffer> <F5> <Cmd>call <SID>RunQuery()<CR>
-        nnoremap <buffer> <C-F5> <Cmd>call <SID>SQLRunSpecial()<CR>
+        command! -buffer -nargs=1 -complete=customlist,<SID>FilterSpecials RunSpecialCommand :call <SID>SQLRunSpecial('<args>')
+        nnoremap <buffer> <C-F5> :RunSpecialCommand<space><C-Z>
+        nnoremap <buffer> <F5> :call <SID>RunQuery()<CR>
     else
         execute winnr . 'wincmd w'
     endif
@@ -261,5 +262,20 @@ let s:specialCommands = [
             \ ]
 
 let b:sqlTempFile = tempname()
+
+let s:connectionStringPattern = '\([^.\\]\+\(\\[^.\\]\+\)\?\)\.\([^.\\]\+\)$'
+let tagline = matchlist(getline(1), '-- Connection: '.s:connectionStringPattern)
+if !empty(tagline)
+    let b:sqlInstance = tagline[1]
+    let b:sqlDatabase = tagline[3]
+endif
+
+command! -buffer -nargs=1 -complete=customlist,<SID>FilterConnections SetConnection :call <SID>SetConnection('<args>')
+command! -buffer -nargs=1 -complete=customlist,<SID>FilterSpecials RunSpecialCommand :call <SID>SQLRunSpecial('<args>')
+nnoremap <silent> <buffer> <F5> :call <SID>SQLRun('file')<CR>
+nnoremap <silent> <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
+vnoremap <silent> <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
+nnoremap <buffer> <C-F5> :RunSpecialCommand<space><C-Z>
+nnoremap <buffer> <leader><F5> :SetConnection<space>
 
 " vim: foldmethod=marker
