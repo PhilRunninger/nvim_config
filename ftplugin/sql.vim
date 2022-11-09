@@ -1,4 +1,7 @@
 " Documentation {{{1
+"                                                        File: ftplugin/sql.vim
+"                                                      Author: Phil Runninger
+"
 " This script gives you the abliity to run SQLServer queries from within Vim.
 " The following key mappings are provided:
 "
@@ -6,28 +9,28 @@
 " F5 (in visual mode) - submit the visual selection to SQLServer
 " Shift+F5 - submit the paragraph to SQLServer
 " Ctrl+F5 - select from a list of special queries to run
-" <leader>F5 - select from, or add to, list of servers and databases
+" <leader>F5 - select from, add to, or edit the list of databases
 " F5 (in the query results buffer) - rerun the same query
 "
-" Servers and databases are stored as a list in the .sqlConnections.json file
-" in this file's folder. It is .gitignored to keep that information private.
-" The login to the database is assumed to use Windows authentication.
+" Databases are stored as a list in the .sqlConnections.json file in this
+" file's folder. It is .gitignored to keep that information private. The login
+" to the database is assumed to use Windows authentication.
 "
 " Prerequisite
 "   - sqlcmd command-line utility (comes with SSMS or maybe Visual Studio)
-" Bonuses
-"   - EasyAlign aligns the text into columns, but only if it's installed.
+" Bonuses (used only if installed)
+"   - EasyAlign aligns the text into columns, if output isn't too large.
 "         https://github.com/junegunn/vim-easy-align
 "   - csv.vim, among MANY other things, highlights the columns.
 "         https://github.com/chrisbra/csv.vim
 
-function! s:SQLRun(object) " {{{1
+function! s:SQLRun(queryType) " {{{1
     if !s:ConnectionIsSet()
         call feedkeys(":SetConnection \<C-Z>", 'it')
         return
     endif
 
-    call s:WriteTempFile(a:object)
+    call s:WriteTempFile(a:queryType)
     call s:GotoResultsBuffer(expand('%:t'), b:sqlInstance, b:sqlDatabase, b:sqlTempFile)
     call s:RunQuery()
 endfunction
@@ -78,53 +81,50 @@ function! s:SetConnection(arg) " {{{1
     endif
 endfunction
 
-function! s:WriteTempFile(object) " {{{1
+function! s:WriteTempFile(queryType) " {{{1
     let z = @z
     let iskeyword = &iskeyword
     set iskeyword+=46
     set iskeyword+=91
     set iskeyword+=93
-    if a:object == 'file'
+    if a:queryType == 'file'
         let start = empty(matchlist(getline(1), '-- Connection: '.s:connectionStringPattern)) ? 1 : 2
         call writefile(getline(start,line('$')), b:sqlTempFile)
 
-    elseif a:object == 'paragraph'
+    elseif a:queryType == 'paragraph'
         call writefile(getline(line("'{"),line("'}")), b:sqlTempFile)
 
-    elseif a:object == 'selection'
+    elseif a:queryType == 'selection'
         silent normal! gv"zy
         call writefile(split(@z,'\n'), b:sqlTempFile)
 
-    elseif a:object == 'listTables'
-        call writefile(["SELECT table_schema + '.' + table_name"
-                     \ ,'FROM information_schema.tables'], b:sqlTempFile)
+    elseif a:queryType == 'listTables'
+        call writefile(["SELECT table_schema + '.' + table_name FROM information_schema.tables"], b:sqlTempFile)
 
-    elseif a:object == 'descTable'
+    elseif a:queryType == 'descTable'
         silent normal! "zyiw
-        call writefile(["sp_help '" . @z ."';"], b:sqlTempFile)
+        call writefile([printf("sp_help '%s'", @z)], b:sqlTempFile)
 
-    elseif a:object == 'listViews'
+    elseif a:queryType == 'listViews'
         call writefile(['SELECT name FROM sys.views'], b:sqlTempFile)
 
-    elseif a:object == 'preview'
+    elseif a:queryType == 'top100'
         silent normal! "zyiw
-        call writefile(['SELECT TOP 100 * FROM ' . @z .';'], b:sqlTempFile)
+        call writefile([printf('SELECT TOP 100 * FROM %s', @z)], b:sqlTempFile)
 
-    elseif a:object == 'listProcs'
+    elseif a:queryType == 'listProcs'
         call writefile(['SELECT name FROM sys.procedures'], b:sqlTempFile)
 
-    elseif a:object == 'listTriggers'
+    elseif a:queryType == 'listTriggers'
         call writefile(['SELECT name FROM sys.triggers'], b:sqlTempFile)
 
-    elseif a:object == 'objectT-SQL'
+    elseif a:queryType == 'objectT-SQL'
         silent normal! "zyiw
-        call writefile(["select c.text"
-                     \ ,"from syscomments c"
-                     \ ,"join sysobjects o on o.id = c.id"
-                     \ ,"where o.name = '" . substitute(split(@z,'\.')[-1],'[\[\]]','','g') . "';"], b:sqlTempFile)
+        let object = substitute(split(@z,'\.')[-1],'[\[\]]','','g')
+        call writefile([printf("SELECT c.text FROM syscomments c JOIN sysobjects o ON o.id = c.id WHERE o.name = '%s'", object)], b:sqlTempFile)
 
     else
-        throw 'Invalid object type.'
+        throw 'Invalid query type.'
 
     endif
     let @z = z
@@ -256,7 +256,7 @@ let s:specialCommands = [
             \  {'id':'listTables',   'desc':'List all tables'}
             \ ,{'id':'descTable',    'desc':'Describe table/view under cursor (sp_help)'}
             \ ,{'id':'listViews',    'desc':'List all views'}
-            \ ,{'id':'preview',      'desc':'SELECT TOP 100 * FROM...'}
+            \ ,{'id':'top100',       'desc':'SELECT TOP 100 * FROM...'}
             \ ,{'id':'listProcs',    'desc':'List all stored procedures'}
             \ ,{'id':'listTriggers', 'desc':'List all triggers'}
             \ ,{'id':'objectT-SQL',  'desc':'T-SQL definition of object (procs, views, triggers, etc.)'}
