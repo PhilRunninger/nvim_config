@@ -46,35 +46,35 @@ function! s:FilterConnections(ArgLead, CmdLine, CursorPos) " {{{1
     if filereadable(s:sqlConnectionsFile)
         let s:sqlConnections = sort(eval(join(readfile(s:sqlConnectionsFile),'')))
     endif
-    return filter(copy(s:sqlConnections) + ['New…', 'Edit…'], {_,v -> v =~ a:ArgLead})
+    return filter(copy(s:sqlConnections) + ['Edit…'], {_,v -> v =~ a:ArgLead})
 endfunction
 
 function! s:SetConnection(arg) " {{{1
     let b:sqlInstance = ''
     let b:sqlDatabase = ''
 
-    if a:arg =~? 'new…\?'
-        let db = input('Enter the new Server.Database or Server\Instance.Database: ')
-        if db =~ '^'.s:connectionStringPattern
-            let b:sqlInstance = split(db, '\.')[0]
-            let b:sqlDatabase = split(db, '\.')[1]
-            call add(s:sqlConnections, db)
-            call writefile(split(json_encode(s:sqlConnections),',\zs'), s:sqlConnectionsFile)
-        endif
-    elseif a:arg =~? 'edit…\?'
+    if a:arg =~? 'edit…\?'
         execute 'vsplit '.s:sqlConnectionsFile
-    elseif count(s:sqlConnections, a:arg) == 1
-        let b:sqlInstance = split(a:arg, '\.')[0]
-        let b:sqlDatabase = split(a:arg, '\.')[1]
-    endif
+    else
+        let connection = matchlist(a:arg, '^'.s:connectionStringPattern)
+        if empty(connection)
+            echomsg 'Bad syntax.'
+        else
+            if count(s:sqlConnections, a:arg) == 0
+                call add(s:sqlConnections, a:arg)
+                call writefile(split(json_encode(s:sqlConnections),',\zs'), s:sqlConnectionsFile)
+            endif
+            let b:sqlInstance = connection[1]
+            let b:sqlDatabase = connection[3]
+        endif
 
-    if s:ConnectionIsSet()
         let tagline = matchlist(getline(1), '-- Connection: '.s:connectionStringPattern)
-
         if !empty(tagline)
             silent normal! ggdd
         endif
-        call append(0, printf("-- Connection: %s.%s", b:sqlInstance, b:sqlDatabase))
+        if s:ConnectionIsSet()
+            call append(0, printf("-- Connection: %s.%s", b:sqlInstance, b:sqlDatabase))
+        endif
     endif
 endfunction
 
