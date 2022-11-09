@@ -23,7 +23,7 @@
 
 function! s:SQLRun(object) " {{{1
     if !s:ConnectionIsSet()
-        echo 'Connect to a database first.'
+        call feedkeys(":SetConnection \<C-Z>", 'it')
         return
     endif
 
