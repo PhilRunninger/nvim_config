@@ -85,7 +85,8 @@ function! s:WriteTempFile(object) " {{{1
     set iskeyword+=91
     set iskeyword+=93
     if a:object == 'file'
-        call writefile(getline(1,line('$')), b:sqlTempFile)
+        let start = empty(matchlist(getline(1), '-- Connection: '.s:connectionStringPattern)) ? 1 : 2
+        call writefile(getline(start,line('$')), b:sqlTempFile)
 
     elseif a:object == 'paragraph'
         call writefile(getline(line("'{"),line("'}")), b:sqlTempFile)
