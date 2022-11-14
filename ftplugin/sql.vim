@@ -27,7 +27,7 @@
 function! s:SQLRun(queryType) " {{{1
     if !s:ConnectionIsSet()
         let db = input(':SetConnection ',"\<C-Z>",'customlist,'.expand('<SID>').'FilterConnections')
-        execute 'call <SID>SetConnection("' . db . '")'
+        call s:SetConnection(db)
     endif
 
     call s:WriteTempFile(a:queryType)
