@@ -99,14 +99,14 @@ function! s:WriteTempFile(queryType) " {{{1
         call writefile(split(@z,'\n'), b:sqlTempFile)
 
     elseif a:queryType == 'listTables'
-        call writefile(["SELECT table_schema + '.' + table_name FROM information_schema.tables"], b:sqlTempFile)
+        call writefile(["SELECT table_schema + '.' + table_name FROM information_schema.tables ORDER BY 1"], b:sqlTempFile)
 
     elseif a:queryType == 'descTable'
         silent normal! "zyiw
         call writefile([printf("sp_help '%s'", @z)], b:sqlTempFile)
 
     elseif a:queryType == 'listViews'
-        call writefile(['SELECT name FROM sys.views'], b:sqlTempFile)
+        call writefile(['SELECT name FROM sys.views ORDER BY 1'], b:sqlTempFile)
 
     elseif a:queryType == 'top100'
         silent normal! "zyiw
