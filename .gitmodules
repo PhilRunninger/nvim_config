@@ -38,7 +38,7 @@
 	path = pack/bundle/opt/presenting.vim
 	url = git@github.com:sotte/presenting.vim.git
 [submodule "pack/bundle/opt/bufselect.vim"]
-	path = pack/bundle/opt/bufselect.vim
+	path = pack/bundle/opt/bufselect
 	url = git@github.com:PhilRunninger/bufselect.vim.git
 [submodule "pack/bundle/opt/crease.vim"]
 	path = pack/bundle/opt/crease.vim

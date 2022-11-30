@@ -5,7 +5,7 @@ local bufmap = vim.api.nvim_buf_set_keymap
 local noremapSilent = {noremap=true, silent=true}
 local noremap = {noremap=true}
 
-cmd('packadd! bufselect.vim') -- #################### https://github.com/PhilRunninger/bufselect.vim
+cmd('packadd! bufselect') -- ############################ https://github.com/PhilRunninger/bufselect
 g.BufSelectKeyDeleteBuffer='w'
 g.BufSelectKeyOpen='l'
 map('n', '<leader>b', '<Cmd>ShowBufferList<CR>', noremapSilent)
