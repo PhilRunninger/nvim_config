@@ -36,12 +36,14 @@ function! s:SQLRun(queryType) " {{{1
 endfunction
 
 function! s:FilterSpecials(ArgLead, CmdLine, CursorPos) " {{{1
-    return map(filter(copy(s:specialCommands), {_,v -> v.desc =~ a:ArgLead}), {_,w -> w.desc})
+    return map(filter(copy(s:specialCommands), {_,v -> v.id.': '.v.description =~ a:ArgLead}), {_,w -> printf("%-3s : %s", w.id, w.description)})
 endfunction
 
 function! s:SQLRunSpecial(arg) " {{{1
-    let pick = filter(copy(s:specialCommands), {_,v -> v.desc == a:arg})[0].id
-    call s:SQLRun(pick)
+    let pick = filter(copy(s:specialCommands), {_,v -> a:arg =~? '^' . v.id})
+    if len(pick) == 1
+        call s:SQLRun(pick[0].id)
+    endif
 endfunction
 
 function! s:FilterConnections(ArgLead, CmdLine, CursorPos) " {{{1
@@ -98,27 +100,27 @@ function! s:WriteTempFile(queryType) " {{{1
         silent normal! gv"zy
         call writefile(split(@z,'\n'), b:sqlTempFile)
 
-    elseif a:queryType == 'listTables'
-        call writefile(["SELECT table_schema + '.' + table_name FROM information_schema.tables ORDER BY 1"], b:sqlTempFile)
+    elseif a:queryType == 'lt'      " list tables
+        call writefile(["SELECT table_schema+'.'+table_name AS Tables FROM information_schema.tables WHERE table_type='BASE TABLE' ORDER BY 1"], b:sqlTempFile)
 
-    elseif a:queryType == 'descTable'
+    elseif a:queryType == 'des'     " describe table/view
         silent normal! "zyiw
         call writefile([printf("sp_help '%s'", @z)], b:sqlTempFile)
 
-    elseif a:queryType == 'listViews'
-        call writefile(['SELECT name FROM sys.views ORDER BY 1'], b:sqlTempFile)
+    elseif a:queryType == 'lv'      " list views
+        call writefile(["SELECT table_schema+'.'+table_name AS Views FROM information_schema.tables WHERE table_type='VIEW' ORDER BY 1"], b:sqlTempFile)
 
-    elseif a:queryType == 'top100'
+    elseif a:queryType == 'top'     " preview table/view
         silent normal! "zyiw
         call writefile([printf('SELECT TOP 100 * FROM %s', @z)], b:sqlTempFile)
 
-    elseif a:queryType == 'listProcs'
-        call writefile(['SELECT name FROM sys.procedures'], b:sqlTempFile)
+    elseif a:queryType == 'lp'      " list stored procedures
+        call writefile(["SELECT specific_schema+'.'+specific_name FROM information_schema.routines ORDER BY specific_name, specific_schema"], b:sqlTempFile)
 
-    elseif a:queryType == 'listTriggers'
-        call writefile(['SELECT name FROM sys.triggers'], b:sqlTempFile)
+    elseif a:queryType == 'tr'      " list triggers
+        call writefile(['SELECT name FROM sys.triggers ORDER BY name'], b:sqlTempFile)
 
-    elseif a:queryType == 'objectT-SQL'
+    elseif a:queryType == 'def'     " T-SQL definition of object
         silent normal! "zyiw
         let object = substitute(split(@z,'\.')[-1],'[\[\]]','','g')
         call writefile([printf("SELECT c.text FROM syscomments c JOIN sysobjects o ON o.id = c.id WHERE o.name = '%s'", object)], b:sqlTempFile)
@@ -139,7 +141,7 @@ function! s:GotoResultsBuffer(sqlQueryBuffer, sqlInstance, sqlDatabase, sqlTempF
         execute 'silent buffer ' . bufferName
         silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv
         command! -buffer -nargs=1 -complete=customlist,<SID>FilterSpecials RunSpecialCommand :call <SID>SQLRunSpecial('<args>')
-        nnoremap <buffer> <C-F5> :RunSpecialCommand<space><C-Z>
+        nnoremap <buffer> <C-F5> :RunSpecialCommand<space>
         nnoremap <buffer> <F5> :call <SID>RunQuery()<CR>
     else
         execute winnr . 'wincmd w'
@@ -228,6 +230,7 @@ function! s:AlignColumns() " {{{1
 
     if exists(':CSVInit')
         let b:delimiter = '|'
+        let b:csv_headerline = 0
         CSVInit!
     endif
     silent execute '%s/^$\n^\s*(\(\d\+ rows affected\))\(\n^$\)\?/|\1|' . repeat('-._.',60) . '\r/e'
@@ -253,13 +256,13 @@ setlocal wildcharm=<C-Z>
 let s:sqlConnectionsFile = expand('<sfile>:p:h').'/.sqlConnections.json'
 
 let s:specialCommands = [
-            \  {'id':'listTables',   'desc':'List all tables'}
-            \ ,{'id':'descTable',    'desc':'Describe table/view under cursor (sp_help)'}
-            \ ,{'id':'listViews',    'desc':'List all views'}
-            \ ,{'id':'top100',       'desc':'SELECT TOP 100 * FROM...'}
-            \ ,{'id':'listProcs',    'desc':'List all stored procedures'}
-            \ ,{'id':'listTriggers', 'desc':'List all triggers'}
-            \ ,{'id':'objectT-SQL',  'desc':'T-SQL definition of object (procs, views, triggers, etc.)'}
+            \  {'id':'lt',  'description':'List all tables'}
+            \ ,{'id':'des', 'description':'Describe table/view under cursor'}
+            \ ,{'id':'lv',  'description':'List all views'}
+            \ ,{'id':'top', 'description':'SELECT TOP 100 * FROM...'}
+            \ ,{'id':'lp',  'description':'List all stored procedures'}
+            \ ,{'id':'tr',  'description':'List all triggers'}
+            \ ,{'id':'def', 'description':'T-SQL definition of object'}
             \ ]
 
 let b:sqlTempFile = tempname()
@@ -276,7 +279,7 @@ command! -buffer -nargs=1 -complete=customlist,<SID>FilterSpecials RunSpecialCom
 nnoremap <silent> <buffer> <F5> :call <SID>SQLRun('file')<CR>
 nnoremap <silent> <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
 vnoremap <silent> <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
-nnoremap <buffer> <C-F5> :RunSpecialCommand<space><C-Z>
+nnoremap <buffer> <C-F5> :RunSpecialCommand<space>
 nnoremap <buffer> <leader><F5> :SetConnection<space>
 
 " vim: foldmethod=marker
