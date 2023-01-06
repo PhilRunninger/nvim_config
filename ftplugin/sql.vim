@@ -171,7 +171,7 @@ function! s:RunQuery() " {{{1
     redraw!
     let platform = s:ServerInfo().platform
     let cmdline = s:Settings().platforms[platform]
-    let cmdline = substitute(cmdline, '<server>', b:server, '')
+    let cmdline = substitute(cmdline, '<server>', escape(b:server, '\'), '')
     let cmdline = substitute(cmdline, '<database>', b:database, '')
     let cmdline = substitute(cmdline, '<sqlfile>', escape(b:tempFile, '\'), '')
     let parm = matchstr(cmdline, '<\w\{-}>')
@@ -181,7 +181,7 @@ function! s:RunQuery() " {{{1
     endwhile
     silent execute '0r! '.cmdline
     silent execute '%s/\($\n\)\+\%$//'
-    call append(line('$'), '|Script|' . b:tempFile)
+    call append(line('$'), 'Script: ' . b:tempFile)
     return reltimefloat(reltime(startTime))
 endfunction
 
