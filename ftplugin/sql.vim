@@ -1,171 +1,187 @@
 " Documentation {{{1
 "                                                        File: ftplugin/sql.vim
 "                                                      Author: Phil Runninger
+" Introduction
+"   This script gives you the ability to run SQL queries from within Vim.
+"   Target platforms include SQL Server and Postgres, but since the platforms
+"   are defined separately in the settings file, other platforms may work
+"   without changes to this script.
 "
-" This script gives you the abliity to run SQLServer queries from within Vim.
-" The following key mappings are provided:
+" Settings File
+"   All the information about the servers, databases, and the platforms
+"   they're running on is stored in the .sqlSettings.json file in this
+"   file's folder. It is .gitignored to keep that information private, but
+"   here is an example to follow:
 "
-" F5 - submit the whole file to SQLServer
-" F5 (in visual mode) - submit the visual selection to SQLServer
-" Shift+F5 - submit the paragraph to SQLServer
-" Ctrl+F5 - select from a list of special queries to run
-" <leader>F5 - select from, add to, or edit the list of databases
-" F5 (in the query results buffer) - rerun the same query
+"   {
+"     "platforms": {
+"       "sqlserver":  "sqlcmd -S <server> -d <database> -s\"|\" -W -I -i <sqlfile>",
+"       "postgresql": "psql -U user1 -h <server> -p <port> -d <database> -F\"|\" -f <sqlfile>"
+"     },
+"     "specials": {
+"       "list tables": {
+"         "sqlserver":  "SELECT table_schema+'.'+table_name AS Tables FROM information_schema.tables WHERE table_type = 'BASE TABLE'",
+"         "postgresql": "SELECT table_schema||'.'||table_name AS Tables FROM information_schema.tables WHERE table_type = 'BASE TABLE'"},
+"       "describe table/view": {
+"         "sqlserver":  "sp_help '<cWORD>'",
+"         "postgresql": "\\d <cWORD>"}
+"     },
+"     "servers": {
+"       "(local)": {"platform": "sqlserver", "databases": ["Northwinds", "Movies"]}
+"       "PGSQL01": {"platform": "postgresql", "port": 5432, "databases": ["MyDB"]},
+"     }
+"   }
 "
-" Databases are stored as a list in the .sqlConnections.json file in this
-" file's folder. It is .gitignored to keep that information private. The login
-" to the database is assumed to use Windows authentication.
+"   The values in the "platforms" object are the commands used to run the SQL
+"   statements for that platform. The command must print the query results to
+"   stdout. The string may contain placeholders that are replaced when the
+"   query runs. The placeholders <server> and <database> are filled in with a
+"   key from the "servers" object and a value from the "databases" list, as
+"   chosen by the user. <sqlfile> is a temporary file that contains the SQL
+"   statements being run. Other placeholders' values are stored in the
+"   corresponding server's object. See <port> in the example above.
 "
-" Prerequisite
-"   - sqlcmd command-line utility (comes with SSMS or maybe Visual Studio)
-" Bonuses (used only if installed)
-"   - EasyAlign aligns the text into columns, if output isn't too large.
-"         https://github.com/junegunn/vim-easy-align
-"   - csv.vim, among MANY other things, highlights the columns.
-"         https://github.com/chrisbra/csv.vim
+"   The "specials" object contains common queries. Using these prevents having
+"   to write them over and over. These queries can make use of two
+"   placeholders: <cword> and <cWORD>. They are replaced by the word or WORD
+"   under the cursor, respectively.
+"
+" Key Mappings
+"   F5 - submit the whole file to the database
+"   F5 (in visual mode) - submit the visual selection to the database
+"   Shift+F5 - submit the paragraph to the database
+"   Ctrl+F5 - select from a list of special queries to run
+"   <leader>F5 - select from or edit the settings file
+"   F5 (in the query results buffer) - rerun the same query
+"
+" Bonus Functionality
+"   If the following plugins are installed, they will be used to improve the
+"   look of the results.
+"   - EasyAlign (https://github.com/junegunn/vim-easy-align) aligns the text
+"       into columns, if output isn't too large.
+"   - csv.vim (https://github.com/chrisbra/csv.vim) highlights the columns.
 
 function! s:SQLRun(queryType) " {{{1
-    if !s:ConnectionIsSet()
-        let db = input(':SetConnection ',"\<C-Z>",'customlist,'.expand('<SID>').'FilterConnections')
-        call s:SetConnection(db)
-    endif
-
-    call s:WriteTempFile(a:queryType)
-    call s:GotoResultsBuffer(expand('%:t'), b:sqlInstance, b:sqlDatabase, b:sqlTempFile)
-    call s:RunQuery()
-endfunction
-
-function! s:FilterSpecials(ArgLead, CmdLine, CursorPos) " {{{1
-    return map(filter(copy(s:specialCommands), {_,v -> v.id.': '.v.description =~ a:ArgLead}), {_,w -> printf("%-3s : %s", w.id, w.description)})
-endfunction
-
-function! s:SQLRunSpecial(arg) " {{{1
-    let pick = filter(copy(s:specialCommands), {_,v -> a:arg =~? '^' . v.id})
-    if len(pick) == 1
-        call s:SQLRun(pick[0].id)
-    endif
-endfunction
-
-function! s:FilterConnections(ArgLead, CmdLine, CursorPos) " {{{1
-    let s:sqlConnections = []
-    if filereadable(s:sqlConnectionsFile)
-        let s:sqlConnections = sort(eval(join(readfile(s:sqlConnectionsFile),'')))
-    endif
-    return filter(copy(s:sqlConnections) + ['Edit…'], {_,v -> v =~ a:ArgLead})
-endfunction
-
-function! s:SetConnection(arg) " {{{1
-    let b:sqlInstance = ''
-    let b:sqlDatabase = ''
-
-    if a:arg =~? 'edit…\?'
-        execute 'vsplit '.s:sqlConnectionsFile
-    else
-        let connection = matchlist(a:arg, '^'.s:connectionStringPattern)
-        if empty(connection)
-            echomsg 'Bad syntax.'
-        else
-            if count(s:sqlConnections, a:arg) == 0
-                call add(s:sqlConnections, a:arg)
-                call writefile(split(json_encode(s:sqlConnections),',\zs'), s:sqlConnectionsFile)
-            endif
-            let b:sqlInstance = connection[1]
-            let b:sqlDatabase = connection[3]
+    try
+        if !s:ConnectionIsSet()
+            call s:SetConnection()
         endif
+        call s:WriteTempFile(a:queryType)
+        call s:GotoResultsBuffer(expand('%:t'), b:server, b:database, b:tempFile)
+        call s:RunAndFormat()
+    catch /.*/
+        echo v:exception
+    endtry
+endfunction
+
+function! s:ConnectionIsSet() " {{{1
+    return get(b:, 'server', '') != '' && get(b:, 'database', '') != ''
+endfunction
+
+function! s:SetConnection() " {{{1
+    try
+        let sqlSettings = eval(join(readfile(s:sqlSettingsFile),''))
+
+        let servers = sort(keys(sqlSettings.servers)) + ['Edit…']
+        let i = s:Choose('Choose a server.', servers)
+        if i == len(servers)-1
+            execute 'vsplit '.s:sqlSettingsFile
+            return
+        endif
+        let b:server = servers[i]
+
+        let databases = sort(sqlSettings.servers[servers[i]].databases) + ['Edit…']
+        let j = s:Choose('Choose a database on ' . b:server, databases)
+        if i == len(servers)-1
+            execute 'vsplit '.s:sqlSettingsFile
+            return
+        endif
+        let b:database = databases[j]
 
         let tagline = matchlist(getline(1), '-- Connection: '.s:connectionStringPattern)
         if !empty(tagline)
-            silent normal! ggdd
+            silent normal! ggdd _
         endif
-        if s:ConnectionIsSet()
-            call append(0, printf("-- Connection: %s.%s", b:sqlInstance, b:sqlDatabase))
-        endif
-    endif
+        silent call append(0, printf('-- Connection: %s.%s', b:server, b:database))
+        redraw!
+    catch /.*/
+        echo v:exception
+    endtry
 endfunction
 
 function! s:WriteTempFile(queryType) " {{{1
-    let z = @z
-    let iskeyword = &iskeyword
-    set iskeyword+=46
-    set iskeyword+=91
-    set iskeyword+=93
     if a:queryType == 'file'
         let start = empty(matchlist(getline(1), '-- Connection: '.s:connectionStringPattern)) ? 1 : 2
-        call writefile(getline(start,line('$')), b:sqlTempFile)
+        call writefile(getline(start,line('$')), b:tempFile)
 
     elseif a:queryType == 'paragraph'
-        call writefile(getline(line("'{"),line("'}")), b:sqlTempFile)
+        call writefile(getline(line("'{"),line("'}")), b:tempFile)
 
     elseif a:queryType == 'selection'
         silent normal! gv"zy
-        call writefile(split(@z,'\n'), b:sqlTempFile)
+        call writefile(split(@z,'\n'), b:tempFile)
 
-    elseif a:queryType == 'lt'      " list tables
-        call writefile(["SELECT table_schema+'.'+table_name AS Tables FROM information_schema.tables WHERE table_type='BASE TABLE' ORDER BY 1"], b:sqlTempFile)
+    elseif a:queryType == 'special'
+        let platform = s:ServerInfo().platform
+        let specials = sort(keys(filter(copy(s:Settings().specials), {k,v -> has_key(v,platform)})))
+        let i = s:Choose('Choose a special query to run.', specials)
+        if i < 0 || i >= len(specials)
+            throw 'Invalid selection. Aborting...'
+        endif
 
-    elseif a:queryType == 'des'     " describe table/view
-        silent normal! "zyiw
-        call writefile([printf("sp_help '%s'", @z)], b:sqlTempFile)
+        let cmdline = s:Settings().specials[specials[i]][platform]
+        let cmdline = substitute(cmdline, '\C<cword>', expand('<cword>'), 'g')
+        let cmdline = substitute(cmdline, '\C<cWORD>', expand('<cWORD>'), 'g')
 
-    elseif a:queryType == 'lv'      " list views
-        call writefile(["SELECT table_schema+'.'+table_name AS Views FROM information_schema.tables WHERE table_type='VIEW' ORDER BY 1"], b:sqlTempFile)
-
-    elseif a:queryType == 'top'     " preview table/view
-        silent normal! "zyiw
-        call writefile([printf('SELECT TOP 100 * FROM %s', @z)], b:sqlTempFile)
-
-    elseif a:queryType == 'lp'      " list stored procedures
-        call writefile(["SELECT specific_schema+'.'+specific_name FROM information_schema.routines ORDER BY specific_name, specific_schema"], b:sqlTempFile)
-
-    elseif a:queryType == 'tr'      " list triggers
-        call writefile(['SELECT name FROM sys.triggers ORDER BY name'], b:sqlTempFile)
-
-    elseif a:queryType == 'def'     " T-SQL definition of object
-        silent normal! "zyiw
-        let object = substitute(split(@z,'\.')[-1],'[\[\]]','','g')
-        call writefile([printf("SELECT c.text FROM syscomments c JOIN sysobjects o ON o.id = c.id WHERE o.name = '%s'", object)], b:sqlTempFile)
-
-    else
-        throw 'Invalid query type.'
+        call writefile([cmdline], b:tempFile)
 
     endif
-    let @z = z
-    let &iskeyword = iskeyword
 endfunction
 
-function! s:GotoResultsBuffer(sqlQueryBuffer, sqlInstance, sqlDatabase, sqlTempFile) " {{{1
-    let bufferName = fnamemodify(a:sqlQueryBuffer, ':r') . '.OUT.' . a:sqlInstance . '.' . a:sqlDatabase
+function! s:GotoResultsBuffer(sqlQueryBuffer, server, database, tempFile) " {{{1
+    let bufferName = fnamemodify(a:sqlQueryBuffer, ':r') . '.OUT.' . a:server . '.' . a:database
     let bufNum = bufnr(bufferName, 1)
     let winnr = bufwinnr(bufferName)
     if winnr == -1
         execute 'silent buffer ' . bufferName
         silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv
-        command! -buffer -nargs=1 -complete=customlist,<SID>FilterSpecials RunSpecialCommand :call <SID>SQLRunSpecial('<args>')
-        nnoremap <buffer> <C-F5> :RunSpecialCommand<space>
-        nnoremap <buffer> <F5> :call <SID>RunQuery()<CR>
+        nnoremap <buffer> <C-F5> :call <SID>SQLRun('special')<CR>
+        nnoremap <buffer> <F5> :call <SID>RunAndFormat()<CR>
     else
         execute winnr . 'wincmd w'
     endif
-    let b:sqlInstance = a:sqlInstance
-    let b:sqlDatabase = a:sqlDatabase
-    let b:sqlTempFile = a:sqlTempFile
+    let b:server = a:server
+    let b:database = a:database
+    let b:tempFile = a:tempFile
 endfunction
 
-function! s:RunQuery() " {{{1
+function! s:RunAndFormat() " {{{1
     " We're in the Results buffer now.
     let startTime = reltime()
     silent normal! ggdG _
-    let querying = s:SQLServer()
+    let querying = s:RunQuery()
     let joining = s:JoinLines()
     let aligning = s:AlignColumns()
     echomsg printf('Elapsed: %f seconds (Query: %f  Join: %f  Align: %f)', reltimefloat(reltime(startTime)), querying, joining, aligning)
 endfunction
 
-function! s:SQLServer() " {{{1
+function! s:RunQuery() " {{{1
     let startTime = reltime()
     echon 'Querying...  '
     redraw!
-    silent execute 'r! sqlcmd -S' . b:sqlInstance . ' -d' . b:sqlDatabase.' -s"|" -W -I -i ' . b:sqlTempFile
+    let platform = s:ServerInfo().platform
+    let cmdline = s:Settings().platforms[platform]
+    let cmdline = substitute(cmdline, '<server>', b:server, '')
+    let cmdline = substitute(cmdline, '<database>', b:database, '')
+    let cmdline = substitute(cmdline, '<sqlfile>', escape(b:tempFile, '\'), '')
+    let parm = matchstr(cmdline, '<\w\{-}>')
+    while parm != ''
+        let cmdline = substitute(cmdline, parm, get(s:ServerInfo(), parm[1:-2], ''), '')
+        let parm = matchstr(cmdline, '<\w\{-}>')
+    endwhile
+    silent execute '0r! '.cmdline
+    silent execute '%s/\($\n\)\+\%$//'
+    call append(line('$'), '|Script|' . b:tempFile)
     return reltimefloat(reltime(startTime))
 endfunction
 
@@ -209,7 +225,7 @@ function! s:AlignColumns() " {{{1
         silent execute '%s/^$\n^\s*\((\d\+ rows affected)\)/\r\1\r/e'
         silent execute '%s/^\s\+$//e'
         normal! gg
-        let startRow = search('^.\+$','W')
+        let startRow = search('^.\+$','cW')
         while startRow > 0
             let columns = count(getline(startRow), '|') + 1
             let endRow = line("'}") - (line("'}") != line("$"))
@@ -233,53 +249,70 @@ function! s:AlignColumns() " {{{1
         let b:csv_headerline = 0
         CSVInit!
     endif
-    silent execute '%s/^$\n^\s*(\(\d\+ rows affected\))\(\n^$\)\?/|\1|' . repeat('-._.',60) . '\r/e'
-    silent 1delete _
+    silent execute '%s/^$\n^\s*(\(\d\+ rows affected\))\(\n^$\)\?/|\1|' . repeat('=',240) . '\r/e'
 
     return reltimefloat(reltime(startTime))
 endfunction
 
-function! s:ConnectionIsSet() " {{{1
-    return get(b:, 'sqlInstance', '') != '' && get(b:, 'sqlDatabase', '') != ''
+function! s:Settings() " {{{1
+    return eval(join(readfile(s:sqlSettingsFile),''))
+endfunction
+
+function! s:ServerInfo() " {{{1
+    return s:Settings().servers[b:server]
+endfunction
+
+function! s:Choose(prompt, choices)   " {{{1
+    echohl Identifier
+    echo a:prompt
+    echo ''
+    for i in range(len(a:choices))
+        echohl Identifier
+        echon printf('  %s', nr2char(char2nr('a') + i))
+        echohl Normal
+        echon ':  '.a:choices[i]
+        echo ''
+    endfor
+
+    while 1
+        let n = getchar()
+        if n == 27
+            throw 'Cancelled.'
+        endif
+
+        let n -= char2nr('a')
+        if (n >= 0 && n < len(a:choices))
+            return n
+        endif
+
+        echo 'Invalid selection. Try again or Esc to cancel.'
+    endwhile
 endfunction
 
 function! SqlConnection() " {{{1
-    return s:ConnectionIsSet() ? b:sqlInstance . '.' . b:sqlDatabase : '<disconnected>'
+    return s:ConnectionIsSet() ? b:server . '.' . b:database : '<disconnected>'
 endfunction
 
 " Start Here {{{1
+let s:sqlSettingsFile = expand('<sfile>:p:h').'/.sqlSettings.json'
+let s:connectionStringPattern = '\([^.\\]\+\(\\[^.\\]\+\)\?\)\.\([^.\\]\+\)$'
+
 if &statusline !~? '@ %{SqlConnection()}'
     execute 'setlocal statusline='.escape(substitute(&statusline, '%f', '%f @ %{SqlConnection()}', ''),' ')
 endif
-setlocal wildcharm=<C-Z>
 
-let s:sqlConnectionsFile = expand('<sfile>:p:h').'/.sqlConnections.json'
+let b:tempFile = tempname()
 
-let s:specialCommands = [
-            \  {'id':'lt',  'description':'List all tables'}
-            \ ,{'id':'des', 'description':'Describe table/view under cursor'}
-            \ ,{'id':'lv',  'description':'List all views'}
-            \ ,{'id':'top', 'description':'SELECT TOP 100 * FROM...'}
-            \ ,{'id':'lp',  'description':'List all stored procedures'}
-            \ ,{'id':'tr',  'description':'List all triggers'}
-            \ ,{'id':'def', 'description':'T-SQL definition of object'}
-            \ ]
-
-let b:sqlTempFile = tempname()
-
-let s:connectionStringPattern = '\([^.\\]\+\(\\[^.\\]\+\)\?\)\.\([^.\\]\+\)$'
 let tagline = matchlist(getline(1), '-- Connection: '.s:connectionStringPattern)
 if !empty(tagline)
-    let b:sqlInstance = tagline[1]
-    let b:sqlDatabase = tagline[3]
+    let b:server = tagline[1]
+    let b:database = tagline[3]
 endif
 
-command! -buffer -nargs=1 -complete=customlist,<SID>FilterConnections SetConnection :call <SID>SetConnection('<args>')
-command! -buffer -nargs=1 -complete=customlist,<SID>FilterSpecials RunSpecialCommand :call <SID>SQLRunSpecial('<args>')
 nnoremap <silent> <buffer> <F5> :call <SID>SQLRun('file')<CR>
 nnoremap <silent> <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
 vnoremap <silent> <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
-nnoremap <buffer> <C-F5> :RunSpecialCommand<space>
-nnoremap <buffer> <leader><F5> :SetConnection<space>
+nnoremap <buffer> <C-F5> :call <SID>SQLRun('special')<CR>
+nnoremap <buffer> <leader><F5> :call <SID>SetConnection()<CR>
 
-" vim: foldmethod=marker
+"  vim: foldmethod=marker
