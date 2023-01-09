@@ -20,8 +20,8 @@
 "     },
 "     "specials": {
 "       "list tables": {
-"         "sqlserver":  "SELECT table_schema+'.'+table_name AS Tables FROM information_schema.tables WHERE table_type = 'BASE TABLE'",
-"         "postgresql": "SELECT table_schema||'.'||table_name AS Tables FROM information_schema.tables WHERE table_type = 'BASE TABLE'"},
+"         "sqlserver":  "SELECT table_schema+'.'+table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE'",
+"         "postgresql": "SELECT table_schema||'.'||table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE';"},
 "       "describe table/view": {
 "         "sqlserver":  "sp_help '<cWORD>'",
 "         "postgresql": "\\d <cWORD>"}
@@ -98,7 +98,7 @@ function! s:SetConnection() " {{{1
         endif
         let b:database = databases[j]
 
-        let tagline = matchlist(getline(1), '-- Connection: '.s:connectionStringPattern)
+        let tagline = matchlist(getline(1), s:connectionStringPattern)
         if !empty(tagline)
             silent normal! ggdd _
         endif
@@ -111,7 +111,7 @@ endfunction
 
 function! s:WriteTempFile(queryType) " {{{1
     if a:queryType == 'file'
-        let start = empty(matchlist(getline(1), '-- Connection: '.s:connectionStringPattern)) ? 1 : 2
+        let start = empty(matchlist(getline(1), s:connectionStringPattern)) ? 1 : 2
         call writefile(getline(start,line('$')), b:tempFile)
 
     elseif a:queryType == 'paragraph'
@@ -139,7 +139,7 @@ function! s:WriteTempFile(queryType) " {{{1
 endfunction
 
 function! s:GotoResultsBuffer(sqlQueryBuffer, server, database, tempFile) " {{{1
-    let bufferName = fnamemodify(a:sqlQueryBuffer, ':r') . '.OUT.' . a:server . '.' . a:database
+    let bufferName = fnamemodify(a:sqlQueryBuffer, ':r') . '.OUT(' . a:server . '.' . a:database . ')'
     let bufNum = bufnr(bufferName, 1)
     let winnr = bufwinnr(bufferName)
     if winnr == -1
@@ -295,7 +295,7 @@ endfunction
 
 " Start Here {{{1
 let s:sqlSettingsFile = expand('<sfile>:p:h').'/.sqlSettings.json'
-let s:connectionStringPattern = '\([^.\\]\+\(\\[^.\\]\+\)\?\)\.\([^.\\]\+\)$'
+let s:connectionStringPattern = '^-- Connection: \(.\+\)\.\([^.]\+\)$'
 
 if &statusline !~? '@ %{SqlConnection()}'
     execute 'setlocal statusline='.escape(substitute(&statusline, '%f', '%f @ %{SqlConnection()}', ''),' ')
@@ -303,10 +303,10 @@ endif
 
 let b:tempFile = tempname()
 
-let tagline = matchlist(getline(1), '-- Connection: '.s:connectionStringPattern)
+let tagline = matchlist(getline(1), s:connectionStringPattern)
 if !empty(tagline)
     let b:server = tagline[1]
-    let b:database = tagline[3]
+    let b:database = tagline[2]
 endif
 
 nnoremap <silent> <buffer> <F5> :call <SID>SQLRun('file')<CR>
