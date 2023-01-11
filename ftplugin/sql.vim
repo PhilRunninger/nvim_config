@@ -181,8 +181,12 @@ function! s:RunQuery() " {{{1
     endwhile
     silent execute '0r! '.cmdline
     silent execute '%s/\($\n\)\+\%$//'
-    call append(line('$'), 'Script: ' . b:tempFile)
-    return reltimefloat(reltime(startTime))
+    let elapsed = reltimefloat(reltime(startTime))
+    let hours = float2nr(elapsed / 3600)
+    let minutes = float2nr(fmod(elapsed,3600) / 60)
+    let seconds = fmod(elapsed, 60)
+    call append(line('$'), printf('%02d:%02d:%06.3f | %s', hours, minutes, seconds, b:tempFile))
+    return elapsed
 endfunction
 
 function! s:JoinLines() " {{{1
