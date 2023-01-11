@@ -14,9 +14,12 @@
 "   here is an example to follow:
 "
 "   {
+"     "options": {
+"       "alignTimeLimit": 5.0
+"     },
 "     "platforms": {
-"       "sqlserver":  "sqlcmd -S <server> -d <database> -s\"|\" -W -I -i <sqlfile>",
-"       "postgresql": "psql -U user1 -h <server> -p <port> -d <database> -F\"|\" -f <sqlfile>"
+"       "sqlserver": {"cmdline": "sqlcmd -S <svr> -d <db> -s\"|\" -W -I -i <file>"},
+"       "postgresql": {"cmdline": "psql -U id -h <svr> -p <port> -d <db> -F\"|\" -f <file>", "options":{"doAlign":0}}
 "     },
 "     "specials": {
 "       "list tables": {
@@ -32,14 +35,21 @@
 "     }
 "   }
 "
-"   The values in the "platforms" object are the commands used to run the SQL
-"   statements for that platform. The command must print the query results to
-"   stdout. The string may contain placeholders that are replaced when the
-"   query runs. The placeholders <server> and <database> are filled in with a
-"   key from the "servers" object and a value from the "databases" list, as
-"   chosen by the user. <sqlfile> is a temporary file that contains the SQL
-"   statements being run. Other placeholders' values are stored in the
-"   corresponding server's object. See <port> in the example above.
+"   There are two options that govern how the script works. They can be placed
+"   in the "options" object as a global option, or in the platform object to
+"   be local to that platform.
+"     - doAlign:        Set to 0 or 1 to turn column alignment off or on.
+"     - alignTimeLimit: If the time estimate is below this number of seconds,
+"         do the alignment.
+"
+"   The platform objects contain the commands used to run the SQL statements
+"   for that platform. The command must print the query results to stdout. The
+"   string may contain placeholders that are replaced when the query runs. The
+"   placeholders <svr> and <db> are filled in with a key from the "servers"
+"   object and a value from the "databases" list, as chosen by the user.
+"   <file> is a temporary file that contains the SQL statements being run.
+"   Other placeholders' values are stored in the corresponding server's
+"   object. See <port> in the example above.
 "
 "   The "specials" object contains common queries. Using these prevents having
 "   to write them over and over. These queries can make use of two
@@ -160,8 +170,16 @@ function! s:RunAndFormat() " {{{1
     let startTime = reltime()
     silent normal! ggdG _
     let querying = s:RunQuery()
+
+    silent execute '%s/^\s\+$//e'
+    silent execute '%s/^\s*\((\d\+ rows\?\( affected\)\?)\)/\r\1\r/e'
+
     let joining = s:JoinLines()
     let aligning = s:AlignColumns()
+
+    silent execute 'g/^$\n^$/d'
+    silent execute 'g/^$\n^\s*(\d\+ rows\?\( affected\)\?)/d'
+
     echomsg printf('Elapsed: %f seconds (Query: %f  Join: %f  Align: %f)', reltimefloat(reltime(startTime)), querying, joining, aligning)
 endfunction
 
@@ -169,11 +187,10 @@ function! s:RunQuery() " {{{1
     let startTime = reltime()
     echon 'Querying...  '
     redraw!
-    let platform = s:ServerInfo().platform
-    let cmdline = s:Settings().platforms[platform]
-    let cmdline = substitute(cmdline, '<server>', escape(b:server, '\'), '')
-    let cmdline = substitute(cmdline, '<database>', b:database, '')
-    let cmdline = substitute(cmdline, '<sqlfile>', escape(b:tempFile, '\'), '')
+    let cmdline = s:Platform().cmdline
+    let cmdline = substitute(cmdline, '<svr>', escape(b:server, '\'), '')
+    let cmdline = substitute(cmdline, '<db>', b:database, '')
+    let cmdline = substitute(cmdline, '<file>', escape(b:tempFile, '\'), '')
     let parm = matchstr(cmdline, '<\w\{-}>')
     while parm != ''
         let cmdline = substitute(cmdline, parm, get(s:ServerInfo(), parm[1:-2], ''), '')
@@ -193,14 +210,15 @@ function! s:JoinLines() " {{{1
     let startTime = reltime()
     echon 'Fixing line breaks...  '
     redraw!
-    let startRow = 2
+    let startRow = 1
     while startRow < line('$')
         call cursor(startRow,1)
-        let endRow = search('^\s*(\d\+ rows affected)', 'cW') - 2
+        let endRow = search('^\s*(\d\+ rows\?\( affected\)\?)', 'cW') - 2
         if endRow == -2
             break
         endif
         let required = count(getline(startRow), '|')
+        let startRow += 2
         while startRow < endRow
             let rows = 0
             let count = count(getline(startRow), '|')
@@ -225,9 +243,8 @@ function! s:AlignColumns() " {{{1
     let startTime = reltime()
     echon 'Aligning columns...  '
     redraw!
-    if exists(':EasyAlign')
-        silent execute '%s/^$\n^\s*\((\d\+ rows affected)\)/\r\1\r/e'
-        silent execute '%s/^\s\+$//e'
+
+    if exists(':EasyAlign') && s:Options().doAlign
         normal! gg
         let startRow = search('^.\+$','cW')
         while startRow > 0
@@ -238,7 +255,7 @@ function! s:AlignColumns() " {{{1
             " tables as long as 10000 rows (2 columns), as wide as 2048
             " columns (10 rows), and various sizes in between.
             let timeEstimate = 0.000299808*rows*columns + 0.014503037*columns
-            if timeEstimate <= get(g:, 'sqlAlignTimeLimit', 5.0)
+            if timeEstimate <= s:Options().alignTimeLimit
                 echon printf('Aligning columns...  (rows: %d, columns: %d, estimate: %.1f seconds)', rows, columns, timeEstimate)
                 redraw!
                 silent execute startRow . ',' . endRow . 'call easy_align#align(0,0,"command","* |")'
@@ -253,7 +270,6 @@ function! s:AlignColumns() " {{{1
         let b:csv_headerline = 0
         CSVInit!
     endif
-    silent execute '%s/^$\n^\s*(\(\d\+ rows affected\))\(\n^$\)\?/|\1|' . repeat('=',240) . '\r/e'
 
     return reltimefloat(reltime(startTime))
 endfunction
@@ -264,6 +280,18 @@ endfunction
 
 function! s:ServerInfo() " {{{1
     return s:Settings().servers[b:server]
+endfunction
+
+
+function! s:Platform() " {{{1
+    return s:Settings().platforms[s:ServerInfo().platform]
+endfunction
+
+function! s:Options() " {{{1
+    return extend(
+                \ get(s:Settings(),'options',{"alignTimeLimit": 5.0, "doAlign": 1}),
+                \ get(s:Platform(),'options',{}),
+                \ 'force')
 endfunction
 
 function! s:Choose(prompt, choices)   " {{{1
