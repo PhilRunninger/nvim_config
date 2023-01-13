@@ -197,7 +197,7 @@ function! s:RunQuery() " {{{1
         let parm = matchstr(cmdline, '<\w\{-}>')
     endwhile
     silent execute '0r! '.cmdline
-    silent execute '%s/\($\n\)\+\%$//'
+    silent execute '%s/\($\n\)\+\%$//e'
     let elapsed = reltimefloat(reltime(startTime))
     let hours = float2nr(elapsed / 3600)
     let minutes = float2nr(fmod(elapsed,3600) / 60)
