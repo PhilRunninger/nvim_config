@@ -109,7 +109,7 @@ require "gitsigns".setup {
 }
 
 
-cmd('packadd! nvim-colorizer.lua') -- ############### https://github.com/norcalli/nvim-colorizer.lua
+cmd('packadd! nvim-colorizer.lua') -- ################# https://github.com/NvChad/nvim-colorizer.lua
 require 'colorizer'.setup()
 
 cmd('packadd! neovim-ayu') -- ################################# https://github.com/Shatur/neovim-ayu
@@ -126,12 +126,13 @@ require 'ayu'.setup({
             SLNormal     = {bg = '#00df00', fg = '#000000'},
             -- Override builtin colors, for better contrast.
             VertSplit    = {bg = 'NONE',              fg = colors.accent},
-            LineNr       = {                          fg = colors.gutter_active},
+            LineNr       = {                          fg = colors.comment},
             CursorLine   = {bg = colors.gutter_normal},
             CursorColumn = {bg = colors.gutter_normal},
             ColorColumn  = {bg = colors.gutter_normal},
             Visual       = {bg = colors.guide_active},
             NormalNC     = {bg = colors.selection_inactive},
+            SpecialKey   = {fg = '#ff00af'}
         }
     end
 })
