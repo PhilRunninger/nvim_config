@@ -76,9 +76,9 @@ function! s:SQLRun(queryType) " {{{1
         if !s:ConnectionIsSet()
             call s:SetConnection()
         endif
-        call s:WriteTempFile(a:queryType)
+        let sequence = s:WriteTempFile(a:queryType)
         call s:GotoResultsBuffer(expand('%:t'), b:server, b:database, b:tempFile)
-        call s:RunAndFormat()
+        call s:RunAndFormat(sequence)
     catch /.*/
         echo v:exception
     endtry
@@ -146,6 +146,7 @@ function! s:WriteTempFile(queryType) " {{{1
         call writefile([cmdline], b:tempFile)
 
     endif
+    return undotree().seq_cur
 endfunction
 
 function! s:GotoResultsBuffer(sqlQueryBuffer, server, database, tempFile) " {{{1
@@ -165,11 +166,11 @@ function! s:GotoResultsBuffer(sqlQueryBuffer, server, database, tempFile) " {{{1
     let b:tempFile = a:tempFile
 endfunction
 
-function! s:RunAndFormat() " {{{1
+function! s:RunAndFormat(sequence) " {{{1
     " We're in the Results buffer now.
     let startTime = reltime()
     silent normal! ggdG _
-    let querying = s:RunQuery()
+    let querying = s:RunQuery(a:sequence)
 
     silent execute '%s/^\s\+$//e'
     silent execute '%s/^\s*\((\d\+ rows\?\( affected\)\?)\)/\r\1\r/e'
@@ -183,7 +184,7 @@ function! s:RunAndFormat() " {{{1
     echomsg printf('Elapsed: %f seconds (Query: %f  Join: %f  Align: %f)', reltimefloat(reltime(startTime)), querying, joining, aligning)
 endfunction
 
-function! s:RunQuery() " {{{1
+function! s:RunQuery(sequence) " {{{1
     let startTime = reltime()
     echon 'Querying...  '
     redraw!
@@ -202,7 +203,7 @@ function! s:RunQuery() " {{{1
     let hours = float2nr(elapsed / 3600)
     let minutes = float2nr(fmod(elapsed,3600) / 60)
     let seconds = fmod(elapsed, 60)
-    call append(line('$'), printf('%02d:%02d:%06.3f | %s', hours, minutes, seconds, b:tempFile))
+    call append(line('$'), printf('%02d:%02d:%06.3f | Seq:%d -> %s', hours, minutes, seconds, a:sequence, b:tempFile))
     return elapsed
 endfunction
 
