@@ -2,7 +2,7 @@ local cmp = require "cmp"
 local luasnip = require "luasnip"
 
 require("luasnip/loaders/from_vscode").lazy_load()
-require("luasnip/loaders/from_vscode").lazy_load({paths={vim.fn.expand("$VIMHOME/snippets")}})
+require("luasnip/loaders/from_vscode").lazy_load({paths={"./snippets"}})
 
 local check_backspace = function()
   local col = vim.fn.col "." - 1
