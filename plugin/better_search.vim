@@ -17,31 +17,21 @@ function! s:ToggleWord(word, full)
     call s:CreateSearchString()
 endfunction
 
-function! s:CreateSearchString()
-    if empty(s:words)
-        let @/ = ''
-        return
-    endif
-
-    let @/ = '\(' . join(s:words,'\|') . '\)'
-    try
-        set hlsearch
-        normal! n
-    catch /E486: Pattern not found/
-    endtry
-endfunction
-
-function! s:ClearSearchString()
+function! s:ClearAllWords()
     let s:words = []
     call s:CreateSearchString()
+endfunction
+
+function! s:CreateSearchString()
+    let @/ = empty(s:words) ? '' : '\(' . join(s:words,'\|') . '\)'
 endfunction
 
 nnoremap <silent> *  :call <SID>ToggleWord(expand("<cword>"),1)<CR>
 nnoremap <silent> g* :call <SID>ToggleWord(expand("<cword>"),0)<CR>
 vnoremap <silent> * "xy:call <SID>ToggleWord(@x,0)<CR>
-nnoremap <silent> <leader>* <Cmd>call <SID>ClearSearchString()<CR>
+nnoremap <silent> <leader>* <Cmd>call <SID>ClearAllWords()<CR>
 
-" The code below was taken from/inspired by https://stackoverflow.com/a/53291200/510067
+" This function is user2679290's code from https://stackoverflow.com/a/53291200/510067
 function! s:Matches(pat)
     let buffer=bufnr("") "current buffer number
     let b:lines=[]
