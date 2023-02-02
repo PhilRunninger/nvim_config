@@ -97,3 +97,6 @@
 [submodule "pack/bundle/opt/vifm.vim"]
 	path = pack/bundle/opt/vifm.vim
 	url = git@github.com:vifm/vifm.vim.git
+[submodule "pack/bundle/opt/Recover.vim"]
+	path = pack/bundle/opt/Recover.vim
+	url = git@github.com:chrisbra/Recover.vim.git

@@ -141,6 +141,7 @@ require 'ayu'.colorscheme()
 -- ###################################################################################### ALL OTHERS
 cmd([[
     packadd! markdown-preview.nvim               "   https://github.com/iamcco/markdown-preview.nvim
+    packadd! Recover.vim                         "           https://github.com:chrisbra/Recover.vim
     packadd! vim-exchange                        "           https://github.com/tommcdo/vim-exchange
     packadd! vim-repeat                          "               https://github.com/tpope/vim-repeat
     packadd! vim-sessions                        "     https://github.com/PhilRunninger/vim-sessions
