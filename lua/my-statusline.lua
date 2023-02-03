@@ -1,21 +1,26 @@
-vim.opt['statusline'] =
-    '%1*' .. ' %4l/%-4L %3v ' ..
-    '%2*' .. '%(  %{FugitiveHead(8)} %)' ..
-    '%3*' .. '%( %{SessionNameStatusLineFlag()} %)' ..
-    '%4*' .. ' %{&filetype} ' ..
-    '%5*' .. ' %{&fileformat} ' ..
-    '%6*' .. ' %(%{&readonly?\'🔒\':\'\'} %)%(%{&modified?\'*\':\'\'} %)%n ' ..
-    '%0*' .. ' %f'
+function SetStatusLineText()
+    local useColor = vim.api.nvim_get_current_win() == vim.g.statusline_winid
+    return
+        (useColor and '%1*' or '') .. " %4l/%-4L %3v " ..
+        (useColor and '%2*' or '') .. "%(  %{FugitiveHead(8)} %)" ..
+        (useColor and '%3*' or '') .. "%( %{SessionNameStatusLineFlag()} %)" ..
+        (useColor and '%4*' or '') .. " %{&filetype} " ..
+        (useColor and '%5*' or '') .. " %{&fileformat} " ..
+        (useColor and '%6*' or '') .. " %(%{&readonly?'🔒':''} %)%(%{&modified?'🔴':''} %)%n " ..
+        (useColor and '%0*' or '') .. " %f"
+end
+
+vim.opt.statusline = "%!luaeval('SetStatusLineText()')"
 
 local changeColors = function(insertMode)
     for i = 1,6,1 do
         local dim = 92 - 10 * i
         local bright = 156 - 19 * i
         local r,b,g
-        if     vim.o.buftype == 'terminal' then r,g,b = bright, dim, 0
-        elseif insertMode                  then r,g,b = 0     , dim, bright
-        elseif vim.o.modified              then r,g,b = bright, 0  , 0
-        else                                    r,g,b = 0     , dim, 0
+        if     vim.o.buftype == 'terminal' then r,g,b = bright, dim,    0       -- 1:#895200 6:#2a2000
+        elseif insertMode                  then r,g,b = 0     , dim,    bright  -- 1:#005289 6:#00202a
+        elseif vim.o.modified              then r,g,b = bright, 0  ,    0       -- 1:#890000 6:#2a0000
+        else                                    r,g,b = 0     , bright, 0       -- 1:#008900 6:#002a00
         end
         vim.cmd('highlight User' .. i .. string.format(" guifg=#afafaf guibg=#%06x", 256*(256*r+g)+b ))
     end
@@ -24,8 +29,4 @@ end
 
 local group = vim.api.nvim_create_augroup('mySLgroup', {clear = true})
 vim.api.nvim_create_autocmd('InsertEnter', {callback = function() changeColors(true) end, group = group})
-vim.api.nvim_create_autocmd({'TermOpen', 'InsertLeave', 'TextChanged', 'BufWritePost', 'BufEnter'}, {callback = function() changeColors(false) end, group = group})
-
--- This works well for &laststatus=3. But for any other value, the non-current statuslines appear with all of the
--- UserN highlight groups. To fix that, do something similar to this, to remove the %N* modifiers from &statusline:
--- https://github.com/PhilRunninger/nvim_config/blob/7a8c6925032d725582f8f4ce93b902a5dedc33eb/init.vim#L434-L470
+vim.api.nvim_create_autocmd({'TermOpen', 'InsertLeave', 'TextChanged', 'BufWritePost', 'BufEnter'}, {callback = function() changeColors() end, group = group})
