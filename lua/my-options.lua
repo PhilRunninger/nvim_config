@@ -1,5 +1,4 @@
 local opt = vim.opt
-local cmd = vim.cmd
 
 local options = {
     sidescroll = 1,
@@ -31,7 +30,6 @@ local options = {
     winminwidth = 0,
     shell = string.find(vim.o.shell,'bash') and 'bash' or vim.o.shell,
     termguicolors = true,
-    statusline = '%3l/%3L %3v %#GitBranch#%( %{FugitiveHead(8)} %)%* %{&ft} %{&ff}%( %{&readonly?\'\':\'\'}%{&modified?\'\':\'\'}%) #%n:%f%=%#Session#%( %{SessionNameStatusLineFlag()} %)%*',
     tabline = '%!Tabline()'
 }
 
@@ -44,8 +42,7 @@ for k,v in pairs(options) do
     opt[k] = v
 end
 
--- Color, Tabline, and Statusline Settings
-cmd([[
+vim.cmd([[
     function! Tabline()
       let s = ''
       for i in range(1,tabpagenr('$'))

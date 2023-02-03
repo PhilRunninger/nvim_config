@@ -108,7 +108,6 @@ require "gitsigns".setup {
     end,
 }
 
-
 cmd('packadd! nvim-colorizer.lua') -- ################# https://github.com/NvChad/nvim-colorizer.lua
 require 'colorizer'.setup()
 
@@ -117,14 +116,7 @@ require 'ayu'.setup({
     overrides = function()
         local colors = require('ayu.colors')
         return
-          { -- My custom highlight groups for the statusline.
-            GitBranch    = {bg = '#f54d27', fg = '#efefe7'},
-            Session      = {bg = '#ffaf00', fg = '#000000'},
-            SLTerm       = {bg = '#ffaf00', fg = '#000000'},
-            SLInsert     = {bg = '#005fff', fg = '#ffffff'},
-            SLNormalMod  = {bg = '#af0000', fg = '#ffffff'},
-            SLNormal     = {bg = '#00df00', fg = '#000000'},
-            -- Override builtin colors, for better contrast.
+          { -- Override builtin colors, for better contrast.
             VertSplit    = {bg = 'NONE',              fg = colors.accent},
             LineNr       = {                          fg = colors.comment},
             CursorLine   = {bg = colors.gutter_normal},

@@ -24,9 +24,3 @@ vim.api.nvim_create_autocmd('BufReadPost', {command = 'if line("\'\\\"") > 1 && 
 
 -- Additional nvim-qt Settings
 vim.api.nvim_create_autocmd('UIEnter', {callback = function() require('my-ginit') end, group = group})
-
--- Change the statusline color depending on mode and buffer's modified state.
-vim.api.nvim_create_autocmd('InsertEnter',
-    {callback = function() vim.cmd('highlight! link StatusLine '..(vim.o.buftype == 'terminal' and 'SLTerm' or 'SLInsert')) end, group = group})
-vim.api.nvim_create_autocmd({'TermOpen', 'InsertLeave', 'TextChanged', 'BufWritePost', 'BufEnter'},
-    {callback = function() vim.cmd('highlight! link StatusLine '..(vim.o.buftype == 'terminal' and 'SLTerm' or (vim.o.modified and 'SLNormalMod' or 'SLNormal'))) end, group = group})
