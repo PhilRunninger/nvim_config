@@ -1,8 +1,8 @@
 " Tab settings
-set softtabstop=4   " number of spaces that <tab> uses when editing
-set tabstop=4       " number of spaces that <tab> in file uses
-set shiftwidth=4    " number of spaces to use for (auto)indent step
-set expandtab       " use spaces when <tab> is inserted
+setlocal softtabstop=4   " number of spaces that <tab> uses when editing
+setlocal tabstop=4       " number of spaces that <tab> in file uses
+setlocal shiftwidth=4    " number of spaces to use for (auto)indent step
+setlocal expandtab       " use spaces when <tab> is inserted
 
 let g:erlang_folding = 1
 

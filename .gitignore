@@ -1,3 +1,4 @@
 ftplugin/.sqlSettings.json
 plugin/splash/*.txt
 plugin/splash/SplashGenPoints.csv
+.luarc.json
