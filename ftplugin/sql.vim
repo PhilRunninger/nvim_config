@@ -71,7 +71,7 @@
 "       into columns, if output isn't too large.
 "   - csv.vim (https://github.com/chrisbra/csv.vim) highlights the columns.
 
-function! s:SQLRun(queryType) " {{{1
+function! s:SQLRun(queryType, stayInResults) " {{{1
     try
         if !s:ConnectionIsSet()
             call s:SetConnection()
@@ -79,6 +79,9 @@ function! s:SQLRun(queryType) " {{{1
         call s:WriteTempFile(a:queryType)
         call s:GotoResultsBuffer(expand('%:t'), b:server, b:database, b:tempFile)
         call s:RunAndFormat()
+        if !a:stayInResults
+            wincmd p
+        endif
     catch /.*/
         echo v:exception
     endtry
@@ -95,7 +98,7 @@ function! s:SetConnection() " {{{1
         let servers = sort(keys(sqlSettings.servers)) + ['Edit…']
         let i = s:Choose('Choose a server.', servers)
         if i == len(servers)-1
-            execute 'vsplit '.s:sqlSettingsFile
+            execute 'tabedit '.s:sqlSettingsFile
             return
         endif
         let b:server = servers[i]
@@ -103,13 +106,12 @@ function! s:SetConnection() " {{{1
         let databases = sort(sqlSettings.servers[servers[i]].databases) + ['Edit…']
         let j = s:Choose('Choose a database on ' . b:server, databases)
         if i == len(servers)-1
-            execute 'vsplit '.s:sqlSettingsFile
+            execute 'tabedit '.s:sqlSettingsFile
             return
         endif
         let b:database = databases[j]
 
-        let tagline = matchlist(getline(1), s:connectionStringPattern)
-        if !empty(tagline)
+        if !empty(matchlist(getline(1), s:connectionStringPattern))
             silent normal! ggdd _
         endif
         silent call append(0, printf('-- Connection: %s.%s', b:server, b:database))
@@ -154,9 +156,9 @@ function! s:GotoResultsBuffer(sqlQueryBuffer, server, database, tempFile) " {{{1
     let bufNum = bufnr(bufferName, 1)
     let winnr = bufwinnr(bufferName)
     if winnr == -1
-        execute 'silent buffer ' . bufferName
+        execute 'silent split ' . bufferName
         silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv
-        nnoremap <buffer> <C-F5> :call <SID>SQLRun('special')<CR>
+        nnoremap <buffer> <C-F5> :call <SID>SQLRun('special',1)<CR>
         nnoremap <buffer> <F5> :call <SID>RunAndFormat()<CR>
     else
         execute winnr . 'wincmd w'
@@ -343,10 +345,16 @@ if !empty(tagline)
     let b:database = tagline[2]
 endif
 
-nnoremap <silent> <buffer> <F5> :call <SID>SQLRun('file')<CR>
-nnoremap <silent> <buffer> <S-F5> :call <SID>SQLRun('paragraph')<CR>
-vnoremap <silent> <buffer> <F5> :<C-U>call <SID>SQLRun('selection')<CR>
-nnoremap <buffer> <C-F5> :call <SID>SQLRun('special')<CR>
-nnoremap <buffer> <leader><F5> :call <SID>SetConnection()<CR>
+nnoremap <silent> <buffer> <leader><F5> :call <SID>SetConnection()<CR>
+" Run the SQL and put cursor in the results window.
+nnoremap <silent> <buffer> g<F5> :call <SID>SQLRun('file',1)<CR>
+nnoremap <silent> <buffer> g<S-F5> :call <SID>SQLRun('paragraph',1)<CR>
+vnoremap <silent> <buffer> g<F5> :<C-U>call <SID>SQLRun('selection',1)<CR>
+nnoremap <silent> <buffer> g<C-F5> :call <SID>SQLRun('special',1)<CR>
+" Run the SQL and keep the cursor in the SQL buffer window.
+nnoremap <silent> <buffer> <F5> :call <SID>SQLRun('file',0)<CR>
+nnoremap <silent> <buffer> <S-F5> :call <SID>SQLRun('paragraph',0)<CR>
+vnoremap <silent> <buffer> <F5> :<C-U>call <SID>SQLRun('selection',0)<CR>
+nnoremap <silent> <buffer> <C-F5> :call <SID>SQLRun('special',0)<CR>
 
 "  vim: foldmethod=marker
