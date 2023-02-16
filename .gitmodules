@@ -67,9 +67,6 @@
 [submodule "pack/bundle/opt/nvim-lspconfig"]
 	path = pack/bundle/opt/nvim-lspconfig
 	url = git@github.com:neovim/nvim-lspconfig.git
-[submodule "pack/bundle/opt/nvim-lsp-installer"]
-	path = pack/bundle/opt/nvim-lsp-installer
-	url = git@github.com:williamboman/nvim-lsp-installer.git
 [submodule "pack/bundle/opt/cmp-nvim-lsp"]
 	path = pack/bundle/opt/cmp-nvim-lsp
 	url = git@github.com:hrsh7th/cmp-nvim-lsp.git
@@ -100,3 +97,9 @@
 [submodule "pack/bundle/opt/Recover.vim"]
 	path = pack/bundle/opt/Recover.vim
 	url = git@github.com:chrisbra/Recover.vim.git
+[submodule "pack/bundle/opt/mason-lspconfig.nvim"]
+	path = pack/bundle/opt/mason-lspconfig.nvim
+	url = git@github.com:williamboman/mason-lspconfig.nvim.git
+[submodule "pack/bundle/opt/mason.nvim"]
+	path = pack/bundle/opt/mason.nvim
+	url = git@github.com:williamboman/mason.nvim.git

@@ -41,7 +41,7 @@ g.vrc_show_command = 1
 g.vrc_trigger = '<F5>'
 
 cmd('packadd! vifm.vim') -- ######################################  https://github.com/vifm/vifm.vim
--- vifm/vifm.vim.rc sets up mappings s, v, t, and q for quicker file picker operations.
+-- vifm/vifm.vim.rc sets up mappings s, v, T, and q for quicker file picker operations.
 -- $VIFM is a vifm-internal variable that points to ~/AppData/Roaming/Vifm or ~/.config/vifm.
 g.vifm_exec_args = '-c "source $VIFM/vifm.vim.rc"'
 map('n', '<leader>o', '<Cmd>Vifm<CR>', noremapSilent)
@@ -61,10 +61,12 @@ cmd('packadd! unicode.vim') -- ############################# https://github.com/
 map('n', 'ga', '<Cmd>UnicodeName<CR>', noremapSilent)
 map('n', '<leader>k', ':UnicodeSearch!<space>', noremap)
 
-cmd('packadd! LuaSnip') -- ##################################### https://github.com/L3MON4D3/LuaSnip
+-- ######################################################################################## SNIPPETS
+cmd('packadd! LuaSnip') --                                       https://github.com/L3MON4D3/LuaSnip
 cmd('packadd! friendly-snippets') --                 https://github.com/rafamadriz/friendly-snippets
 
-cmd('packadd! nvim-cmp') -- #################################### https://github.com/hrsh7th/nvim-cmp
+-- ###################################################################################### COMPLETION
+cmd('packadd! nvim-cmp') --                                      https://github.com/hrsh7th/nvim-cmp
 cmd('packadd! cmp-buffer') --                                  https://github.com/hrsh7th/cmp-buffer
 cmd('packadd! cmp-path') --                                      https://github.com/hrsh7th/cmp-path
 cmd('packadd! cmp_luasnip') --                           https://github.com/saadparwaiz1/cmp_luasnip
@@ -72,8 +74,10 @@ cmd('packadd! cmp-nvim-lsp') --                              https://github.com/
 cmd('packadd! cmp-nvim-lua') --                              https://github.com/hrsh7th/cmp-nvim-lua
 require "my-cmp"
 
-cmd('packadd! nvim-lspconfig') -- ######################### https://github.com/neovim/nvim-lspconfig
-cmd('packadd! nvim-lsp-installer') --             https://github.com/williamboman/nvim-lsp-installer
+-- ######################################################################## LANGUAGE SERVER PROTOCOL
+cmd('packadd! mason.nvim') --                             https://github.com:williamboman/mason.nvim
+cmd('packadd! mason-lspconfig.nvim') --         https://github.com:williamboman/mason-lspconfig.nvim
+cmd('packadd! nvim-lspconfig') --                           https://github.com/neovim/nvim-lspconfig
 require "my-lsp"
 
 cmd('packadd! nvim-treesitter') -- ############## https://github.com/nvim-treesitter/nvim-treesitter
@@ -131,16 +135,14 @@ require 'ayu'.setup({
 require 'ayu'.colorscheme()
 
 -- ###################################################################################### ALL OTHERS
-cmd([[
-    packadd! markdown-preview.nvim               "   https://github.com/iamcco/markdown-preview.nvim
-    packadd! Recover.vim                         "           https://github.com:chrisbra/Recover.vim
-    packadd! vim-exchange                        "           https://github.com/tommcdo/vim-exchange
-    packadd! vim-repeat                          "               https://github.com/tpope/vim-repeat
-    packadd! vim-sessions                        "     https://github.com/PhilRunninger/vim-sessions
-    packadd! vim-signature                       "          https://github.com/kshenoy/vim-signature
-    packadd! vim-surround                        "             https://github.com/tpope/vim-surround
-    packadd! vim-unimpaired                      "           https://github.com/tpope/vim-unimpaired
-]])
+cmd('packadd! markdown-preview.nvim') --             https://github.com/iamcco/markdown-preview.nvim
+cmd('packadd! Recover.vim') --                               https://github.com:chrisbra/Recover.vim
+cmd('packadd! vim-exchange') --                              https://github.com/tommcdo/vim-exchange
+cmd('packadd! vim-repeat') --                                    https://github.com/tpope/vim-repeat
+cmd('packadd! vim-sessions') --                        https://github.com/PhilRunninger/vim-sessions
+cmd('packadd! vim-signature') --                            https://github.com/kshenoy/vim-signature
+cmd('packadd! vim-surround') --                                https://github.com/tpope/vim-surround
+cmd('packadd! vim-unimpaired') --                            https://github.com/tpope/vim-unimpaired
 
 -- Must come AFTER the :packadd! calls above; otherwise, the contents of
 -- package 'ftdetect' directories won't be evaluated.
