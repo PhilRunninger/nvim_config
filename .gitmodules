@@ -103,3 +103,6 @@
 [submodule "pack/bundle/opt/mason.nvim"]
 	path = pack/bundle/opt/mason.nvim
 	url = git@github.com:williamboman/mason.nvim.git
+[submodule "pack/bundle/opt/cmp-rpncalc"]
+	path = pack/bundle/opt/cmp-rpncalc
+	url = git@github.com:PhilRunninger/cmp-rpncalc.git

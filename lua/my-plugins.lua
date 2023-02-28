@@ -72,6 +72,7 @@ cmd('packadd! cmp-path') --                                      https://github.
 cmd('packadd! cmp_luasnip') --                           https://github.com/saadparwaiz1/cmp_luasnip
 cmd('packadd! cmp-nvim-lsp') --                              https://github.com/hrsh7th/cmp-nvim-lsp
 cmd('packadd! cmp-nvim-lua') --                              https://github.com/hrsh7th/cmp-nvim-lua
+cmd('packadd! cmp-rpncalc') --                          https://github.com/PhilRunninger/cmp-rpncalc
 require "my-cmp"
 
 -- ######################################################################## LANGUAGE SERVER PROTOCOL
