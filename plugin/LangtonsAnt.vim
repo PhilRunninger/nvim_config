@@ -29,7 +29,6 @@ function! s:Langton(count = 1, explosionRadius=10)
             let collisions = map(copy(collisions), {_,v -> count(collisions, v)})
             for i in range(len(collisions)-1, 0, -1)
                 if collisions[i] > 1
-                    echomsg string(collisions)
                     for r in range(a:explosionRadius+1)
                         for c in range(float2nr(sqrt(a:explosionRadius*a:explosionRadius - r*r)))
                             call s:Flip([(b:pos[i][0]-r+b:height) % b:height, (b:pos[i][1]-c+b:width) % b:width, 0], 'off')

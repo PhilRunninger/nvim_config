@@ -24,3 +24,6 @@ vim.api.nvim_create_autocmd('BufReadPost', {command = 'if line("\'\\\"") > 1 && 
 
 -- Additional nvim-qt Settings
 vim.api.nvim_create_autocmd('UIEnter', {callback = function() require('my-ginit') end, group = group})
+
+-- Turn off formatoptions=o for every file. Must be here, after ftplugin/*.vim runs.
+vim.api.nvim_create_autocmd('BufWinEnter', {callback = function() vim.opt.formatoptions:remove('o') end, group = group})
