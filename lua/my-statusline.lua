@@ -36,7 +36,7 @@ local changeColors = function(insertMode)
     local s = 0.75
     for i = 1,6,1 do
         -- Background Luminance: Fade toward the background as i increases
-        local l = vim.o.background == 'light' and (0.25 + 0.1 * i) or (0.4 - 0.05 * i)
+        local l = vim.o.background == 'light' and (0.54 + 0.06 * i) or (0.4 - 0.05 * i)
         local r,g,b = HLSToRGB(h, l, s)
         local bg = 256*(256*r+g)+b
 
