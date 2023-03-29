@@ -73,7 +73,10 @@ lspconfig.lua_ls.setup({
 })
 lspconfig.omnisharp.setup({ on_attach = on_attach })
 
-lspconfig.powershell_es.setup({ on_attach = on_attach })
+lspconfig.powershell_es.setup({
+    on_attach = on_attach,
+    bundle_path = 'c:/ProgramData/PowerShell/EditorServices'
+})
 
 lspconfig.pyright.setup({
     on_attach = on_attach,
