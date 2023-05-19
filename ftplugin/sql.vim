@@ -73,8 +73,8 @@
 
 function! s:SQLRun(queryType, stayInResults) " {{{1
     try
-        if !s:ConnectionIsSet()
-            call s:SetConnection()
+        if !s:ConnectionIsSet() && !s:SetConnection()
+            return
         endif
         call s:WriteTempFile(a:queryType)
         call s:GotoResultsBuffer(expand('%:t'), b:server, b:database, b:tempFile)
@@ -99,7 +99,7 @@ function! s:SetConnection() " {{{1
         let i = s:Choose('Choose a server.', servers)
         if i == len(servers)-1
             execute 'tabedit '.s:sqlSettingsFile
-            return
+            return 0
         endif
         let b:server = servers[i]
 
@@ -107,7 +107,7 @@ function! s:SetConnection() " {{{1
         let j = s:Choose('Choose a database on ' . b:server, databases)
         if i == len(servers)-1
             execute 'tabedit '.s:sqlSettingsFile
-            return
+            return 0
         endif
         let b:database = databases[j]
 
@@ -116,6 +116,7 @@ function! s:SetConnection() " {{{1
         endif
         silent call append(0, printf('-- Connection: %s.%s', b:server, b:database))
         redraw!
+        return s:ConnectionIsSet()
     catch /.*/
         echo v:exception
     endtry
