@@ -30,7 +30,7 @@ local options = {
     winminwidth = 0,
     shell = string.find(vim.o.shell,'bash') and 'bash' or vim.o.shell,
     termguicolors = true,
-    tabline = '%!Tabline()'
+    tabline = "%!luaeval('SetTabLine()')"
 }
 
 opt.path:append('**')
@@ -42,16 +42,15 @@ for k,v in pairs(options) do
     opt[k] = v
 end
 
-vim.cmd([[
-    function! Tabline()
-      let s = ''
-      for i in range(1,tabpagenr('$'))
-        let bufnr = tabpagebuflist(i)[tabpagewinnr(i) - 1]
-        let bufname = bufname(bufnr)
-        let s .= '%'.i.'T' . (i == tabpagenr() ? '%#TabLineSel#' : '%#TabLine#')
-        let s .= ' ' . (bufname!='' ? fnamemodify(bufname,':t') : 'New…')
-        let s .= (getbufvar(bufnr,'&modified') ? '  ' : ' ')
-      endfor
-      return s . '%#TabLineFill#'
-    endfunction
-]])
+function SetTabLine()
+    local s = {}
+    for i = 1,vim.fn.tabpagenr('$'),1 do
+        local bufnr = vim.fn.tabpagebuflist(i)[vim.fn.tabpagewinnr(i)]
+        local bufname = vim.fn.bufname(bufnr)
+        s[i] = string.format('%%%dT%s%s%s', i,
+            i == vim.fn.tabpagenr() and '%#TabLineSel#' or '%#TabLine#',
+            vim.api.nvim_buf_get_option(bufnr,'modified') and '🔴' or '',
+            bufname == '' and 'New…' or vim.fn.fnamemodify(bufname,':t'))
+    end
+    return table.concat(s, '%#TabLineDivider#┃')
+end

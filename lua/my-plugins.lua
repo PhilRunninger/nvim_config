@@ -8,7 +8,7 @@ local noremap = {noremap=true}
 cmd('packadd! bufselect') -- ############################ https://github.com/PhilRunninger/bufselect
 g.BufSelectKeyDeleteBuffer='w'
 g.BufSelectKeyOpen='l'
-map('n', '<leader>b', '<Cmd>ShowBufferList<CR>', noremapSilent)
+map('n', '<leader>b', ':ShowBufferList<CR>', noremapSilent)
 
 cmd('packadd! crease.vim') -- ############################### https://github.com/scr1pt0r/crease.vim
 g.crease_foldtext = {default='%{repeat("▶",v:foldlevel)}%{repeat(" ",v:foldlevel)}%t%=[%l lines]'}
@@ -22,7 +22,7 @@ map('v', '<Enter>', '<Plug>(LiveEasyAlign)', {})
 cmd('packadd! vim-fugitive') -- ############################## https://github.com/tpope/vim-fugitive
 map('n', '<F3>', '"zyiw/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>', noremapSilent)
 map('v', '<F3>', '"zy/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>', noremapSilent)
-map('n', '<leader>G', '<Cmd>Git<CR>', noremapSilent)
+map('n', '<leader>G', ':Git<CR>', noremapSilent)
 
 -- This plugin (tpope's) ships with Neovim. ############################################### MARKDOWN
 g.markdown_folding = 1
@@ -44,10 +44,10 @@ cmd('packadd! vifm.vim') -- ######################################  https://gith
 -- vifm/vifm.vim.rc sets up mappings s, v, T, and q for quicker file picker operations.
 -- $VIFM is a vifm-internal variable that points to ~/AppData/Roaming/Vifm or ~/.config/vifm.
 g.vifm_exec_args = '-c "source $VIFM/vifm.vim.rc"'
-map('n', '<leader>o', '<Cmd>Vifm<CR>', noremapSilent)
+map('n', '<leader>o', ':Vifm<CR>', noremapSilent)
 
 cmd('packadd! undotree') -- ##################################### https://github.com/mbbill/undotree
-map('n', '<leader>u', '<Cmd>UndotreeShow<CR>', noremapSilent)
+map('n', '<leader>u', ':UndotreeShow<CR>', noremapSilent)
 g.undotree_WindowLayout = 2
 g.undotree_HelpLine = 0
 g.undotree_ShortIndicators = 1
@@ -58,8 +58,8 @@ g.undotree_TreeReturnShape = '╲'
 g.undotree_SetFocusWhenToggle = 1
 
 cmd('packadd! unicode.vim') -- ############################# https://github.com/chrisbra/unicode.vim
-map('n', 'ga', '<Cmd>UnicodeName<CR>', noremapSilent)
-map('n', '<leader>k', ':UnicodeSearch!<space>', noremap)
+map('n', 'ga', ':UnicodeName<CR>', noremapSilent)
+map('n', '<leader>ga', ':UnicodeSearch!<space>', noremap)
 
 -- ######################################################################################## SNIPPETS
 cmd('packadd! LuaSnip') --                                       https://github.com/L3MON4D3/LuaSnip
@@ -107,9 +107,9 @@ require "gitsigns".setup {
         changedelete = { hl = 'GitSignsChange', text = '▌', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn' },
     },
     on_attach = function (bufnr)
-        bufmap(bufnr, 'n', ']c', '<CMD>Gitsigns next_hunk<CR>', noremapSilent)
-        bufmap(bufnr, 'n', '[c', '<CMD>Gitsigns prev_hunk<CR>', noremapSilent)
-        bufmap(bufnr, 'n', '<leader>hp', '<CMD>Gitsigns preview_hunk<CR>', noremapSilent)
+        bufmap(bufnr, 'n', ']c', ':Gitsigns next_hunk<CR>', noremapSilent)
+        bufmap(bufnr, 'n', '[c', ':Gitsigns prev_hunk<CR>', noremapSilent)
+        bufmap(bufnr, 'n', '<leader>hp', ':Gitsigns preview_hunk<CR>', noremapSilent)
     end,
 }
 
@@ -129,7 +129,9 @@ require 'ayu'.setup({
             ColorColumn  = {bg = colors.gutter_normal},
             Visual       = {bg = colors.guide_active},
             NormalNC     = {bg = colors.selection_inactive},
-            SpecialKey   = {fg = '#ff00af'}
+            SpecialKey   = {fg = '#ff00af'},
+            -- Add my new custom color
+            TabLineDivider = {fg = colors.accent}
         }
     end
 })

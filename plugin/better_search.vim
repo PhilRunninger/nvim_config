@@ -29,15 +29,16 @@ endfunction
 nnoremap <silent> *  :call <SID>ToggleWord(expand("<cword>"),1)<CR>
 nnoremap <silent> g* :call <SID>ToggleWord(expand("<cword>"),0)<CR>
 vnoremap <silent> * "xy:call <SID>ToggleWord(@x,0)<CR>
-nnoremap <silent> <leader>* <Cmd>call <SID>ClearAllWords()<CR>
+nnoremap <silent> <leader>* :call <SID>ClearAllWords()<CR>
 
 " This function is user2679290's code from https://stackoverflow.com/a/53291200/510067
 function! s:Matches(pat)
     let buffer=bufnr("") "current buffer number
     let b:lines=[]
     execute ":%g/".a:pat."/let b:lines+=[{'bufnr':".'buffer'.", 'lnum':"."line('.')".", 'text': escape(getline('.'),'\"')}]"
-    call setloclist(0, [], ' ', {'items': b:lines})
-    lopen
+    call setqflist(b:lines)
+    call setqflist([], 'a', {'title':a:pat})
+    copen
 endfunction
 
 nnoremap <silent> <leader>/ :call <SID>Matches(@/)<CR>
