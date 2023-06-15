@@ -1,11 +1,11 @@
 function SetStatusLineText()
     local useColor = vim.api.nvim_get_current_win() == vim.g.statusline_winid
     return
-        (useColor and '%6*' or '') .. " %4l/%-4L %3v " ..
-        (useColor and '%3*' or '') .. "%(  %{get(b:,'gitsigns_head')} %{get(b:,'gitsigns_status','')} %)" ..
-        (useColor and '%5*' or '') .. "%( 🕒 %{SessionNameStatusLineFlag()} %)" ..
-        (useColor and '%2*' or '') .. " %{&filetype} " ..
-        (useColor and '%4*' or '') .. " %{&fileformat=='dos' ? '' : ''} " ..
+        (useColor and '%6*' or '') .. " %4l/%-4L %3v ▐" ..
+        (useColor and '%5*' or '') .. "%(  %{get(b:,'gitsigns_head')} %{get(b:,'gitsigns_status','')} ▐%)" ..
+        (useColor and '%4*' or '') .. "%( 🕒 %{SessionNameStatusLineFlag()} ▐%)" ..
+        (useColor and '%3*' or '') .. " %{&filetype} ▐" ..
+        (useColor and '%2*' or '') .. " %{&fileformat=='dos' ? '' : ''} ▐" ..
         (useColor and '%1*' or '') .. " %(%{&readonly?'🔒':''}%)%(%{&modified?'🔴':''}%)%f"
 end
 
