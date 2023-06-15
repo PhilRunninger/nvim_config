@@ -93,7 +93,7 @@ endfunction
 
 function! s:SetConnection() " {{{1
     try
-        let sqlSettings = eval(join(readfile(s:sqlSettingsFile),''))
+        let sqlSettings = s:Settings()
 
         let servers = sort(keys(sqlSettings.servers)) + ['Edit…']
         let i = s:Choose('Choose a server.', servers)
@@ -280,7 +280,7 @@ function! s:AlignColumns() " {{{1
 endfunction
 
 function! s:Settings() " {{{1
-    return eval(join(readfile(s:sqlSettingsFile),''))
+    return json_decode(readfile(s:sqlSettingsFile))
 endfunction
 
 function! s:ServerInfo() " {{{1
