@@ -1,12 +1,16 @@
 function SetStatusLineText()
     local useColor = vim.api.nvim_get_current_win() == vim.g.statusline_winid
+    local divider = useColor and '' or ''  -- Other candidates:     ┃
     return
-        (useColor and '%6*' or '') .. " %4l/%-4L %3v ▐" ..
-        (useColor and '%5*' or '') .. "%(  %{get(b:,'gitsigns_head')} %{get(b:,'gitsigns_status','')} ▐%)" ..
-        (useColor and '%4*' or '') .. "%( 🕒 %{SessionNameStatusLineFlag()} ▐%)" ..
-        (useColor and '%3*' or '') .. " %{&filetype} ▐" ..
-        (useColor and '%2*' or '') .. " %{&fileformat=='dos' ? '' : ''} ▐" ..
-        (useColor and '%1*' or '') .. " %(%{&readonly?'🔒':''}%)%(%{&modified?'🔴':''}%)%f"
+        (useColor and '%1*'        or  '') .. " %4l/%-4L %3v " ..
+        (useColor and '%#User12#'  or  '') .. divider ..
+        (useColor and '%2*'        or  '') .. "%(  %{get(b:,'gitsigns_head')} %{get(b:,'gitsigns_status','')} %)" ..
+        (useColor and '%#User23#'  or  '') .. divider ..
+        (useColor and '%3*'        or  '') .. "%( 🕒 %{SessionNameStatusLineFlag()} %)" ..
+        (useColor and '%#User34#'  or  '') .. divider ..
+        (useColor and '%4*'        or  '') .. " %{&filetype} %{&fileformat=='dos' ? '' : ''} " ..
+        (useColor and '%#User45#'  or  '') .. divider ..
+        (useColor and '%5*'        or  '') .. " %(%{&readonly?'🔒':''}%)%(%{&modified?'🔴':''}%)%f"
 end
 
 vim.opt.statusline = "%!luaeval('SetStatusLineText()')"
@@ -25,28 +29,29 @@ local HLSToRGB = function(h,l,s)
     elseif h < 300 then r,g,b = x, 0, c
     else                r,g,b = c, 0, x
     end
-    return math.floor((r+m)*255), math.floor((g+m)*255), math.floor((b+m)*255)
+    r,g,b = math.floor((r+m)*255), math.floor((g+m)*255), math.floor((b+m)*255)
+    return 256*(256*r+g)+b
 end
 
 local changeColors = function(insertMode)
     -- Background Hue: Terminal=purple, INSERT mode=blue, Modified=red, Unmodified=green
-    local h = vim.o.buftype == 'terminal' and 288 or (insertMode and 210 or (vim.o.modified and 0 or 120))
-    -- Background Saturation
-    local s = 0.75
-    for i = 1,6,1 do
-        local l = vim.o.background == 'light' and (0.725 + 0.025 * i) or (0.275 - 0.025 * i)
-        local r,g,b = HLSToRGB(h, l, s)
-        local bg = 256*(256*r+g)+b
+    local h = vim.o.buftype == 'terminal' and 276 or (insertMode and 204 or (vim.o.modified and 0 or 108))
+    local bg,fg = {},{}
 
-        if vim.o.background == 'light' then
-            r,g,b = HLSToRGB(208, (-.05 + 0.05 * i), 0.08)
+    for i = 1,6,1 do
+        if  vim.o.background == 'light' then
+            bg[i] = HLSToRGB(h, (0.925 - 0.075 * i), 0.75)
+            fg[i] = HLSToRGB(208, (0.35 - 0.05 * i), 0.08)
         else
-            r,g,b = HLSToRGB(40, (1.05 - 0.05 * i), 0.04)
+            bg[i] = HLSToRGB(h, (0.075 + 0.075 * i), 0.75)
+            fg[i] = HLSToRGB(40, (0.65 + 0.05 * i), 0.04)
         end
-        local fg = 256*(256*r+g)+b
-        vim.cmd(string.format('highlight User%d guifg=#%06x guibg=#%06x', i, fg, bg))
+        vim.cmd(string.format('highlight User%d guifg=#%06x guibg=#%06x', i, fg[i], bg[i]))
     end
-    vim.cmd('highlight! default link StatusLine User1')
+
+    for i = 1,5,1 do
+        vim.cmd(string.format('highlight User%d%d guifg=#%06x guibg=#%06x', i, i+1, bg[i], bg[i+1]))
+    end
 end
 
 local group = vim.api.nvim_create_augroup('mySLgroup', {clear = true})
