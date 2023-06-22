@@ -1,8 +1,8 @@
 {
     "date - for journal entry": {
         "prefix": "dateJournal",
-        "description": "Day of month for my journal",
-        "body": ["* **${CURRENT_DATE}**: "]
+        "description": "Date, formatted for my journal",
+        "body": ["* **${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}**: "]
     }
 }
 
