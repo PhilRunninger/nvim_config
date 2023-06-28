@@ -35,18 +35,17 @@ end
 
 local changeColors = function(insertMode)
     -- Background Hue: Terminal=purple, INSERT mode=blue, Modified=red, Unmodified=green
-    local h = vim.o.buftype == 'terminal' and 276 or (insertMode and 204 or (vim.o.modified and 0 or 108))
-    local bg,fg = {},{}
+    local h = vim.o.buftype == 'terminal' and 312 or (insertMode and 204 or (vim.o.modified and 0 or 108))
 
+    local bg = {}
     for i = 1,6,1 do
-        if  vim.o.background == 'light' then
-            bg[i] = HLSToRGB(h, (0.925 - 0.075 * i), 0.75)
-            fg[i] = HLSToRGB(208, (0.35 - 0.05 * i), 0.08)
-        else
-            bg[i] = HLSToRGB(h, (0.075 + 0.075 * i), 0.75)
-            fg[i] = HLSToRGB(40, (0.65 + 0.05 * i), 0.04)
-        end
-        vim.cmd(string.format('highlight User%d guifg=#%06x guibg=#%06x', i, fg[i], bg[i]))
+        local l = vim.o.background == 'light' and (0.925 - 0.075 * i) or (0.075 + 0.075 * i)
+        bg[i] = HLSToRGB(h, l, 0.999)
+
+        local limit = 0.457781037 - 0.002553392*h + 7.13007e-5 *h^2 - 1.43305e-6*h^3 + 1.17384e-8 *h^4 - 3.8692e-11*h^5 + 4.3931e-14*h^6
+        local fg = HLSToRGB(0, l < limit and 1 or 0, 0.999)  -- white or black
+
+        vim.cmd(string.format('highlight User%d gui=bold guifg=#%06x guibg=#%06x', i, fg, bg[i]))
     end
 
     for i = 1,5,1 do
