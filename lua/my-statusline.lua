@@ -4,11 +4,11 @@ function SetStatusLineText()
     return
         (useColor and '%1*'        or  '') .. " %4l/%-4L %3v " ..
         (useColor and '%#User12#'  or  '') .. divider ..
-        (useColor and '%2*'        or  '') .. "%(  %{get(b:,'gitsigns_head')} %{get(b:,'gitsigns_status','')} %)" ..
+        (useColor and '%2*'        or  '') .. "%(  %{get(b:,'gitsigns_head','')} %{get(b:,'gitsigns_status','')} %)" ..
         (useColor and '%#User23#'  or  '') .. divider ..
         (useColor and '%3*'        or  '') .. "%( 🕒 %{SessionNameStatusLineFlag()} %)" ..
         (useColor and '%#User34#'  or  '') .. divider ..
-        (useColor and '%4*'        or  '') .. " %{&filetype} %{&fileformat=='dos' ? '' : ''} " ..
+        (useColor and '%4*'        or  '') .. " %(%{&filetype} %)%(%{&fileformat=='dos' ? '' : ''} %)" ..
         (useColor and '%#User45#'  or  '') .. divider ..
         (useColor and '%5*'        or  '') .. " %(%{&readonly?'🔒':''}%)%(%{&modified?'🔴':''}%)%f"
 end
