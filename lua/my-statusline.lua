@@ -55,4 +55,4 @@ end
 
 local group = vim.api.nvim_create_augroup('mySLgroup', {clear = true})
 vim.api.nvim_create_autocmd('InsertEnter', {callback = function() changeColors(true) end, group = group})
-vim.api.nvim_create_autocmd({'VimEnter','ColorScheme','TermOpen','InsertLeave','TextChanged','BufWritePost','BufEnter'}, {callback = function() changeColors() end, group = group})
+vim.api.nvim_create_autocmd({'VimEnter','ColorScheme','TermOpen','TermClose','InsertLeave','TextChanged','BufWritePost','BufEnter'}, {callback = function() changeColors() end, group = group})

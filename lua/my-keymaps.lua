@@ -36,12 +36,7 @@ map('t', '<C-l>', '<C-\\><C-n>:lua WinTabSwitch("l")<CR>', noremapSilent)
 map('t', '<Esc><Esc>', '<C-\\><C-n>', noremapSilent)
 
 -- Open a terminal in a split window
-if fn.has('win32') and not string.find(vim.o.shell,'bash') then
-    map('n', '<leader>t', ':split|terminal pwsh<CR>', noremapSilent)
-    map('n', '<C-Z>', 'nop', noremapSilent)  -- Prevent C-Z from freezing the shell
-elseif string.find(vim.o.shell,'bash') then
-    map('n', '<leader>t', ':split|terminal<CR>', noremapSilent)
-end
+map('n', '<leader>t', ':split|terminal'..((fn.has('win32') and vim.o.shell ~= 'bash') and ' pwsh' or '')..'<CR>', noremapSilent)
 
 -- Swap j and k with gj and gk
 map('n', 'j', 'gj', noremapSilent)
