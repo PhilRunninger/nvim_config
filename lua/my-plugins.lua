@@ -130,6 +130,7 @@ require 'ayu'.setup({
             Visual       = {bg = colors.guide_active},
             NormalNC     = {bg = colors.selection_inactive},
             SpecialKey   = {fg = '#ff00af'},
+            MatchParen   = {reverse=true, underline=false},
             -- Add my new custom color
             TabLineDivider = {fg = colors.accent}
         }
