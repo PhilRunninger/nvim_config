@@ -7,6 +7,7 @@ vim.api.nvim_create_autocmd('InsertLeave', {command = 'set listchars+=trail:■'
 
 -- Turn off line numbers in Terminal windows.
 vim.api.nvim_create_autocmd('TermOpen', {command = 'setlocal nonumber | startinsert', group = group})
+vim.api.nvim_create_autocmd('BufEnter', {command = 'if &buftype=="terminal"|startinsert|endif', group = group})
 
 -- Close Terminal window automatically if it didn't throw an error.
 vim.api.nvim_create_autocmd('TermClose', {command = 'if !v:event.status && expand("<afile>") !~# "vifm: " | execute "bdelete! ".expand("<abuf>") | endif', group = group})
