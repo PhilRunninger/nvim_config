@@ -122,15 +122,15 @@ require 'ayu'.setup({
         local colors = require('ayu.colors')
         return
           { -- Override builtin colors, for better contrast.
-            VertSplit    = {bg = 'NONE',              fg = colors.accent},
-            LineNr       = {                          fg = colors.comment},
+            VertSplit    = {bg = 'NONE', fg = colors.accent},
+            LineNr       = {fg = colors.comment},
             CursorLine   = {bg = colors.gutter_normal},
             CursorColumn = {bg = colors.gutter_normal},
             ColorColumn  = {bg = colors.gutter_normal},
             Visual       = {bg = colors.guide_active},
             NormalNC     = {bg = colors.selection_inactive},
             SpecialKey   = {fg = '#ff00af'},
-            MatchParen   = {reverse=true, underline=false},
+            MatchParen   = {bg='#af00af', fg='#ffcf00', underline=false},
             -- Add my new custom color
             TabLineDivider = {fg = colors.accent}
         }
