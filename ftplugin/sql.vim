@@ -176,14 +176,16 @@ function! s:RunAndFormat() " {{{1
     silent normal! ggdG _
     let querying = s:RunQuery()
 
-    silent execute '%s/^\s\+$//e'
-    silent execute '%s/^\s*\((\d\+ rows\?\( affected\)\?)\)/\r\1\r/e'
+    silent execute 'keeppatterns %s/^\s\+$//e'
+    silent execute 'keeppatterns %s/^\s*\((\d\+ rows\?\( affected\)\?)\)/\r\1\r/e'
 
     let joining = s:JoinLines()
     let aligning = s:AlignColumns()
 
-    silent execute 'g/^$\n^$/d'
-    silent execute 'g/^$\n^\s*(\d\+ rows\?\( affected\)\?)/d'
+    silent execute 'keeppatterns g/^$\n^$/d'
+    silent execute 'keeppatterns g/^$\n^\s*(\d\+ rows\?\( affected\)\?)/d'
+
+    normal gg
 
     echomsg printf('Elapsed: %f seconds (Query: %f  Join: %f  Align: %f)', reltimefloat(reltime(startTime)), querying, joining, aligning)
 endfunction
@@ -202,7 +204,7 @@ function! s:RunQuery() " {{{1
         let parm = matchstr(cmdline, '<\w\{-}>')
     endwhile
     silent execute '0r! '.cmdline
-    silent execute '%s/\($\n\)\+\%$//e'
+    silent execute 'keeppatterns %s/\($\n\)\+\%$//e'
     let elapsed = reltimefloat(reltime(startTime))
     let hours = float2nr(elapsed / 3600)
     let minutes = float2nr(fmod(elapsed,3600) / 60)
@@ -240,7 +242,7 @@ function! s:JoinLines() " {{{1
         endwhile
         let startRow = endRow + 3
     endwhile
-    silent execute '%s/'.nr2char(13).'$//e'
+    silent execute 'keeppatterns %s/'.nr2char(13).'$//e'
     return reltimefloat(reltime(startTime))
 endfunction
 
