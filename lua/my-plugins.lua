@@ -122,7 +122,8 @@ require 'ayu'.setup({
         local colors = require('ayu.colors')
         return
           { -- Override builtin colors, for better contrast.
-            VertSplit    = {bg = 'NONE', fg = colors.accent},
+            VertSplit    = {bg = 'NONE', fg = colors.normal},
+            SignColumn   = {bg = 'NONE'},
             LineNr       = {fg = colors.comment},
             CursorLine   = {bg = colors.gutter_normal},
             CursorColumn = {bg = colors.gutter_normal},
