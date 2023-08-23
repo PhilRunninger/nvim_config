@@ -121,7 +121,7 @@ require 'ayu'.setup({
     overrides = function()
         local colors = require('ayu.colors')
         return
-          { -- Override builtin colors, for better contrast.
+        { -- Override builtin colors, for better contrast.
             VertSplit    = {bg = 'NONE', fg = colors.normal},
             SignColumn   = {bg = 'NONE'},
             LineNr       = {fg = colors.comment},
@@ -131,9 +131,9 @@ require 'ayu'.setup({
             Visual       = {bg = colors.guide_active},
             NormalNC     = {bg = colors.selection_inactive},
             SpecialKey   = {fg = '#ff00af'},
-            MatchParen   = {bg='#af00af', fg='#ffcf00', underline=false},
+            MatchParen   = {bg = '#af00af', fg = '#ffcf00', underline = false},
             -- Tabline highlight groups, including one custom.
-            TabLineSel     = {underline = false, fg = colors.accent, italic = true},
+            TabLineSel     = {fg = colors.string, underline = false, bold = true, italic = true},
             TabLine        = {underline = true},
             TabLineFill    = {underline = true},
             TabLineDivider = {fg = colors.normal}
