@@ -132,8 +132,11 @@ require 'ayu'.setup({
             NormalNC     = {bg = colors.selection_inactive},
             SpecialKey   = {fg = '#ff00af'},
             MatchParen   = {bg='#af00af', fg='#ffcf00', underline=false},
-            -- Add my new custom color
-            TabLineDivider = {fg = colors.accent}
+            -- Tabline highlight groups, including one custom.
+            TabLineSel     = {underline = false, fg = colors.accent, italic = true},
+            TabLine        = {underline = true},
+            TabLineFill    = {underline = true},
+            TabLineDivider = {fg = colors.normal}
         }
     end
 })
