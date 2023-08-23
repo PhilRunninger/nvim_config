@@ -220,21 +220,23 @@ function! s:JoinLines() " {{{1
     let startRow = 1
     while startRow < line('$')
         call cursor(startRow,1)
-        let endRow = search('^\s*(\d\+ rows\?\( affected\)\?)', 'cW') - 2
-        if endRow == -2
+        let endRow = search('^\s*(\d\+ rows\?\( affected\)\?)', 'cW') - 1
+        if endRow == -1
             break
         endif
         let required = count(getline(startRow), '|')
         let startRow += 2
-        while startRow < endRow
+        while startRow < endRow && required > 0
             let rows = 0
             let count = count(getline(startRow), '|')
-            while count < required
+            let countNext = count(getline(startRow+1), '|')
+            while startRow + rows < endRow && (count < required || countNext == 0)
                 let rows += 1
                 let count += count(getline(startRow + rows), '|')
+                let countNext = count(getline(startRow + rows + 1), '|')
             endwhile
             if rows > 0
-                execute startRow.','.(startRow + rows).'join!'
+                execute startRow.','.(startRow + rows).'join'
                 let endRow -= rows
             else
                 let startRow += 1
