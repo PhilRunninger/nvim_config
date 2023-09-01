@@ -44,6 +44,10 @@ map('n', 'k', 'gk', noremapSilent)
 map('n', 'gj', 'j', noremapSilent)
 map('n', 'gk', 'k', noremapSilent)
 
+-- Horizontal scrolling, similar to <C-f> and <C-b>.
+map('n', '<C-s>', '40zh', noremapSilent)
+map('n', '<C-d>', '40zl', noremapSilent)
+
 -- Show/hide cursorline and cursorcolumn
 map('n', '+', ':set cursorline! cursorcolumn!<CR>', noremapSilent)
 map('n', '-', ':set cursorline!<CR>', noremapSilent)
