@@ -52,7 +52,7 @@
 "   object. See <port> in the example above.
 "
 "   The "specials" object contains common queries. Using these prevents having
-"   to write them over and over. These queries can make use of two
+"   to write them over and over. These queries can make use of two other
 "   placeholders: <cword> and <cWORD>. They are replaced by the word or WORD
 "   under the cursor, respectively.
 "
@@ -93,23 +93,16 @@ endfunction
 
 function! s:SetConnection() " {{{1
     try
-        let sqlSettings = s:Settings()
-
-        let servers = sort(keys(sqlSettings.servers)) + ['Edit…']
-        let i = s:Choose('Choose a server.', servers)
-        if i == len(servers)-1
+        let connection = s:Choose('Connecting to:',
+            \   sort(flatten(map(
+            \       keys(s:Settings().servers), {_,v -> map(
+            \           copy(s:Settings().servers[v].databases), {_,w -> v.' ▶ '.w})})))
+            \  + ['Edit…'] )
+        if connection == 'Edit…'
             execute 'tabedit '.s:sqlSettingsFile
             return 0
         endif
-        let b:server = servers[i]
-
-        let databases = sort(sqlSettings.servers[servers[i]].databases) + ['Edit…']
-        let j = s:Choose('Choose a database on ' . b:server, databases)
-        if i == len(servers)-1
-            execute 'tabedit '.s:sqlSettingsFile
-            return 0
-        endif
-        let b:database = databases[j]
+        let [b:server,b:database] = split(connection, ' ▶ ')
 
         if !empty(matchlist(getline(1), s:connectionStringPattern))
             silent normal! ggdd _
@@ -136,13 +129,13 @@ function! s:WriteTempFile(queryType) " {{{1
 
     elseif a:queryType == 'special'
         let platform = s:ServerInfo().platform
-        let specials = sort(keys(filter(copy(s:Settings().specials), {k,v -> has_key(v,platform)})))
-        let i = s:Choose('Choose a special query to run.', specials)
-        if i < 0 || i >= len(specials)
+        let special = s:Choose('Running special query:',
+            \   sort(keys(filter(copy(s:Settings().specials), {k,v -> has_key(v,platform)}))))
+        if special == ''
             throw 'Invalid selection. Aborting...'
         endif
 
-        let cmdline = s:Settings().specials[specials[i]][platform]
+        let cmdline = s:Settings().specials[special][platform]
         let cmdline = substitute(cmdline, '\C<cword>', expand('<cword>'), 'g')
         let cmdline = substitute(cmdline, '\C<cWORD>', expand('<cWORD>'), 'g')
 
@@ -304,43 +297,18 @@ function! s:Options() " {{{1
 endfunction
 
 function! s:Choose(prompt, choices)   " {{{1
-    echohl Identifier
-    echo a:prompt
-    echo ''
-    for i in range(len(a:choices))
-        echohl Identifier
-        echon printf('  %s', nr2char(char2nr('a') + i))
-        echohl Normal
-        echon ':  '.a:choices[i]
-        echo ''
-    endfor
-
-    while 1
-        let n = getchar()
-        if n == 27
-            throw 'Cancelled.'
-        endif
-
-        let n -= char2nr('a')
-        if (n >= 0 && n < len(a:choices))
-            return n
-        endif
-
-        echo 'Invalid selection. Try again or Esc to cancel.'
-    endwhile
+    let s:choices = a:choices
+    let response = input(a:prompt.' ', '', 'customlist,SQLCompletion')
+    return index(a:choices, response) == -1 ? '' : response
 endfunction
 
-function! SqlConnection() " {{{1
-    return s:ConnectionIsSet() ? b:server . '.' . b:database : '<disconnected>'
+function! SQLCompletion(A, L, P) " {{{1
+    return filter(copy(s:choices), {_,v -> v =~ a:A})
 endfunction
 
 " Start Here {{{1
 let s:sqlSettingsFile = expand('<sfile>:p:h').'/.sqlSettings.json'
 let s:connectionStringPattern = '^-- Connection: \(.\+\)\.\([^.]\+\)$'
-
-if &statusline !~? '@ %{SqlConnection()}'
-    execute 'setlocal statusline='.escape(substitute(&statusline, '%f', '%f @ %{SqlConnection()}', ''),' ')
-endif
 
 let b:tempFile = tempname()
 
