@@ -1,0 +1,35 @@
+{
+    "HTML-format email of query":{
+        "prefix": "emailHTML",
+        "description": "Using sp_send_dbmail, send manually-crafted HTML to email address(es).",
+        "body": [
+            "-- Reference: https://learn.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-send-dbmail-transact-sql",
+            "exec msdb.dbo.sp_send_dbmail",
+            "    @profile_name = N'Default Profile',",
+            "    @recipients = '${1:emailAddresses}',",
+            "    @subject = '${2:subject}',",
+            "    @body_format = 'HTML',",
+            "    @query_no_truncate = 1,",
+            "    @execute_query_database = ''${3:database}'',",
+            "    @query = '",
+            "        SET NOCOUNT ON;",
+            "        SELECT ",
+            "            ''<h1>${4:title}</h1>'' +",
+            "            ''<p>${5:body}</p>'' +",
+            "            ''<table border=1><tr>'' +",
+            "                ''<th>ID</th>'' +",
+            "                ''<th>Name</th>'' +",
+            "            ''</tr>'' as html",
+            "        UNION ALL",
+            "        SELECT",
+            "            ''<tr>'' +",
+            "                ''<td>'' + cast(ID as varchar(MAX)) + ''</td>'' +",
+            "                ''<td>'' + ''<a href=\"https://server.com/'' + Name + ''\">'' + Name + '' + ''</a>'' + ''</td>'' +",
+            "            ''</tr>''",
+            "        FROM table",
+            "        UNION ALL",
+            "        SELECT ''</table>''",
+            "        ';"
+        ]
+    }
+}
