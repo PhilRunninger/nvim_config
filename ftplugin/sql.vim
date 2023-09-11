@@ -112,6 +112,7 @@ function! s:SetConnection() " {{{1
         return s:ConnectionIsSet()
     catch /.*/
         echo v:exception
+        return 0
     endtry
 endfunction
 
@@ -131,16 +132,11 @@ function! s:WriteTempFile(queryType) " {{{1
         let platform = s:ServerInfo().platform
         let special = s:Choose('Running special query:',
             \   sort(keys(filter(copy(s:Settings().specials), {k,v -> has_key(v,platform)}))))
-        if special == ''
-            throw 'Invalid selection. Aborting...'
-        endif
-
         let cmdline = s:Settings().specials[special][platform]
         let cmdline = substitute(cmdline, '\C<cword>', expand('<cword>'), 'g')
         let cmdline = substitute(cmdline, '\C<cWORD>', expand('<cWORD>'), 'g')
 
         call writefile([cmdline], b:tempFile)
-
     endif
 endfunction
 
@@ -299,7 +295,10 @@ endfunction
 function! s:Choose(prompt, choices)   " {{{1
     let s:choices = a:choices
     let response = input(a:prompt.' ', '', 'customlist,SQLCompletion')
-    return index(a:choices, response) == -1 ? '' : response
+    if index(a:choices, response) == -1
+        throw '  Invalid selection. Aborting...'
+    endif
+    return response
 endfunction
 
 function! SQLCompletion(A, L, P) " {{{1
