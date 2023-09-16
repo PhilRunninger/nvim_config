@@ -132,11 +132,9 @@ require 'ayu'.setup({
             NormalNC     = {bg = colors.selection_inactive},
             SpecialKey   = {fg = '#ff00af'},
             MatchParen   = {bg = '#af00af', fg = '#ffcf00', underline = false},
-            -- Tabline highlight groups, including one custom.
-            TabLineSel     = {fg = colors.string, underline = false, bold = true, italic = true},
-            TabLine        = {underline = true},
-            TabLineFill    = {underline = true},
-            TabLineDivider = {fg = colors.normal}
+            TabLineSel        = {bg = colors.accent, fg = colors.black, underline = false, bold = true, italic = true},
+            TabLine           = {underline = true},
+            TabLineFill       = {underline = true}
         }
     end
 })
