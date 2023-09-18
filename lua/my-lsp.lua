@@ -60,14 +60,16 @@ lspconfig.lua_ls.setup({
         Lua = {
             runtime = { version = 'LuaJIT' },
             diagnostics = { globals = { "vim" } },
-            workspace = { library = {
-                [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-                [vim.fn.stdpath("config") .. "/lua"] = true,
-            }
+            workspace = {
+                library = {
+                    [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+                    [vim.fn.stdpath("config") .. "/lua"] = true,
+                }
             }
         }
     }
 })
+
 lspconfig.omnisharp.setup({ on_attach = on_attach })
 
 lspconfig.powershell_es.setup({
