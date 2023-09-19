@@ -11,7 +11,7 @@ function SetTabLine()
         local bufname = vim.fn.fnamemodify(vim.fn.bufname(bufnr),':t')
         tabline = tabline
             .. '%' .. tab .. 'T'
-            .. (prevIsSelected and '%#TabLine#' or (isSelected and '%#TabLineSel#' or '%#TabLine#'))
+            .. (prevIsSelected and '%#TabLine#' or (isSelected and '%#TabLineSel#' or '%#TabLine#' .. (tab == 1 and '' or '')))
             .. (vim.bo[bufnr].modified and '  ' or ' ')
             .. (bufname == '' and 'New…' or bufname) .. ' '
         prevIsSelected = isSelected
