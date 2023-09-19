@@ -256,7 +256,7 @@ function! s:AlignColumns() " {{{1
             if timeEstimate <= s:Options().alignTimeLimit
                 echon printf('Aligning columns...  (rows: %d, columns: %d, estimate: %.1f seconds)', rows, columns, timeEstimate)
                 redraw!
-                silent execute startRow . ',' . endRow . 'EasyAlign * | {"lm":0, "rm":0}'
+                silent execute startRow . ',' . endRow . 'EasyAlign * |'
             endif
             normal! }
             let startRow = search('^.\+$','W')
