@@ -36,7 +36,14 @@ map('t', '<C-l>', '<C-\\><C-n>:lua WinTabSwitch("l")<CR>', noremapSilent)
 map('t', '<Esc><Esc>', '<C-\\><C-n>', noremapSilent)
 
 -- Open a terminal in a split window
-map('n', '<leader>t', ':split|terminal'..((fn.has('win32') and vim.o.shell ~= 'bash') and ' pwsh' or '')..'<CR>', noremapSilent)
+map('n', '<leader>t', ':split|terminal'..((jit.os == 'Windows' and vim.o.shell ~= 'bash') and ' pwsh' or '')..'<CR>', noremapSilent)
+
+ -- Open a URL in the browser
+if jit.os == 'Windows' then
+    map('n', 'gx', ':!start <C-R><C-A><CR>', noremapSilent)
+elseif jit.os == 'OSX' then
+    map('n', 'gx', ':!open <C-R><C-A><CR>', noremapSilent)
+end
 
 -- Swap j and k with gj and gk
 map('n', 'j', 'gj', noremapSilent)
