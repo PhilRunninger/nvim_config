@@ -9,9 +9,9 @@
 "
 " Settings File
 "   All the information about the servers, databases, and the platforms
-"   they're running on is stored in the .sqlSettings.json file in this
-"   file's folder. It is .gitignored to keep that information private, but
-"   here is an example to follow:
+"   they're running on is stored in the .sql.json file in this file's folder.
+"   It is .gitignored to keep that information private, but here is an example
+"   to follow:
 "
 "   {
 "     "options": {
@@ -306,7 +306,7 @@ function! SQLCompletion(A, L, P) " {{{1
 endfunction
 
 " Start Here {{{1
-let s:sqlSettingsFile = expand('<sfile>:p:h').'/.sqlSettings.json'
+let s:sqlSettingsFile = expand('<sfile>:p:h').'/.sql.json'
 let s:connectionStringPattern = '^-- Connection: \(.\+\)\.\([^.]\+\)$'
 
 let b:tempFile = tempname()
