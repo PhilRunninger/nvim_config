@@ -5,6 +5,7 @@ local bufmap = vim.api.nvim_buf_set_keymap
 local noremapSilent = {noremap=true, silent=true}
 local noremap = {noremap=true}
 
+cmd('packadd! plenary.nvim') -- ########################### https://github.com/nvim-lua/plenary.nvim
 cmd('packadd! bufselect') -- ############################ https://github.com/PhilRunninger/bufselect
 g.BufSelectKeyDeleteBuffer='w'
 g.BufSelectKeyOpen='l'
@@ -35,6 +36,37 @@ cmd('packadd! presenting.vim') -- ########################## https://github.com/
 g.presenting_quit = '<Esc>'
 g.presenting_next = '<Right>'
 g.presenting_prev = '<Left>'
+
+cmd('packadd! rest.nvim') -- ################################ https://github.com/rest-nvim/rest.nvim
+require("rest-nvim").setup({
+    -- Open request results in a horizontal split
+    result_split_horizontal = false,
+    -- Keep the http file buffer above|left when split horizontal|vertical
+    result_split_in_place = false,
+    -- Skip SSL verification, useful for unknown certificates
+    skip_ssl_verification = false,
+    encode_url = true,
+    highlight = {
+        enabled = true,
+        timeout = 150,
+    },
+    result = {
+        show_url = true,
+        show_curl_command = true,
+        show_http_info = true,
+        show_headers = true,
+        formatters = {
+            json = "jq",
+            html = function(body)
+                return vim.fn.system({"tidy", "-i", "-q", "-"}, body)
+            end
+        },
+    },
+    jump_to_request = false,
+    env_file = '.env',
+    custom_dynamic_variables = {},
+    yank_dry_run = true,
+})
 
 cmd('packadd! vim-rest-console') -- ###################### https://github.com/diepm/vim-rest-console
 g.vrc_show_command = 1
@@ -83,7 +115,7 @@ require "my-lsp"
 
 cmd('packadd! nvim-treesitter') -- ############## https://github.com/nvim-treesitter/nvim-treesitter
 require "nvim-treesitter.configs".setup {
-  ensure_installed = {"bash", "c_sharp", "css", "erlang", "graphql", "help", "html", "javascript", "json", "lua", "make", "markdown", "python", "regex", "ruby", "typescript", "vim", "yaml"},
+  ensure_installed = {"bash", "c_sharp", "css", "erlang", "graphql", "help", "html", "http", "javascript", "json", "lua", "make", "markdown", "python", "regex", "ruby", "typescript", "vim", "yaml"},
   sync_install = false,
   ignore_install = {}, -- List of parsers to ignore installing
   highlight = {

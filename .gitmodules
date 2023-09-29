@@ -1,9 +1,6 @@
 [submodule "pack/bundle/opt/vim-fugitive"]
 	path = pack/bundle/opt/vim-fugitive
 	url = git@github.com:tpope/vim-fugitive
-[submodule "pack/bundle/opt/vim-rest-console"]
-	path = pack/bundle/opt/vim-rest-console
-	url = git@github.com:diepm/vim-rest-console.git
 [submodule "pack/bundle/opt/csv.vim"]
 	path = pack/bundle/opt/csv.vim
 	url = git@github.com:chrisbra/csv.vim
@@ -106,3 +103,9 @@
 [submodule "pack/bundle/opt/cmp-rpncalc"]
 	path = pack/bundle/opt/cmp-rpncalc
 	url = git@github.com:PhilRunninger/cmp-rpncalc.git
+[submodule "pack/bundle/opt/rest.nvim"]
+	path = pack/bundle/opt/rest.nvim
+	url = git@github.com:rest-nvim/rest.nvim.git
+[submodule "pack/bundle/opt/plenary.nvim"]
+	path = pack/bundle/opt/plenary.nvim
+	url = git@github.com:nvim-lua/plenary.nvim.git
