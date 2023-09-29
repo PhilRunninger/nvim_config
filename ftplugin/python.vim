@@ -1,2 +1,2 @@
 " Poor-man's REPL
-noremap <silent> <F5> :write !python<CR>
+noremap <buffer> <F5> :write !python<CR>

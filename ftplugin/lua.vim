@@ -1,2 +1,2 @@
 " Poor-man's REPL
-noremap <silent> <F5> :write !lua<CR>
+noremap <buffer> <F5> :write !lua<CR>

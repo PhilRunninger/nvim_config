@@ -5,4 +5,4 @@ setlocal shiftwidth=2    " number of spaces to use for (auto)indent step
 setlocal expandtab       " use spaces when <tab> is inserted
 
 " Poor-man's REPL
-noremap <silent> <F5> :write !node<CR>
+noremap <buffer> <F5> :write !node<CR>
