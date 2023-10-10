@@ -1,0 +1,25 @@
+{
+    "http":{
+        "prefix":"http",
+        "description": "Template for REST queries",
+        "body": [
+        "POST https://reqres.in/api/users",
+        "Content-Type: application/json",
+        "",
+        "--silent",
+        "",
+        "{",
+        "  \"name\": \"morpheus\",",
+        "  \"job\": \"leader\",",
+        "  \"array\": [\"a\", \"b\", \"c\"],",
+        "  \"object_ugly_closing\": {",
+        "    \"some_key\": \"some_value\"",
+        "  }",
+        "}",
+        "",
+        "GET https://reqres.in/api/users",
+        "",
+        "--silent"
+        ]
+    }
+}

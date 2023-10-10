@@ -68,10 +68,6 @@ require("rest-nvim").setup({
     yank_dry_run = true,
 })
 
-cmd('packadd! vim-rest-console') -- ###################### https://github.com/diepm/vim-rest-console
-g.vrc_show_command = 1
-g.vrc_trigger = '<F5>'
-
 cmd('packadd! vifm.vim') -- ######################################  https://github.com/vifm/vifm.vim
 -- vifm/vifm.vim.rc sets up mappings s, v, T, and q for quicker file picker operations.
 -- $VIFM is a vifm-internal variable that points to ~/AppData/Roaming/Vifm or ~/.config/vifm.

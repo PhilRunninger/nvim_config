@@ -10,8 +10,8 @@
                 "path": "./global.json"
             },
             {
-                "language": "rest",
-                "path": "./rest.json"
+                "language": "http",
+                "path": "./http.json"
             },
             {
                 "language": "sql",
