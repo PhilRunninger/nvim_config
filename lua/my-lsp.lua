@@ -27,7 +27,7 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { 
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded", })
 
 -- Map keys after language server attaches to current buffer.
-local on_attach = function(_, bufnr)
+local map_keys = function(_, bufnr)
     local bufopts = { noremap = true, silent = true, buffer = bufnr }
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
@@ -46,16 +46,16 @@ local on_attach = function(_, bufnr)
 end
 
 -- Configure each language server.
-lspconfig.cssls.setup({ on_attach = on_attach })
+lspconfig.cssls.setup({ on_attach = map_keys })
 
 lspconfig.erlangls.setup({})
 
-lspconfig.html.setup({ on_attach = on_attach })
+lspconfig.html.setup({ on_attach = map_keys })
 
-lspconfig.jsonls.setup({ on_attach = on_attach })
+lspconfig.jsonls.setup({ on_attach = map_keys })
 
 lspconfig.lua_ls.setup({
-    on_attach = on_attach,
+    on_attach = map_keys,
     settings = {
         Lua = {
             runtime = { version = 'LuaJIT' },
@@ -70,15 +70,18 @@ lspconfig.lua_ls.setup({
     }
 })
 
-lspconfig.omnisharp.setup({ on_attach = on_attach })
+lspconfig.omnisharp.setup({
+    on_attach = map_keys,
+    cmd = { 'dotnet', 'c:/Users/prunninger/Appdata/Local/nvim-data/lsp_servers/omnisharp/omnisharp' },
+})
 
 lspconfig.powershell_es.setup({
-    on_attach = on_attach,
+    on_attach = map_keys,
     bundle_path = 'c:/ProgramData/PowerShell/EditorServices'
 })
 
 lspconfig.pyright.setup({
-    on_attach = on_attach,
+    on_attach = map_keys,
     settings = {
         python = {
             analysis = {
@@ -88,6 +91,6 @@ lspconfig.pyright.setup({
     },
 })
 
-lspconfig.tsserver.setup({ on_attach = on_attach })
+lspconfig.tsserver.setup({ on_attach = map_keys })
 
-lspconfig.vimls.setup({ on_attach = on_attach })
+lspconfig.vimls.setup({ on_attach = map_keys })
