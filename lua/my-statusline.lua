@@ -34,8 +34,8 @@ local HLSToRGB = function(h,l,s)
 end
 
 local changeColors = function(insertMode)
-    -- Background Hue: Terminal=purple, INSERT mode=blue, Modified=red, Unmodified=green
-    local h = vim.o.buftype == 'terminal' and 312 or (insertMode and 204 or (vim.o.modified and 0 or 108))
+    -- Background Hue: Terminal=purple, INSERT mode=blue, Modified=orange, Unmodified=green
+    local h = vim.o.buftype == 'terminal' and 312 or (insertMode and 204 or (vim.o.modified and 30 or 108))
 
     local bg = {}
     for i = 1,6,1 do
