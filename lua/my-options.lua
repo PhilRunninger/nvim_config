@@ -19,7 +19,7 @@ local options = {
     showmode = false,
     showmatch = true,
     number = true,
-    fillchars = {stl=' ', stlnc=' ', eob=' ', fold='‧'},
+    fillchars = {stl=' ', stlnc=' ', eob=' '},
     list = true,
     listchars = {tab='●·', extends='→', precedes='←', trail='■'},
     laststatus = 3,
