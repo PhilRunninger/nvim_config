@@ -11,7 +11,7 @@ git submodule --quiet foreach '
 
     git checkout --quiet $BRANCH
     OLDHASH=$(git rev-parse HEAD)
-    git pull --quiet --recurse-submodules || :
+    git pull --quiet --recurse-submodules origin $BRANCH || :
     git --no-pager log --oneline $OLDHASH..HEAD
 '
 
