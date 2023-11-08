@@ -108,19 +108,6 @@ cmd('packadd! mason-lspconfig.nvim') --         https://github.com:williamboman/
 cmd('packadd! nvim-lspconfig') --                           https://github.com/neovim/nvim-lspconfig
 require "my-lsp"
 
-cmd('packadd! nvim-treesitter') -- ############## https://github.com/nvim-treesitter/nvim-treesitter
-require "nvim-treesitter.configs".setup {
-  ensure_installed = {"bash", "c_sharp", "css", "erlang", "graphql", "help", "html", "http", "javascript", "json", "lua", "make", "markdown", "python", "regex", "ruby", "typescript", "vim", "yaml"},
-  sync_install = false,
-  ignore_install = {}, -- List of parsers to ignore installing
-  highlight = {
-    enable = true, -- false will disable the whole extension
-    disable = {}, -- list of language that will be disabled
-    additional_vim_regex_highlighting = true,
-  },
-  indent = {enable = true, disable = {"yaml"}},
-}
-
 cmd('packadd! Comment.nvim') -- ########################### https://github.com/numToStr/Comment.nvim
 require "Comment".setup()
 

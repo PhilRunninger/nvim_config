@@ -26,4 +26,5 @@ function! s:RevealHighlights(r,c)
     endif
 endfunction
 
-nnoremap <leader>s :call <SID>RevealHighlights(line('.'),col('.'))<CR>
+" nnoremap <leader>s :call <SID>RevealHighlights(line('.'),col('.'))<CR>
+nnoremap <leader>s :Inspect<CR>
