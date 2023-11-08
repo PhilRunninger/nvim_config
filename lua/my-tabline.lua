@@ -9,12 +9,15 @@ function SetTabLine()
         isSelected = tab == vim.fn.tabpagenr()
         local bufnr = vim.fn.tabpagebuflist(tab)[vim.fn.tabpagewinnr(tab)]
         local bufname = vim.fn.fnamemodify(vim.fn.bufname(bufnr),':t')
-        tabline = tabline
-            .. '%' .. tab .. 'T'
-            .. (prevIsSelected and '%#TabLine#' or (isSelected and '%#TabLineSel#' or '%#TabLine#' .. (tab == 1 and '' or '')))
-            .. (vim.bo[bufnr].modified and '  ' or ' ')
-            .. (bufname == '' and 'New…' or bufname) .. ' '
+        tabline = tabline .. '%' .. tab .. 'T'
+        if prevIsSelected then tabline = tabline .. '%#TabLine#'    -- Selected right edge of previous tab
+        elseif isSelected then tabline = tabline .. '%#TabLineSel#' -- Selected left edge of current tab
+        elseif tab == 1 then   tabline = tabline .. '%#TabLine#'    -- Unselected left edge of 1st tab
+        else                   tabline = tabline .. '%#TabLine#'    -- Unselected right edge of previous tab
+        end
+        tabline = tabline .. (vim.bo[bufnr].modified and '  ' or ' ')
+        tabline = tabline .. (bufname == '' and 'New…' or bufname) .. ' '
         prevIsSelected = isSelected
     end
-    return tabline .. (prevIsSelected and '' or '') .. '%#TabLineFill#'
+    return tabline .. (isSelected and '' or '') .. '%#TabLineFill#'
 end
