@@ -32,7 +32,7 @@ function! s:Splash(...)
         let l:attr = {'align':'c', 'valign':'c', 'colors':[]}
         let l:data = readfile(printf('%s/%s.txt', s:splashDir,l:file))
         try
-            let l:attr = extend(eval(l:data[0]), l:attr, 'keep')
+            let l:attr = extend(json_decode(l:data[0]), l:attr, 'keep')
             let l:data = l:data[1:]
         catch
         finally
