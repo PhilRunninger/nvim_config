@@ -87,6 +87,7 @@ g.undotree_SetFocusWhenToggle = 1
 cmd('packadd! unicode.vim') -- ############################# https://github.com/chrisbra/unicode.vim
 map('n', 'ga', ':UnicodeName<CR>', noremapSilent)
 map('n', '<leader>ga', ':UnicodeSearch!<space>', noremap)
+g.Unicode_no_default_mappings = 1
 
 -- ######################################################################################## SNIPPETS
 cmd('packadd! LuaSnip') --                                       https://github.com/L3MON4D3/LuaSnip
