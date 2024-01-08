@@ -6,6 +6,7 @@ local noremapSilent = {noremap=true, silent=true}
 local noremap = {noremap=true}
 
 cmd('packadd! plenary.nvim') -- ########################### https://github.com/nvim-lua/plenary.nvim
+
 cmd('packadd! bufselect') -- ############################ https://github.com/PhilRunninger/bufselect
 g.BufSelectSetup = {mappings={delete='w',open='l',gopen='gl'},win={config={border='rounded',title='Buffers',title_pos='center'}}}
 map('n', '<leader>b', ':ShowBufferList<CR>', noremapSilent)

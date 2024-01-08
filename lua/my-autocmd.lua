@@ -24,7 +24,7 @@ vim.api.nvim_create_autocmd('CursorHold',  {command = 'silent! checktime', group
 vim.api.nvim_create_autocmd('CursorMoved', {command = 'silent! checktime', group = group})
 
 -- Restart with cursor in the location from last session.
-vim.api.nvim_create_autocmd('BufReadPost', {command = 'if line("\'\\\"") > 1 && line("\'\\\"") <= line("$") | execute "normal! g`\\\"" | endif', group = group})
+vim.api.nvim_create_autocmd('BufReadPost', {command = 'if &filetype != "gitcommit" && line("\'\\\"") > 1 && line("\'\\\"") <= line("$") | execute "normal! g`\\\"" | endif', group = group})
 
 -- Additional nvim-qt Settings
 vim.api.nvim_create_autocmd('UIEnter', {callback = function() require('my-ginit') end, group = group})
