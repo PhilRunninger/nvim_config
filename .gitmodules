@@ -31,15 +31,12 @@
 [submodule "pack/bundle/opt/unicode.vim"]
 	path = pack/bundle/opt/unicode.vim
 	url = git@github.com:chrisbra/unicode.vim.git
-[submodule "pack/bundle/opt/presenting.vim"]
-	path = pack/bundle/opt/presenting.vim
-	url = git@github.com:sotte/presenting.vim.git
 [submodule "pack/bundle/opt/bufselect.vim"]
 	path = pack/bundle/opt/bufselect
 	url = git@github.com:PhilRunninger/bufselect.vim.git
 [submodule "pack/bundle/opt/crease.vim"]
 	path = pack/bundle/opt/crease.vim
-	url = git@github.com:scr1pt0r/crease.vim.git
+	url = git@github.com:gustaphe/crease.vim.git
 [submodule "pack/bundle/opt/cmp-nvim-lua"]
 	path = pack/bundle/opt/cmp-nvim-lua
 	url = git@github.com:hrsh7th/cmp-nvim-lua.git
