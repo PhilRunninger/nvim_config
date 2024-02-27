@@ -19,6 +19,7 @@ local options = {
     showmode = false,
     showmatch = true,
     number = true,
+    relativenumber = true,
     fillchars = {stl=' ', stlnc=' ', eob=' '},
     list = true,
     listchars = {tab='●·', extends='→', precedes='←', trail='■'},
