@@ -11,7 +11,7 @@ cmd('packadd! bufselect') -- ############################ https://github.com/Phi
 g.BufSelectSetup = {mappings={delete='w',open='l',gopen='gl'},win={config={border='rounded',title='Buffers',title_pos='center'}}}
 map('n', '<leader>b', ':ShowBufferList<CR>', noremapSilent)
 
-cmd('packadd! crease.vim') -- ############################### https://github.com/scr1pt0r/crease.vim
+cmd('packadd! crease.vim') -- ############################### https://github.com/gustaphe/crease.vim
 g.crease_foldtext = {default='%{repeat("▶",v:foldlevel)}%{repeat(" ",v:foldlevel)}%t%=[%l lines]'}
 
 cmd('packadd! csv.vim') -- ##################################### https://github.com/chrisbra/csv.vim
@@ -31,11 +31,6 @@ g.markdown_fenced_languages = {'vim','sql','cs','ps1'}
 
 cmd('packadd! vim-matchup') -- ############################# https://github.com/andymass/vim-matchup
 g.matchup_matchparen_offscreen = {method='popup'}
-
-cmd('packadd! presenting.vim') -- ########################## https://github.com/sotte/presenting.vim
-g.presenting_quit = '<Esc>'
-g.presenting_next = '<Right>'
-g.presenting_prev = '<Left>'
 
 cmd('packadd! rest.nvim') -- ################################ https://github.com/rest-nvim/rest.nvim
 require("rest-nvim").setup({
