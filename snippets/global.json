@@ -2,7 +2,7 @@
     "date - for journal entry": {
         "prefix": "dateJournal",
         "description": "Date, formatted for my journal",
-        "body": ["- **${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}**: "]
+        "body": ["- [ ] **${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}**: "]
     }
 }
 

@@ -15,8 +15,8 @@ map('n', '<Left>', '10<C-W><', noremapSilent)        --               10 columns
 
 -- Switch Between Windows and Tabs
 function WinTabSwitch(direction)
-    local info = vim.fn.getwininfo(vim.fn.win_getid())[1]
-    local wincol = vim.fn.win_screenpos(vim.fn.winnr())[2]
+    local info = fn.getwininfo(fn.win_getid())[1]
+    local wincol = fn.win_screenpos(fn.winnr())[2]
     if (direction == 'h' and wincol <= 1) then
         vim.cmd('tabprev|99wincmd l')
     elseif (direction == 'l' and wincol + info.width >= vim.o.columns) then

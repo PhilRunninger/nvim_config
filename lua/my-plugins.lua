@@ -70,7 +70,7 @@ g.vifm_exec_args = '-c "source $VIFM/vifm.vim.rc"'
 map('n', '<leader>o', ':Vifm<CR>', noremapSilent)
 
 cmd('packadd! undotree') -- ##################################### https://github.com/mbbill/undotree
-map('n', '<leader>u', ':UndotreeShow<CR>', noremapSilent)
+map('n', '<leader>u', ':UndotreeToggle<CR>', noremapSilent)
 g.undotree_WindowLayout = 2
 g.undotree_HelpLine = 0
 g.undotree_ShortIndicators = 1
@@ -133,9 +133,12 @@ require 'ayu'.setup({
         local colors = require('ayu.colors')
         return
         { -- Override builtin colors, for better contrast.
-            VertSplit    = {bg = 'NONE', fg = colors.normal},
+            WinSeparator = {bg = 'NONE', fg = colors.normal},
             SignColumn   = {bg = 'NONE'},
-            LineNr       = {fg = colors.comment},
+            LineNrAbove  = {fg = colors.comment},
+            LineNr       = {fg = colors.accent},
+            LineNrBelow  = {fg = colors.comment},
+            CursorLineNr = {fg = colors.accent},
             CursorLine   = {bg = colors.gutter_normal},
             CursorColumn = {bg = colors.gutter_normal},
             ColorColumn  = {bg = colors.gutter_normal},
