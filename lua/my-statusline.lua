@@ -2,7 +2,7 @@ vim.opt.statusline = "%!luaeval('SetStatusLineText()')"
 
 function SetStatusLineText()
     local useColor = vim.api.nvim_get_current_win() == vim.g.statusline_winid
-    local divider = useColor and '' or ''  -- Other candidates:     ┃  
+    local divider = useColor and '' or ''  -- Other candidates:     ┃  
     return
         (useColor and '%1*'        or  '') .. " %4l/%-4L %3v " ..
         (useColor and '%#User12#'  or  '') .. divider ..
