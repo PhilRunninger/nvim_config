@@ -18,8 +18,8 @@
 "       "alignTimeLimit": 5.0
 "     },
 "     "platforms": {
-"       "sqlserver": {"cmdline": "sqlcmd -S <svr> -d <db> -s\"|\" -W -I -i <file>"},
-"       "postgresql": {"cmdline": "psql -U id -h <svr> -p <port> -d <db> -F\"|\" -f <file>", "options":{"doAlign":0}}
+"       "sqlserver": {"cmdline": "sqlcmd -S <svr> -d <db> -s\"\u001f\" -W -I -i <file>"},
+"       "postgresql": {"cmdline": "psql -U id -h <svr> -p <port> -d <db> -F\"\u001f\" -f <file>", "options":{"doAlign":0}}
 "     },
 "     "specials": {
 "       "list tables": {
@@ -150,6 +150,9 @@ function! s:GotoResultsBuffer(sqlQueryBuffer, server, database, tempFile) " {{{1
         silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv
         nnoremap <buffer> <C-F5> :call <SID>SQLRun('special',1)<CR>
         nnoremap <buffer> <F5> :call <SID>RunAndFormat()<CR>
+        execute 'vnoremap <buffer> <F5> :EasyAlign */'.s:colSeparator.'/<CR>'
+        execute 'nnoremap <buffer> <S-F5> :%s/'.s:colSeparator.'/;/g<CR>'
+        execute 'vnoremap <buffer> <S-F5> :s/'.s:colSeparator.'/;/g<CR>'
     else
         execute winnr . 'wincmd w'
     endif
@@ -198,7 +201,7 @@ function! s:RunQuery() " {{{1
     let hours = float2nr(elapsed / 3600)
     let minutes = float2nr(fmod(elapsed,3600) / 60)
     let seconds = fmod(elapsed, 60)
-    call append(line('$'), printf('%02d:%02d:%06.3f | Seq:%d -> %s', hours, minutes, seconds, b:sequence, b:tempFile))
+    call append(line('$'), printf('%02d:%02d:%06.3f '.s:colSeparator.' Seq:%d -> %s', hours, minutes, seconds, b:sequence, b:tempFile))
     return elapsed
 endfunction
 
@@ -213,16 +216,16 @@ function! s:JoinLines() " {{{1
         if endRow == -1
             break
         endif
-        let required = count(getline(startRow), '|')
+        let required = count(getline(startRow), s:colSeparator)
         let startRow += 2
         while startRow < endRow && required > 0
             let rows = 0
-            let count = count(getline(startRow), '|')
-            let countNext = count(getline(startRow+1), '|')
+            let count = count(getline(startRow), s:colSeparator)
+            let countNext = count(getline(startRow+1), s:colSeparator)
             while startRow + rows < endRow && (count < required || countNext == 0)
                 let rows += 1
-                let count += count(getline(startRow + rows), '|')
-                let countNext = count(getline(startRow + rows + 1), '|')
+                let count += count(getline(startRow + rows), s:colSeparator)
+                let countNext = count(getline(startRow + rows + 1), s:colSeparator)
             endwhile
             if rows > 0
                 execute startRow.','.(startRow + rows).'join'
@@ -246,7 +249,7 @@ function! s:AlignColumns() " {{{1
         normal! gg
         let startRow = search('^.\+$','cW')
         while startRow > 0
-            let columns = count(getline(startRow), '|') + 1
+            let columns = count(getline(startRow), s:colSeparator) + 1
             let endRow = line("'}") - (line("'}") != line("$"))
             let rows = endRow - startRow - 1
             " These coefficients were derived from an experiment I did with
@@ -256,7 +259,7 @@ function! s:AlignColumns() " {{{1
             if timeEstimate <= s:Options().alignTimeLimit
                 echon printf('Aligning columns...  (rows: %d, columns: %d, estimate: %.1f seconds)', rows, columns, timeEstimate)
                 redraw!
-                silent execute startRow . ',' . endRow . 'EasyAlign * |'
+                silent execute startRow . ',' . endRow . 'EasyAlign */'.s:colSeparator.'/'
             endif
             normal! }
             let startRow = search('^.\+$','W')
@@ -264,7 +267,7 @@ function! s:AlignColumns() " {{{1
     endif
 
     if exists(':CSVInit')
-        let b:delimiter = '|'
+        let b:delimiter = s:colSeparator
         let b:csv_headerline = 0
         CSVInit!
     endif
@@ -307,6 +310,7 @@ endfunction
 
 " Start Here {{{1
 let s:sqlSettingsFile = expand('<sfile>:p:h').'/.sql.json'
+let s:colSeparator = ''   " In s:sqlSettingsFile, this must be encoded as \u001f
 let s:connectionStringPattern = '^-- Connection: \(.\+\)\.\([^.]\+\)$'
 
 let b:tempFile = tempname()
