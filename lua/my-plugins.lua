@@ -146,7 +146,7 @@ require 'ayu'.setup({
             NormalNC     = {bg = colors.selection_inactive},
             SpecialKey   = {fg = '#ff00af'},
             MatchParen   = {bg = '#af00af', fg = '#ffcf00', underline = false},
-            TabLineSel   = {bg = colors.fg, fg = colors.bg, underline = false, bold = true, italic = true},
+            TabLineSel   = {bg = colors.fg, fg = colors.bg, underline = false, bold = true, italic = false},
             TabLine      = {underline = true},
             TabLineFill  = {underline = true}
         }
