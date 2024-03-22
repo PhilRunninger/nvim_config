@@ -103,3 +103,6 @@
 [submodule "pack/bundle/opt/plenary.nvim"]
 	path = pack/bundle/opt/plenary.nvim
 	url = git@github.com:nvim-lua/plenary.nvim.git
+[submodule "pack/bundle/opt/nvim-treesitter"]
+	path = pack/bundle/opt/nvim-treesitter
+	url = git@github.com:nvim-treesitter/nvim-treesitter.git
