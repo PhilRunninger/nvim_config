@@ -97,9 +97,6 @@
 [submodule "pack/bundle/opt/cmp-rpncalc"]
 	path = pack/bundle/opt/cmp-rpncalc
 	url = git@github.com:PhilRunninger/cmp-rpncalc.git
-[submodule "pack/bundle/opt/rest.nvim"]
-	path = pack/bundle/opt/rest.nvim
-	url = git@github.com:rest-nvim/rest.nvim.git
 [submodule "pack/bundle/opt/plenary.nvim"]
 	path = pack/bundle/opt/plenary.nvim
 	url = git@github.com:nvim-lua/plenary.nvim.git

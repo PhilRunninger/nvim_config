@@ -10,10 +10,6 @@
                 "path": "./global.json"
             },
             {
-                "language": "http",
-                "path": "./http.json"
-            },
-            {
                 "language": "sql",
                 "path": "./sql.json"
             }
