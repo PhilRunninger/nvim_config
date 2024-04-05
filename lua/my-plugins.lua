@@ -98,11 +98,12 @@ require 'colorizer'.setup()
 
 cmd('packadd! neovim-ayu') -- ################################# https://github.com/Shatur/neovim-ayu
 require 'ayu'.setup({
+    terminal = false,
     overrides = function()
         local colors = require('ayu.colors')
         return
         { -- Override builtin colors, for better contrast.
-            WinSeparator = {bg = 'NONE', fg = colors.normal},
+            WinSeparator = {bg = 'NONE', fg = colors.accent},
             SignColumn   = {bg = 'NONE'},
             LineNrAbove  = {fg = colors.comment},
             LineNr       = {fg = colors.accent},
