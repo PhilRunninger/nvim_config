@@ -11,8 +11,14 @@ cmd('packadd! bufselect') -- ############################ https://github.com/Phi
 g.BufSelectSetup = {mappings={delete='w',open='l',gopen='gl'},win={config={border='rounded',title='Buffers',title_pos='center'}}}
 map('n', '<leader>b', ':ShowBufferList<CR>', noremapSilent)
 
-cmd('packadd! crease.vim') -- ############################### https://github.com/gustaphe/crease.vim
-g.crease_foldtext = {default='%{repeat("▶",v:foldlevel)}%{repeat(" ",v:foldlevel)}%t%=[%l lines]'}
+cmd('packadd! pretty-fold.nvim') -- ################# https://github.com/anuvyklack/pretty-fold.nvim
+require('pretty-fold').setup({
+    fill_char = '━',
+    sections = {
+        left = { function() return string.rep('', vim.v.foldlevel) end, ' ', 'content' },
+        right = { ' ', 'number_of_folded_lines', ': ', 'percentage', ' ━━━'}
+    }
+})
 
 cmd('packadd! csv.vim') -- ##################################### https://github.com/chrisbra/csv.vim
 g.no_csv_maps = 1

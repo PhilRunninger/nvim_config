@@ -34,9 +34,6 @@
 [submodule "pack/bundle/opt/bufselect.vim"]
 	path = pack/bundle/opt/bufselect
 	url = git@github.com:PhilRunninger/bufselect.vim.git
-[submodule "pack/bundle/opt/crease.vim"]
-	path = pack/bundle/opt/crease.vim
-	url = git@github.com:gustaphe/crease.vim.git
 [submodule "pack/bundle/opt/cmp-nvim-lua"]
 	path = pack/bundle/opt/cmp-nvim-lua
 	url = git@github.com:hrsh7th/cmp-nvim-lua.git
@@ -100,3 +97,6 @@
 [submodule "pack/bundle/opt/plenary.nvim"]
 	path = pack/bundle/opt/plenary.nvim
 	url = git@github.com:nvim-lua/plenary.nvim.git
+[submodule "pack/bundle/opt/pretty-fold.nvim"]
+	path = pack/bundle/opt/pretty-fold.nvim
+	url = git@github.com:anuvyklack/pretty-fold.nvim.git
