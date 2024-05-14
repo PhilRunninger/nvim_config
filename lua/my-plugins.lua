@@ -38,6 +38,10 @@ g.markdown_fenced_languages = {'vim','sql','cs','ps1'}
 cmd('packadd! vim-matchup') -- ############################# https://github.com/andymass/vim-matchup
 g.matchup_matchparen_offscreen = {method='popup'}
 
+cmd('packadd! vim-rest-console') -- ##################### https://github.com/Aadniz/vim-rest-console
+g.vrc_show_command = 1
+g.vrc_trigger = '<F5>'
+
 cmd('packadd! vifm.vim') -- ######################################  https://github.com/vifm/vifm.vim
 -- vifm/vifm.vim.rc sets up mappings s, v, T, and q for quicker file picker operations.
 -- $VIFM is a vifm-internal variable that points to ~/AppData/Roaming/Vifm or ~/.config/vifm.

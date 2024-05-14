@@ -97,6 +97,9 @@
 [submodule "pack/bundle/opt/plenary.nvim"]
 	path = pack/bundle/opt/plenary.nvim
 	url = git@github.com:nvim-lua/plenary.nvim.git
+[submodule "pack/bundle/opt/vim-rest-console"]
+	path = pack/bundle/opt/vim-rest-console
+	url = git@github.com:Aadniz/vim-rest-console.git
 [submodule "pack/bundle/opt/pretty-fold.nvim"]
 	path = pack/bundle/opt/pretty-fold.nvim
 	url = git@github.com:anuvyklack/pretty-fold.nvim.git
