@@ -113,7 +113,6 @@ require 'ayu'.setup({
         local colors = require('ayu.colors')
         return
         { -- Override builtin colors, for better contrast.
-            WinSeparator = {bg = 'NONE', fg = colors.accent},
             SignColumn   = {bg = 'NONE'},
             LineNrAbove  = {fg = colors.comment},
             LineNr       = {fg = colors.accent},
@@ -126,9 +125,11 @@ require 'ayu'.setup({
             NormalNC     = {bg = colors.selection_inactive},
             SpecialKey   = {fg = '#ff00af'},
             MatchParen   = {bg = '#af00af', fg = '#ffcf00', underline = false},
-            TabLineSel   = {bg = colors.fg, fg = colors.bg, underline = false, bold = true, italic = false},
-            TabLine      = {underline = true},
-            TabLineFill  = {underline = true}
+            WinSeparator = {bg = colors.fg_idle, fg = colors.fg_idle},
+            StatusLineNC = {bg = colors.fg_idle},
+            TabLine      = {bg = colors.fg_idle},
+            TabLineFill  = {bg = colors.fg_idle},
+            TabLineSel   = {bg = colors.accent, fg = colors.bg, bold = true},
         }
     end
 })
