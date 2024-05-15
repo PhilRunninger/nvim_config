@@ -36,7 +36,7 @@ map('n', '<leader>G', ':Git<CR>', noremapSilent)
 
 -- This plugin (tpope's) ships with Neovim. ############################################### MARKDOWN
 g.markdown_folding = 1
-g.markdown_fenced_languages = {'vim','sql','cs','ps1'}
+g.markdown_fenced_languages = {'vim','sql','cs','ps1','lua','json'}
 
 cmd('packadd! vim-matchup') -- ############################# https://github.com/andymass/vim-matchup
 g.matchup_matchparen_offscreen = {method='popup'}
