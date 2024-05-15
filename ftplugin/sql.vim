@@ -147,7 +147,7 @@ function! s:GotoResultsBuffer(sqlQueryBuffer, server, database, tempFile) " {{{1
     let winnr = bufwinnr(bufferName)
     if winnr == -1
         execute 'silent split ' . bufferName
-        silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv
+        silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv virtualedit=all
         nnoremap <buffer> <C-F5> :call <SID>SQLRun('special',1)<CR>
         nnoremap <buffer> <F5> :call <SID>RunAndFormat()<CR>
         execute 'vnoremap <buffer> <F5> :EasyAlign */'.s:colSeparator.'/<CR>'
@@ -310,7 +310,7 @@ endfunction
 
 " Start Here {{{1
 let s:sqlSettingsFile = expand('<sfile>:p:h').'/.sql.json'
-let s:colSeparator = ''   " In s:sqlSettingsFile, this must be encoded as \u001f
+let s:colSeparator = ';'   " In s:sqlSettingsFile,  must be encoded as \u001f
 let s:connectionStringPattern = '^-- Connection: \(.\+\)\.\([^.]\+\)$'
 
 let b:tempFile = tempname()

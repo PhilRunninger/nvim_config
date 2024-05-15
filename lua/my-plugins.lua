@@ -24,6 +24,7 @@ cmd('packadd! csv.vim') -- ##################################### https://github.
 g.no_csv_maps = 1
 
 cmd('packadd! vim-easy-align') -- ####################### https://github.com/junegunn/vim-easy-align
+g.easy_align_delimiters = {[';'] = {pattern=';', left_margin=1, right_margin=1, stick_to_left=0}}
 map('v', '<Enter>', '<Plug>(LiveEasyAlign)', {})
 
 cmd('packadd! vim-fugitive') -- ############################## https://github.com/tpope/vim-fugitive
