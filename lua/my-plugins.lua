@@ -8,7 +8,9 @@ local noremap = {noremap=true}
 cmd('packadd! plenary.nvim') -- ########################### https://github.com/nvim-lua/plenary.nvim
 
 cmd('packadd! bufselect') -- ############################ https://github.com/PhilRunninger/bufselect
-g.BufSelectSetup = {mappings={delete='w',open='l',gopen='gl'},win={config={border='rounded',title='Buffers',title_pos='center'}}}
+vim.fn['bufselect#settings']({
+   mappings={delete="w", open="l", gopen="gl"},
+   win={config={border="rounded", title="Buffers", title_pos="center"}}})
 map('n', '<leader>b', ':ShowBufferList<CR>', noremapSilent)
 
 cmd('packadd! pretty-fold.nvim') -- ################# https://github.com/anuvyklack/pretty-fold.nvim
@@ -136,12 +138,14 @@ require 'ayu'.setup({
 })
 require 'ayu'.colorscheme()
 
+cmd('packadd! vim-sessions') -- ###################### https://github.com/PhilRunninger/vim-sessions
+g.SessionsSetup = {normalBuffersOnly = 1}
+
 -- ###################################################################################### ALL OTHERS
 cmd('packadd! markdown-preview.nvim') --             https://github.com/iamcco/markdown-preview.nvim
 cmd('packadd! Recover.vim') --                               https://github.com:chrisbra/Recover.vim
 cmd('packadd! vim-exchange') --                              https://github.com/tommcdo/vim-exchange
 cmd('packadd! vim-repeat') --                                    https://github.com/tpope/vim-repeat
-cmd('packadd! vim-sessions') --                        https://github.com/PhilRunninger/vim-sessions
 cmd('packadd! vim-signature') --                            https://github.com/kshenoy/vim-signature
 cmd('packadd! vim-surround') --                                https://github.com/tpope/vim-surround
 cmd('packadd! vim-unimpaired') --                            https://github.com/tpope/vim-unimpaired
