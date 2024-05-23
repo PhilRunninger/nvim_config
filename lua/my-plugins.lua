@@ -13,15 +13,6 @@ vim.fn['bufselect#settings']({
    win={config={border="rounded", title="Buffers", title_pos="center"}}})
 map('n', '<leader>b', ':ShowBufferList<CR>', noremapSilent)
 
-cmd('packadd! pretty-fold.nvim') -- ################# https://github.com/anuvyklack/pretty-fold.nvim
-require('pretty-fold').setup({
-    fill_char = '━',
-    sections = {
-        left = { function() return string.rep('', vim.v.foldlevel) end, ' ', 'content' },
-        right = { ' ', 'number_of_folded_lines', ': ', 'percentage', ' ━━━'}
-    }
-})
-
 cmd('packadd! csv.vim') -- ##################################### https://github.com/chrisbra/csv.vim
 g.no_csv_maps = 1
 
@@ -126,6 +117,7 @@ require 'ayu'.setup({
             ColorColumn  = {bg = colors.gutter_normal},
             Visual       = {bg = colors.guide_active},
             NormalNC     = {bg = colors.selection_inactive},
+            Folded       = {fg = colors.fg},
             SpecialKey   = {fg = '#ff00af'},
             MatchParen   = {bg = '#af00af', fg = '#ffcf00', underline = false},
             WinSeparator = {bg = colors.fg_idle, fg = colors.fg_idle},
