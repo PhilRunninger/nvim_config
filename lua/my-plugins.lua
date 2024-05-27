@@ -117,7 +117,6 @@ require 'ayu'.setup({
             ColorColumn  = {bg = colors.gutter_normal},
             Visual       = {bg = colors.guide_active},
             NormalNC     = {bg = colors.selection_inactive},
-            Folded       = {fg = colors.fg},
             SpecialKey   = {fg = '#ff00af'},
             MatchParen   = {bg = '#af00af', fg = '#ffcf00', underline = false},
             WinSeparator = {bg = colors.fg_idle, fg = colors.fg_idle},
