@@ -147,7 +147,7 @@ function! s:GotoResultsBuffer(sqlQueryBuffer, server, database, tempFile) " {{{1
     let winnr = bufwinnr(bufferName)
     if winnr == -1
         execute 'silent split ' . bufferName
-        silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv virtualedit=all
+        silent setlocal buftype=nofile buflisted noswapfile nowrap ft=csv
         nnoremap <buffer> <C-F5> :call <SID>SQLRun('special',1)<CR>
         nnoremap <buffer> <F5> :call <SID>RunAndFormat()<CR>
         execute 'vnoremap <buffer> <F5> :EasyAlign */'.s:colSeparator.'/<CR>'
