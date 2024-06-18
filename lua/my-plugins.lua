@@ -33,6 +33,8 @@ cmd('packadd! vim-matchup') -- ############################# https://github.com/
 g.matchup_matchparen_offscreen = {method='popup'}
 
 cmd('packadd! vim-rest-console') -- ##################### https://github.com/Aadniz/vim-rest-console
+g.vrc_curl_timeout = '0'
+g.vrc_response_default_content_type='application/json'
 g.vrc_show_command = 1
 g.vrc_trigger = '<F5>'
 
