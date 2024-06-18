@@ -4,15 +4,15 @@ function SetStatusLineText()
     local useColor = vim.api.nvim_get_current_win() == vim.g.statusline_winid
     local divider = useColor and '' or ''  -- Other candidates:     ┃  
     return
-        (useColor and '%1*'        or  '') .. " %4l/%-4L %3v " ..
-        (useColor and '%#User12#'  or  '') .. divider ..
-        (useColor and '%2*'        or  '') .. "%(  %{get(b:,'gitsigns_head','')} %{get(b:,'gitsigns_status','')} %)" ..
-        (useColor and '%#User23#'  or  '') .. divider ..
-        (useColor and '%3*'        or  '') .. "%( 🖪 %{SessionNameStatusLineFlag()} %)" ..
-        (useColor and '%#User34#'  or  '') .. divider ..
-        (useColor and '%4*'        or  '') .. " %(%{&filetype} %)%(%{&fileformat=='dos' ? '' : ''} %)" ..
-        (useColor and '%#User45#'  or  '') .. divider ..
-        (useColor and '%5*'        or  '') .."%( %{&readonly?'⃠':''}%{&modified?'':''}%) %f"
+        (useColor and '%#User1#'  or '') .. " %4l/%-4L %3v " ..
+        (useColor and '%#User12#' or '') .. divider ..
+        (useColor and '%#User2#'  or '') .. "%(  %{get(b:,'gitsigns_head','')} %{get(b:,'gitsigns_status','')} %)" ..
+        (useColor and '%#User23#' or '') .. divider ..
+        (useColor and '%#User3#'  or '') .. "%( 🖪 %{SessionNameStatusLineFlag()} %)" ..
+        (useColor and '%#User34#' or '') .. divider ..
+        (useColor and '%#User4#'  or '') .. " %(%{&filetype} %)%(%{&fileformat=='dos' ? '' : ''} %)" ..
+        (useColor and '%#User45#' or '') .. divider ..
+        (useColor and '%#User5#'  or '') .."%( %{&readonly?'⃠':''}%{&modified?'':''}%) %f"
 end
 
 local HLSToRGB = function(h,l,s)
@@ -36,14 +36,14 @@ end
 local changeColors = function(insertMode)
     -- Background Hue: Terminal=purple, INSERT mode=blue, Modified=orange, Unmodified=green
     local h = vim.o.buftype == 'terminal' and 312 or (insertMode and 204 or (vim.o.modified and 30 or 108))
+    -- Lightness threshold to determine whether foreground is black or white.
+    local limit = 0.457781037 - 0.002553392*h + 7.13007e-5 *h^2 - 1.43305e-6*h^3 + 1.17384e-8 *h^4 - 3.8692e-11*h^5 + 4.3931e-14*h^6
 
     local bg = {}
     for i = 1,6,1 do
         local l = vim.o.background == 'light' and (0.925 - 0.075 * i) or (0.075 + 0.075 * i)
         bg[i] = HLSToRGB(h, l, 0.999)
-
-        local limit = 0.457781037 - 0.002553392*h + 7.13007e-5 *h^2 - 1.43305e-6*h^3 + 1.17384e-8 *h^4 - 3.8692e-11*h^5 + 4.3931e-14*h^6
-        local fg = HLSToRGB(0, l < limit and 1 or 0, 0.999)  -- white or black
+        local fg = HLSToRGB(0, l < limit and 1 or 0, 1)
 
         vim.cmd(string.format('highlight User%d gui=bold guifg=#%06x guibg=#%06x', i, fg, bg[i]))
     end
