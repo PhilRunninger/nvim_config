@@ -24,7 +24,6 @@ local options = {
     foldtext = 'printf("%s  %s %d ",getline(v:foldstart)->substitute("^.\\\\+\\\\zs\\\\s*".&commentstring->substitute("%s",".\\\\\\\\{-}$",""),"",""),repeat("▶",v:foldlevel),v:foldend-v:foldstart+1)',
     list = true,
     listchars = {tab='●·', extends='→', precedes='←', trail='■'},
-    laststatus = 3,
     undofile = true,
     splitbelow = true,
     splitright = true,
