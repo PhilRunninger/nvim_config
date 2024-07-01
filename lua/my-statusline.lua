@@ -1,5 +1,4 @@
 vim.opt.statusline = "%!luaeval('SetStatusLineText()')"
-vim.cmd('highlight! link StatusLine User5')
 
 function SetStatusLineText()
     local useColor = vim.api.nvim_get_current_win() == vim.g.statusline_winid
@@ -57,3 +56,4 @@ end
 local group = vim.api.nvim_create_augroup('mySLgroup', {clear = true})
 vim.api.nvim_create_autocmd('InsertEnter', {callback = function() changeColors(true) end, group = group})
 vim.api.nvim_create_autocmd({'VimEnter','ColorScheme','TermOpen','TermClose','InsertLeave','TextChanged','BufWritePost','BufEnter'}, {callback = function() changeColors() end, group = group})
+vim.api.nvim_create_autocmd('ColorScheme', {command = 'highlight! link StatusLine User5', group = group})
