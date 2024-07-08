@@ -73,9 +73,6 @@
 [submodule "pack/bundle/opt/vim-matchup"]
 	path = pack/bundle/opt/vim-matchup
 	url = git@github.com:andymass/vim-matchup.git
-[submodule "pack/bundle/opt/neovim-ayu"]
-	path = pack/bundle/opt/neovim-ayu
-	url = git@github.com:Shatur/neovim-ayu.git
 [submodule "pack/bundle/opt/markdown-preview.nvim"]
 	path = pack/bundle/opt/markdown-preview.nvim
 	url = git@github.com:iamcco/markdown-preview.nvim.git

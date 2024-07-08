@@ -102,35 +102,6 @@ require "gitsigns".setup {
 cmd('packadd! nvim-colorizer.lua') -- ################# https://github.com/NvChad/nvim-colorizer.lua
 require 'colorizer'.setup()
 
-cmd('packadd! neovim-ayu') -- ################################# https://github.com/Shatur/neovim-ayu
-require 'ayu'.setup({
-    terminal = false,
-    overrides = function()
-        local colors = require('ayu.colors')
-        return
-        { -- Override builtin colors, for better contrast.
-            SignColumn   = {bg = 'NONE'},
-            LineNrAbove  = {fg = colors.comment},
-            LineNr       = {fg = colors.accent},
-            LineNrBelow  = {fg = colors.comment},
-            CursorLineNr = {fg = colors.accent},
-            CursorLine   = {bg = colors.gutter_normal},
-            CursorColumn = {bg = colors.gutter_normal},
-            ColorColumn  = {bg = colors.gutter_normal},
-            Visual       = {bg = colors.guide_active},
-            Folded       = {fg = colors.fg, bold = true, italic = true},
-            SpecialKey   = {fg = '#ff00af'},
-            MatchParen   = {bg = '#af00af', fg = '#ffcf00', underline = false},
-            WinSeparator = {bg = colors.fg_idle, fg = colors.fg_idle},
-            StatusLineNC = {bg = colors.fg_idle},
-            TabLine      = {bg = colors.fg_idle},
-            TabLineFill  = {bg = colors.fg_idle},
-            TabLineSel   = {bg = colors.accent, fg = colors.bg, bold = true},
-        }
-    end
-})
-require 'ayu'.colorscheme()
-
 cmd('packadd! vim-sessions') -- ###################### https://github.com/PhilRunninger/vim-sessions
 g.SessionsSetup = {normalBuffersOnly = 1}
 

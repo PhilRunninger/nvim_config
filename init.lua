@@ -8,3 +8,5 @@ require "my-plugins"
 require "my-autocmd"
 require "my-statusline"
 require "my-tabline"
+
+vim.cmd('colorscheme starkbox')
