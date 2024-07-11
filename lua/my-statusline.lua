@@ -1,5 +1,12 @@
 vim.opt.statusline = "%!luaeval('SetStatusLineText()')"
 
+local colors = {
+    count = 5,
+    h = { modified = 30, unmodified = 108 , insert = 204, terminal = 312 }, -- 30=DarkOrange 108=green2 204=DeepSkyBlue 312=magenta3
+    l = { light = { m = -0.075, b = 0.925 }, dark = { m = 0.075, b = 0.075 } },
+    s = 0.999
+}
+
 function SetStatusLineText()
     local useColor = vim.api.nvim_get_current_win() == vim.g.statusline_winid
     local divider = useColor and '' or ''  -- Other candidates:     ┃  
@@ -33,23 +40,27 @@ local HLSToRGB = function(h,l,s)
     return 256*(256*r+g)+b
 end
 
-local changeColors = function(insertMode)
-    -- Background Hue: Terminal=purple, INSERT mode=blue, Modified=orange, Unmodified=green
-    local h = vim.o.buftype == 'terminal' and 312 or (insertMode and 204 or (vim.o.modified and 30 or 108))
-    -- Lightness threshold to determine whether foreground is black or white.
+local foregroundColor = function(h,l)
     local limit = 0.457781037 - 0.002553392*h + 7.13007e-5 *h^2 - 1.43305e-6*h^3 + 1.17384e-8 *h^4 - 3.8692e-11*h^5 + 4.3931e-14*h^6
+    return l < limit and 0xffffff or 0x000000
+end
 
-    local bg = {}
-    for i = 1,5,1 do
-        local l = vim.o.background == 'light' and (0.925 - 0.075 * i) or (0.075 + 0.075 * i)
-        bg[i] = HLSToRGB(h, l, 0.999)
-        local fg = HLSToRGB(0, l < limit and 1 or 0, 1)
-
-        vim.cmd(string.format('highlight User%d gui=bold guifg=#%06x guibg=#%06x', i, fg, bg[i]))
+local changeColors = function(insertMode)
+    local mode = vim.o.buftype == 'terminal' and 'terminal' or (insertMode and 'insert' or (vim.o.modified and 'modified' or 'unmodified'))
+    for i = 1,colors.count,1 do
+        vim.cmd(string.format('highlight User%d gui=bold guifg=#%06x guibg=#%06x', i, colors[mode][vim.o.background].fg[i], colors[mode][vim.o.background].bg[i]))
+        vim.cmd(string.format('highlight User%d%d guifg=#%06x guibg=#%06x', i, i+1, colors[mode][vim.o.background].bg[i], colors[mode][vim.o.background].bg[i+1]))
     end
+end
 
-    for i = 1,4,1 do
-        vim.cmd(string.format('highlight User%d%d guifg=#%06x guibg=#%06x', i, i+1, bg[i], bg[i+1]))
+for mode,h in pairs(colors.h) do
+    colors[mode] = {}
+    for background,l in pairs(colors.l) do
+        colors[mode][background] = {bg={}, fg={}}
+        for i = 1,colors.count+1,1 do
+            colors[mode][background].bg[i] = HLSToRGB(h,        l.b + l.m * i, colors.s)
+            colors[mode][background].fg[i] = foregroundColor(h, l.b + l.m * i)
+        end
     end
 end
 
