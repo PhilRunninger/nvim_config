@@ -1,18 +1,18 @@
 let s:words = []
 
-function! s:ToggleWord(word, full)
-    let fullWord = '\<'.a:word.'\>'
-    let i = index(s:words, a:word)
-    let j = index(s:words, fullWord)
+function! s:ToggleWord(fragment, full)
+    let fullWord = '\<'.a:fragment.'\>'
+    let existingFragment = index(s:words, a:fragment)
+    let existingWord = index(s:words, fullWord)
 
-    if i >= 0
-        call remove(s:words, i)
-    elseif j >= 0
-        call remove(s:words, j)
+    if existingFragment >= 0
+        call remove(s:words, existingFragment)
+    elseif existingWord >= 0
+        call remove(s:words, existingWord)
     endif
 
-    if (i>=0 && a:full) || (j>=0 && !a:full) || (i<0 && j<0)
-        call add(s:words, a:full ? fullWord : a:word)
+    if (existingFragment>=0 && a:full) || (existingWord>=0 && !a:full) || (existingFragment<0 && existingWord<0)
+        call add(s:words, a:full ? fullWord : a:fragment)
     endif
     call s:CreateSearchString()
 endfunction
@@ -23,6 +23,7 @@ function! s:ClearAllWords()
 endfunction
 
 function! s:CreateSearchString()
+    echo 'Search ['.len(s:words).' pattern'.(len(s:words)==1?'':'s').']: '. join(s:words, ', ')
     let @/ = empty(s:words) ? '' : '\(' . join(s:words,'\|') . '\)'
 endfunction
 
