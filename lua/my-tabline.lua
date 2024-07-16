@@ -1,7 +1,7 @@
 vim.opt.tabline = "%!luaeval('SetTabLine()')"
 
 function SetTabLine()
-    local tabline = '%#Tabline#'
+    local tabline = '%#TablineFill#'
 
     for tab = 1,vim.fn.tabpagenr('$'),1 do
         local window = vim.fn.tabpagewinnr(tab)
@@ -10,11 +10,13 @@ function SetTabLine()
         local bufname = vim.fn.fnamemodify(vim.fn.bufname(bufnr),':t')
 
         bufname = buftype == '' and (bufname == '' and 'New…' or bufname) or buftype
-        bufname = ' ' .. bufname .. (vim.bo[bufnr].modified and '🔴 ' or ' ')
+        bufname = bufname .. (vim.bo[bufnr].modified and '🔴' or '')
 
-        tabline = tabline .. '%' .. tab .. 'T'
-        if tab == vim.fn.tabpagenr() then bufname = '%#TabLineSel#' .. bufname .. '%#TabLine#' end
-        tabline = tabline .. ' ' .. bufname
+        tabline = tabline
+            .. ' %' .. tab .. 'T'
+            .. (tab == vim.fn.tabpagenr() and '%#TabLineSel#' or '%#TabLine#')
+            .. ' ' .. bufname .. ' '
+            .. '%#TabLineFill#'
     end
-    return tabline .. '%#TabLineFill#'
+    return tabline
 end

@@ -53,7 +53,7 @@ if &background ==# 'dark'
   hi SpecialKey     guifg=#ff00af guibg=NONE    gui=NONE
   hi StatusLine     guifg=fg      guibg=#504945
   hi StatusLineNC   guifg=#a89984 guibg=#3c3836
-  hi TabLine        guifg=#a89984 guibg=#3c3836 gui=NONE
+  hi TabLine        guifg=#a89984 guibg=#504945 gui=NONE
   hi TabLineFill    guifg=fg      guibg=#3c3836 gui=NONE
   hi TabLineSel     guifg=#fbf1c7 guibg=bg      gui=bold
   hi ToolbarButton  guifg=#fbf1c7 guibg=#303030 gui=bold
@@ -147,7 +147,7 @@ else
   hi SpecialKey     guifg=#ff00af guibg=NONE    gui=NONE
   hi StatusLine     guifg=fg      guibg=#bdae93
   hi StatusLineNC   guifg=fg      guibg=#ebdbb2
-  hi TabLine        guifg=#665c54 guibg=#ebdbb2 gui=NONE
+  hi TabLine        guifg=#665c54 guibg=#bdae93 gui=NONE
   hi TabLineFill    guifg=#ebdbb2 guibg=#ebdbb2 gui=NONE
   hi TabLineSel     guifg=#282828 guibg=bg      gui=bold
   hi ToolbarButton  guifg=#282828 guibg=#bdae93 gui=bold
