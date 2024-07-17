@@ -2,9 +2,9 @@ vim.opt.statusline = "%!luaeval('SetStatusLineText()')"
 
 local colors = {
     count = 5,
-    h = { modified = 30, unmodified = 108 , insert = 204, terminal = 312 }, -- 30=DarkOrange 108=green2 204=DeepSkyBlue 312=magenta3
-    l = { light = { m = -0.075, b = 0.925 }, dark = { m = 0.075, b = 0.075 } },
-    s = 0.999
+    hues = { modified = 30, unmodified = 108 , insert = 204, terminal = 312 }, -- 30=DarkOrange 108=green2 204=DeepSkyBlue 312=magenta3
+    luminances = { light = { m = -0.075, b = 0.925 }, dark = { m = 0.075, b = 0.075 } },
+    saturation = 0.999
 }
 
 function SetStatusLineText()
@@ -37,28 +37,28 @@ local HLSToRGB = function(h,l,s)
     else                r,g,b = c, 0, x
     end
     r,g,b = math.floor((r+m)*255), math.floor((g+m)*255), math.floor((b+m)*255)
-    return 256*(256*r+g)+b
+    return string.format('#%06x', 256*(256*r+g)+b)
 end
 
 local foregroundColor = function(h,l)
     local limit = 0.457781037 - 0.002553392*h + 7.13007e-5 *h^2 - 1.43305e-6*h^3 + 1.17384e-8 *h^4 - 3.8692e-11*h^5 + 4.3931e-14*h^6
-    return l < limit and 0xffffff or 0x000000
+    return l < limit and 'white' or 'black'
 end
 
 local changeColors = function(insertMode)
     local mode = vim.o.buftype == 'terminal' and 'terminal' or (insertMode and 'insert' or (vim.o.modified and 'modified' or 'unmodified'))
     for i = 1,colors.count,1 do
-        vim.cmd(string.format('highlight User%d gui=bold guifg=#%06x guibg=#%06x', i, colors[mode][vim.o.background].fg[i], colors[mode][vim.o.background].bg[i]))
-        vim.cmd(string.format('highlight User%d%d guifg=#%06x guibg=#%06x', i, i+1, colors[mode][vim.o.background].bg[i], colors[mode][vim.o.background].bg[i+1]))
+        vim.api.nvim_set_hl(0, 'User'..i, {fg=colors[mode][vim.o.background].fg[i], bg=colors[mode][vim.o.background].bg[i], bold=true})
+        vim.api.nvim_set_hl(0, ('User'..i)..(i+1), {fg=colors[mode][vim.o.background].bg[i], bg=colors[mode][vim.o.background].bg[i+1]})
     end
 end
 
-for mode,h in pairs(colors.h) do
+for mode,h in pairs(colors.hues) do
     colors[mode] = {}
-    for background,l in pairs(colors.l) do
+    for background,l in pairs(colors.luminances) do
         colors[mode][background] = {bg={}, fg={}}
         for i = 1,colors.count+1,1 do
-            colors[mode][background].bg[i] = HLSToRGB(h,        l.b + l.m * i, colors.s)
+            colors[mode][background].bg[i] = HLSToRGB(h,        l.b + l.m * i, colors.saturation)
             colors[mode][background].fg[i] = foregroundColor(h, l.b + l.m * i)
         end
     end
