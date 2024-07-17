@@ -26,6 +26,7 @@ if &background ==# 'dark'
     \ '#928374', '#fb4934', '#b8bb26', '#fabd2f', '#83a598', '#d3869b', '#8ec07c', '#ebdbb2'
   \ ]
   hi Normal         guifg=#ebdbb2 guibg=#000000 gui=NONE
+  hi NormalFloat    guifg=#ebdbb2 guibg=#1c1c1c gui=NONE
   hi CursorLineNr   guifg=#fabd2f guibg=bg      gui=bold
   hi FoldColumn     guifg=#928374 guibg=bg      gui=NONE
   hi SignColumn     guifg=#928374 guibg=bg      gui=NONE
@@ -120,6 +121,7 @@ else
     \ '#928374', '#9d0006', '#79740e', '#b57614', '#076678', '#8f3f71', '#427b58', '#ffffff'
   \ ]
   hi Normal         guifg=#3c3836 guibg=#ffffff gui=NONE
+  hi NormalFloat    guifg=#3c3836 guibg=#fbf1c7 gui=NONE
   hi CursorLineNr   guifg=#b57614 guibg=bg      gui=bold
   hi FoldColumn     guifg=#928374 guibg=bg      gui=NONE
   hi SignColumn     guifg=fg      guibg=bg      gui=NONE
