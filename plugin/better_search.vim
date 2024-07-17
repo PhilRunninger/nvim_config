@@ -1,6 +1,7 @@
 let s:words = []
 
 function! s:ToggleWord(fragment, full)
+    let countBefore = len(s:words)
     let fullWord = '\<'.a:fragment.'\>'
     let existingFragment = index(s:words, a:fragment)
     let existingWord = index(s:words, fullWord)
@@ -14,7 +15,12 @@ function! s:ToggleWord(fragment, full)
     if (existingFragment>=0 && a:full) || (existingWord>=0 && !a:full) || (existingFragment<0 && existingWord<0)
         call add(s:words, a:full ? fullWord : a:fragment)
     endif
+
     call s:CreateSearchString()
+
+    if len(s:words) > countBefore
+        call feedkeys('nN', 'n')
+    endif
 endfunction
 
 function! s:ClearAllWords()
