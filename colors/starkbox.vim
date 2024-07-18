@@ -1,8 +1,11 @@
 " Name:         Stark GruvBox
-" Description:  A variation of morhetz's <morhetz@gmail.com> gruvbox, ported from retrobox (https://www.github.com/vim/colorschemes), but with a stark black or white &background.
+" Description:  A variation of morhetz's gruvbox, but with a stark black or white &background.
+" Lineage:      [gruvbox](https://github.com/morhetz/gruvbox)
+"                 ↳ [retrobox](https://github.com/vim/colorschemes)
+"                     ↳ [starkbox](this file)
 " Author:       Phil Runninger <philrunninger@gmail.com>
 " Maintainer:   Phil Runninger <philrunninger@gmail.com>
-" Last Updated: 07/08/2024 09:35
+" Last Updated: 2024-07-18 08:07:19
 
 hi clear
 let g:colors_name = 'starkbox'
