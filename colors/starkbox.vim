@@ -115,6 +115,8 @@ if &background ==# 'dark'
   hi Type           guifg=#fabd2f guibg=NONE    gui=NONE
   hi Typedef        guifg=#fabd2f guibg=NONE    gui=NONE
   hi Underlined     guifg=#83a598 guibg=NONE    gui=underline
+  hi Added          guifg=#98971a guibg=bg      gui=bold,italic
+  hi Removed        guifg=#cc241d guibg=bg      gui=bold,italic
   hi Cursor         guifg=#fbf1c7 guibg=bg      gui=reverse
 
 else
@@ -210,6 +212,8 @@ else
   hi Type           guifg=#b57614 guibg=NONE    gui=NONE
   hi Typedef        guifg=#b57614 guibg=NONE    gui=NONE
   hi Underlined     guifg=#076678 guibg=NONE    gui=underline
+  hi Added          guifg=#98971a guibg=bg      gui=bold,italic
+  hi Removed        guifg=#cc241d guibg=bg      gui=bold,italic
   hi Cursor         guifg=#282828 guibg=bg      gui=reverse
 endif
 
