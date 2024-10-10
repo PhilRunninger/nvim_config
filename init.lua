@@ -12,5 +12,3 @@ require "my-tabline"
 vim.cmd('colorscheme starkbox')
 -- Lower the priority of semantic tokens to stop the mangled highlighting.
 vim.highlight.priorities.semantic_tokens = 75
-
-vim.cmd('packadd sql')

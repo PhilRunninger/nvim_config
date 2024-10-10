@@ -105,6 +105,8 @@ require 'colorizer'.setup()
 cmd('packadd! vim-sessions') -- ###################### https://github.com/PhilRunninger/vim-sessions
 g.SessionsSetup = {normalBuffersOnly = 1}
 
+cmd('packadd! sql.nvim') -- ######################################
+
 -- ###################################################################################### ALL OTHERS
 cmd('packadd! markdown-preview.nvim') --             https://github.com/iamcco/markdown-preview.nvim
 cmd('packadd! Recover.vim') --                               https://github.com:chrisbra/Recover.vim
