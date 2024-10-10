@@ -19,7 +19,6 @@ local options = {
     showmode = false,
     showmatch = true,
     number = true,
-    relativenumber = true,
     fillchars = {stl=' ', stlnc=' ', eob=' ', fold='⋯'},
     foldtext = 'printf("%s  %s %d ",getline(v:foldstart)->substitute("^.\\\\+\\\\zs\\\\s*".&commentstring->substitute("%s",".\\\\\\\\{-}$",""),"",""),repeat("▶",v:foldlevel),v:foldend-v:foldstart+1)',
     list = true,

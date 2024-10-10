@@ -12,16 +12,8 @@ vim.api.nvim_create_autocmd('BufEnter', {command = 'if &buftype=="terminal"|star
 -- Close Terminal window automatically if it didn't throw an error.
 vim.api.nvim_create_autocmd('TermClose', {command = 'if !v:event.status && expand("<afile>") !~# "vifm: " | execute "bdelete! ".expand("<abuf>") | endif', group = group})
 
--- Keep cursor in original position when switching buffers
-if not vim.o.diff then
-    vim.api.nvim_create_autocmd('BufLeave', {command = 'let b:winview = winsaveview()', group = group})
-    vim.api.nvim_create_autocmd('BufEnter', {command = 'if exists("b:winview") | call winrestview(b:winview) | endif', group = group})
-end
-
 -- Make 'autoread' work more responsively
-vim.api.nvim_create_autocmd('BufEnter',    {command = 'silent! checktime', group = group})
-vim.api.nvim_create_autocmd('CursorHold',  {command = 'silent! checktime', group = group})
-vim.api.nvim_create_autocmd('CursorMoved', {command = 'silent! checktime', group = group})
+vim.api.nvim_create_autocmd({'BufEnter','CursorHold','CursorMoved'}, {command = 'silent! checktime', group = group})
 
 -- Restart with cursor in the location from last session.
 vim.api.nvim_create_autocmd('BufReadPost', {command = 'if &filetype != "gitcommit" && line("\'\\\"") > 1 && line("\'\\\"") <= line("$") | execute "normal! g`\\\"" | endif', group = group})
