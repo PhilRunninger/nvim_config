@@ -1,20 +1,26 @@
 command! -nargs=* Langton :call <SID>Langton(<f-args>)
 
 function! s:Random(...)
-    let num = map(range(3), {_ -> fmod(reltimefloat(reltime()),1) * 1.0e6})
-    let num = fmod(num[0]*num[1]*num[2], 2038074743) / 2038074743.0
-    return a:0 ? float2nr(num*a:1) : num
+    if a:0 && (type(a:1) != v:t_number || a:1 < 1)
+        throw 'Error in call Random(' . a:1 . ') - optional argument must be a positive integer.'
+    endif
+
+    if a:0
+        return luaeval('math.random(' . a:1 . ') - 1')
+    else
+        return luaeval('math.random()')
+    endif
 endfunction
 
 function! s:Langton(count = 1, explosionRadius=10)
     tabnew
     setlocal buftype=nofile bufhidden=wipe
-    setlocal nonumber signcolumn=no nolist nocursorline nocursorcolumn
+    setlocal nonumber norelativenumber signcolumn=no nolist nocursorline nocursorcolumn
     let b:height = 2 * getwininfo(win_getid())[0]['height']
     let b:width = getwininfo(win_getid())[0]['width']
     while get(b:, 'interrupt', 0) != 27
         let b:interrupt = getchar(0)
-        execute "setlocal statusline=Langton's\\ Ant\\ \\ ".a:count
+        execute "setlocal statusline=Langton's\\ Ant\\ \\ ".a:count."\\ \\ [Space:\\ restart\\ \\ Esc:\\ quit]"
         normal! ggdG
         call append(0, map(range(b:height/2), {_ -> repeat(' ', b:width)}))
         normal! gg
@@ -38,7 +44,7 @@ function! s:Langton(count = 1, explosionRadius=10)
                         endfor
                     endfor
                     call remove(b:pos, i)
-                    execute "setlocal statusline=Langton's\\ Ant\\ \\ ".len(b:pos)."/".a:count
+                    execute "setlocal statusline=Langton's\\ Ant\\ \\ ".len(b:pos)."/".a:count."\\ \\ [Space:\\ restart\\ \\ Esc:\\ quit]"
                 endif
             endfor
             redraw!

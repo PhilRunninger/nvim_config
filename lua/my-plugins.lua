@@ -25,7 +25,7 @@ map('n', '<F3>', '"zyiw/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redr
 map('v', '<F3>', '"zy/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>', noremapSilent)
 map('n', '<leader>G', ':Git<CR>', noremapSilent)
 
--- This plugin (tpope's) ships with Neovim. ############################################### MARKDOWN
+-- This plugin ships with Neovim. ############################ https://github.com/tpope/vim-markdown
 g.markdown_folding = 1
 g.markdown_fenced_languages = {'vim','sql','cs','ps1','lua','json'}
 
@@ -103,7 +103,7 @@ cmd('packadd! nvim-colorizer.lua') -- ################# https://github.com/NvCha
 require 'colorizer'.setup()
 
 cmd('packadd! vim-sessions') -- ###################### https://github.com/PhilRunninger/vim-sessions
-g.SessionsSetup = {normalBuffersOnly = 1}
+g.SessionsSetup = {normalBuffersOnly = 1, confirmQuit = 0}
 
 cmd('packadd! sql.nvim') -- ######################################
 

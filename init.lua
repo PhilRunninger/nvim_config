@@ -9,6 +9,6 @@ require "my-autocmd"
 require "my-statusline"
 require "my-tabline"
 
-vim.cmd('colorscheme starkbox')
+vim.cmd('colorscheme strongbox')
 -- Lower the priority of semantic tokens to stop the mangled highlighting.
 vim.highlight.priorities.semantic_tokens = 75
