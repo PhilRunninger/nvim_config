@@ -6,7 +6,7 @@
 "                     ↳ [strongbox](this file)
 " Author:       Phil Runninger <philrunninger@gmail.com>
 " Maintainer:   Phil Runninger <philrunninger@gmail.com>
-" Last Updated: 2024-10-17 23:09
+" Last Updated: 2024-10-23 18:08
 
 hi clear
 let g:colors_name = 'strongbox'
@@ -17,14 +17,14 @@ let g:colors_name = 'strongbox'
 let isDark = &background ==# 'dark'
 
 let s:bg0    = isDark ? '#000000': '#ffffff'
-let s:bg1    = isDark ? '#131312': '#e4dcc9'
-let s:bg2    = isDark ? '#262424': '#c8baa0'
-let s:bg3    = isDark ? '#3c3936': '#a69881'
-let s:bg4    = isDark ? '#5a534c': '#7f7466'
-let s:fg4    = isDark ? '#7f7466': '#5a534c'
-let s:fg3    = isDark ? '#a69881': '#3c3936'
-let s:fg2    = isDark ? '#c8baa0': '#262424'
-let s:fg1    = isDark ? '#e4dcc9': '#131312'
+let s:bg1    = isDark ? '#2f2b29': '#eadfc6'
+let s:bg2    = isDark ? '#514a45': '#d4c4a2'
+let s:bg3    = isDark ? '#665c54': '#beae93'
+let s:bg4    = isDark ? '#837769': '#a0927e'
+let s:fg4    = isDark ? '#a0927e': '#837769'
+let s:fg3    = isDark ? '#beae93': '#665c54'
+let s:fg2    = isDark ? '#d4c4a2': '#514a45'
+let s:fg1    = isDark ? '#eadfc6': '#2f2b29'
 let s:fg0    = isDark ? '#ffffff': '#000000'
 let s:grey   = isDark ? '#928374': '#928374'
 let s:red    = isDark ? '#fb4934': '#9d0006'
