@@ -59,7 +59,7 @@ call s:HiLite(#{
     \ DiffDelete:     #{fg: s:red,     bg: s:bg2,    bold: 1, italic: 1},
     \ DiffText:       #{fg: s:yellow,  bg: s:bg2,    bold: 1, italic: 1},
     \ EndOfBuffer:    #{},
-    \ TermCursor:     #{},
+    \ TermCursor:                                  #{link: 'Cursor'},
     \ TermCursorNC:   #{},
     \ ErrorMsg:                                    #{link: 'Error'},
     \ WinSeparator:   #{fg: s:bg2,     bg: s:bg2},
