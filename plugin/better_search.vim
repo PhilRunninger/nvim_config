@@ -37,6 +37,7 @@ nnoremap <silent> *  :call <SID>ToggleWord(expand("<cword>"),1)<CR>
 nnoremap <silent> g* :call <SID>ToggleWord(expand("<cword>"),0)<CR>
 vnoremap <silent> * "xy:call <SID>ToggleWord(@x,0)<CR>
 nnoremap <silent> <leader>* :call <SID>ClearAllWords()<CR>
+nnoremap <silent> <ESC> :nohlsearch<CR>
 
 " This function is user2679290's code from https://stackoverflow.com/a/53291200/510067
 function! s:Matches(pat)
