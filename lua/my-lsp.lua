@@ -77,7 +77,7 @@ lspconfig.omnisharp.setup({
 
 lspconfig.powershell_es.setup({
     on_attach = map_keys,
-    bundle_path = 'c:/ProgramData/PowerShell/EditorServices'
+    bundle_path = 'c:/ProgramData/PowerShellEditorServices'
 })
 
 lspconfig.pyright.setup({
