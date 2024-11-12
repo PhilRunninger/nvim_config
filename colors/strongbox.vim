@@ -74,7 +74,7 @@ call s:HiLite(#{
     \ CursorLineNr:   #{fg: s:fg1,                   bold: 1},
     \ CursorLineFold: #{},
     \ CursorLineSign: #{},
-    \ MatchParen:     #{fg: s:bg0,     bg: s:yellow, bold: 1},
+    \ MatchParen:     #{fg: s:purple,                bold: 1, italic: 1},
     \ ModeMsg:        #{fg: s:yellow,                bold: 1},
     \ MsgArea:        #{},
     \ MsgSeparator:   #{},
