@@ -97,3 +97,6 @@
 [submodule "pack/bundle/opt/vim-rest-console"]
 	path = pack/bundle/opt/vim-rest-console
 	url = git@github.com:Aadniz/vim-rest-console.git
+[submodule "pack/bundle/opt/sql.nvim"]
+	path = pack/bundle/opt/sql.nvim
+	url = git@github.com:PhilRunninger/sql.nvim.git
