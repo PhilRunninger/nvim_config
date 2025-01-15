@@ -68,6 +68,9 @@ map('n', 'l', 'foldclosed(".")!=-1 ? "zo" : "l"', {expr = true})
 map('i', '<F2>', '★<Esc>[s1z=/★<CR>s', noremapSilent)
 map('n', '<F2>', 'i★<Esc>[s1z=/★<CR>x', noremapSilent)
 
+-- Remove trailing spaces.
+map('n', '<leader>d<space>', ':let [v,c,l]=[winsaveview(),&cuc,&cul]|set cuc cul|keeppatterns %s/\\s\\+$//ce|let [&cuc,&cul]=[c,l]|call winrestview(v)|unlet v l c<CR>', noremapSilent)
+
 -- Miscellaneous
 map('n', '#', ':buffer #<CR>', noremapSilent) -- Make # switch to the alternate buffer
 map('n', '<leader>cd', ':cd %:p:h|pwd<CR>', noremapSilent) -- Change cwd to current buffer's directory
