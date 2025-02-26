@@ -106,6 +106,7 @@ cmd('packadd! vim-sessions') -- ###################### https://github.com/PhilRu
 g.SessionsSetup = {askOnStartup = 0, normalBuffersOnly = 1, confirmQuit = 0}
 
 cmd('packadd! sql.nvim') -- ############################## https://github.com/PhilRunninger/sql.nvim
+map('n', '<F8>', ':SQL<CR>', noremapSilent)
 
 -- ###################################################################################### ALL OTHERS
 cmd('packadd! markdown-preview.nvim') --             https://github.com/iamcco/markdown-preview.nvim
