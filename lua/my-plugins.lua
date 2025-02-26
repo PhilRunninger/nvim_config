@@ -115,6 +115,7 @@ cmd('packadd! vim-repeat') --                                    https://github.
 cmd('packadd! vim-signature') --                            https://github.com/kshenoy/vim-signature
 cmd('packadd! vim-surround') --                                https://github.com/tpope/vim-surround
 cmd('packadd! vim-unimpaired') --                            https://github.com/tpope/vim-unimpaired
+cmd('packadd! mru') --                                               https://github.com/yegappan/mru
 
 -- Must come AFTER the :packadd! calls above; otherwise, the contents of
 -- package 'ftdetect' directories won't be evaluated.

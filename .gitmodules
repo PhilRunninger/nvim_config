@@ -100,3 +100,6 @@
 [submodule "pack/bundle/opt/sql.nvim"]
 	path = pack/bundle/opt/sql.nvim
 	url = git@github.com:PhilRunninger/sql.nvim.git
+[submodule "pack/bundle/opt/mru"]
+	path = pack/bundle/opt/mru
+	url = git@github.com:yegappan/mru.git
