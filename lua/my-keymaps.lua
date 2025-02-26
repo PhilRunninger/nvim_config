@@ -33,10 +33,6 @@ map('t', '<C-h>', '<C-\\><C-n>:lua WinTabSwitch("h")<CR>', noremapSilent)
 map('t', '<C-j>', '<C-\\><C-n>:lua WinTabSwitch("j")<CR>', noremapSilent)
 map('t', '<C-k>', '<C-\\><C-n>:lua WinTabSwitch("k")<CR>', noremapSilent)
 map('t', '<C-l>', '<C-\\><C-n>:lua WinTabSwitch("l")<CR>', noremapSilent)
-map('t', '<Esc><Esc>', '<C-\\><C-n>', noremapSilent)
-
--- Open a terminal in a split window
-map('n', '<leader>t', ':split|terminal'..((jit.os == 'Windows' and vim.o.shell ~= 'bash') and ' pwsh' or '')..'<CR>', noremapSilent)
 
  -- Open a URL in the browser
 if jit.os == 'Windows' then
