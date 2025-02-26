@@ -103,7 +103,7 @@ cmd('packadd! nvim-colorizer.lua') -- ################# https://github.com/NvCha
 require 'colorizer'.setup()
 
 cmd('packadd! vim-sessions') -- ###################### https://github.com/PhilRunninger/vim-sessions
-g.SessionsSetup = {normalBuffersOnly = 1, confirmQuit = 0}
+g.SessionsSetup = {askOnStartup = 0, normalBuffersOnly = 1, confirmQuit = 0}
 
 cmd('packadd! sql.nvim') -- ############################## https://github.com/PhilRunninger/sql.nvim
 
