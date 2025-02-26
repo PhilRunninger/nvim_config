@@ -1,28 +1,5 @@
 local group = vim.api.nvim_create_augroup('myAuGroup', {clear = true})
 
--- Capitalize all SQL keywords when saving
-local sqlKeywords =
-    {
-        'create','alter','table','view','procedure','function',
-        'select','insert','update','case','when','then','else','end','min','max','avg','count','substring','len','ltrim','rtrim','as',
-        'into',
-        'from','inner','left','right','outer','join','on',
-        'where','and','or','not','is','null',
-        'group','order','by','having',
-        'declare','begin','while','if','set'
-    }
-vim.api.nvim_create_autocmd('BufWritePre', {
-    pattern  = '*.sql',
-    command =
-        'let [v,c,l]=[winsaveview(),&cursorcolumn,&cursorline]|' ..
-        'set cursorcolumn cursorline|' ..
-        'keeppatterns %s/\\C\\<\\('.. vim.fn.join(sqlKeywords, '\\|') .. '\\)\\>/\\U&/gce|' ..
-        'let [&cursorcolumn,&cursorline]=[c,l]|' ..
-        'call winrestview(v)|' ..
-        'unlet v l c',
-    group = group
-})
-
 -- Remove, display/hide trailing whitespace
 vim.api.nvim_create_autocmd('BufWritePre', {command = 'let [v,c,l]=[winsaveview(),&cuc,&cul]|set cuc cul|keeppatterns %s/\\s\\+$//ce|let [&cuc,&cul]=[c,l]|call winrestview(v)|unlet v l c', group = group})
 vim.api.nvim_create_autocmd('InsertEnter', {command = 'set listchars-=trail:■', group = group})
