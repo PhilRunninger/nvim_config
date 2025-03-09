@@ -56,5 +56,5 @@ vim.api.nvim_create_user_command("Floaterminal", toggle_terminal, {})
 
 local map = vim.api.nvim_set_keymap
 local noremapSilent = {noremap=true, silent=true}
-map('n', '<leader>t', ':Floaterminal<CR>', noremapSilent)
-map('t', '<Esc><Esc>', '<C-\\><C-n>', noremapSilent)
+map('n', '<F9>', ':Floaterminal<CR>', noremapSilent)
+map('t', '<F9>', '<C-\\><C-n>', noremapSilent)
