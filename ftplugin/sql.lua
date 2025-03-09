@@ -5,6 +5,9 @@
 vim.bo.formatprg =
     vim.fn.stdpath('data') ..
     '\\mason\\packages\\sql-formatter\\node_modules\\.bin\\sql-formatter.cmd' ..
-    ' --config ' .. vim.fn.stdpath('config') .. '\\ftplugin\\sql-formatter.json'
+    ' --config ' .. vim.fn.stdpath('config') .. '\\ftplugin\\sql-formatter-sqlserver.json'
 
-vim.bo.equalprg = vim.bo.formatprg
+vim.bo.equalprg =
+    vim.fn.stdpath('data') ..
+    '\\mason\\packages\\sql-formatter\\node_modules\\.bin\\sql-formatter.cmd' ..
+    ' --config ' .. vim.fn.stdpath('config') .. '\\ftplugin\\sql-formatter-postgres.json'
