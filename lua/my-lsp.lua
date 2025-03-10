@@ -91,6 +91,6 @@ lspconfig.pyright.setup({
     },
 })
 
-lspconfig.tsserver.setup({ on_attach = map_keys })
+lspconfig.ts_ls.setup({ on_attach = map_keys })
 
 lspconfig.vimls.setup({ on_attach = map_keys })
