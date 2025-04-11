@@ -5,6 +5,6 @@
     "keywordCase": "upper",
     "dataTypeCase": "lower",
     "functionCase": "upper",
-    "logicalOperatorNewline": "after",
+    "logicalOperatorNewline": "before",
     "expressionWidth": 120
 }
