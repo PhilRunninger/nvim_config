@@ -5,6 +5,21 @@ local bufmap = vim.api.nvim_buf_set_keymap
 local noremapSilent = {noremap=true, silent=true}
 local noremap = {noremap=true}
 
+-- Disable built-in stuff I don't use.
+g.loaded_perl_provider = 0
+g.loaded_ruby_provider = 0
+g.loaded_node_provider = 0
+g.loaded_python_provider = 0
+g.loaded_python3_provider = 0
+
+g.loaded = 1
+g.loaded_netrw = 1
+g.loaded_netrwPlugin = 1
+g.loaded_2html_plugin = 1
+g.loaded_tutor_mode_plugin = 1
+g.loaded_matchit = 1
+g.loaded_matchparen = 1
+
 cmd('packadd! plenary.nvim') -- ########################### https://github.com/nvim-lua/plenary.nvim
 
 cmd('packadd! bufselect') -- ############################ https://github.com/PhilRunninger/bufselect
@@ -108,6 +123,13 @@ g.SessionsSetup = {askOnStartup = 0, normalBuffersOnly = 1, confirmQuit = 0}
 cmd('packadd! sql.nvim') -- ############################## https://github.com/PhilRunninger/sql.nvim
 map('n', '<F8>', ':SQL<CR>', noremapSilent)
 
+cmd('packadd! vimwiki') -- ###################################### https://github.com/vimwiki/vimwiki
+g.vimwiki_list = {{path = '~/Documents/vimwiki/', syntax = 'markdown', ext = 'md'}}
+g.vimwiki_global_ext = 0
+
+cmd('packadd! mru') -- ############################################# https://github.com/yegappan/mru
+g.MRU_File = vim.fn.stdpath('data') .. '\\_vim_mru_files'
+
 -- ###################################################################################### ALL OTHERS
 cmd('packadd! markdown-preview.nvim') --             https://github.com/iamcco/markdown-preview.nvim
 cmd('packadd! Recover.vim') --                               https://github.com:chrisbra/Recover.vim
@@ -116,7 +138,6 @@ cmd('packadd! vim-repeat') --                                    https://github.
 cmd('packadd! vim-signature') --                            https://github.com/kshenoy/vim-signature
 cmd('packadd! vim-surround') --                                https://github.com/tpope/vim-surround
 cmd('packadd! vim-unimpaired') --                            https://github.com/tpope/vim-unimpaired
-cmd('packadd! mru') --                                               https://github.com/yegappan/mru
 
 -- Must come AFTER the :packadd! calls above; otherwise, the contents of
 -- package 'ftdetect' directories won't be evaluated.

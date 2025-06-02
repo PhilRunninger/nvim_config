@@ -6,7 +6,6 @@ local noremapSilent = {noremap=true, silent=true}
 g.mapleader = ' '
 
 -- Window Sizing
-map('n', '<leader>w', '<C-W>', noremapSilent)        -- An alternate keystroke for <C-W>
 map('n', '<leader>x', '<C-W>_<C-W>|', noremapSilent) -- Maximize current window.
 map('n', '<Up>', '5<C-W>+', noremapSilent)           -- Resize window 5 rows taller
 map('n', '<Down>', '5<C-W>-', noremapSilent)         --               5 rows shorter

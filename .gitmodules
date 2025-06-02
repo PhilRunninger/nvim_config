@@ -103,3 +103,6 @@
 [submodule "pack/bundle/opt/mru"]
 	path = pack/bundle/opt/mru
 	url = git@github.com:yegappan/mru.git
+[submodule "pack/bundle/opt/vimwiki"]
+	path = pack/bundle/opt/vimwiki
+	url = git@github.com:vimwiki/vimwiki.git
