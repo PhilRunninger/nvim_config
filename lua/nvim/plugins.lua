@@ -87,13 +87,13 @@ cmd('packadd! cmp_luasnip') --                           https://github.com/saad
 cmd('packadd! cmp-nvim-lsp') --                              https://github.com/hrsh7th/cmp-nvim-lsp
 cmd('packadd! cmp-nvim-lua') --                              https://github.com/hrsh7th/cmp-nvim-lua
 cmd('packadd! cmp-rpncalc') --                          https://github.com/PhilRunninger/cmp-rpncalc
-require "my-cmp"
+require "nvim.cmp"
 
 -- ######################################################################## LANGUAGE SERVER PROTOCOL
 cmd('packadd! mason.nvim') --                             https://github.com:williamboman/mason.nvim
 cmd('packadd! mason-lspconfig.nvim') --         https://github.com:williamboman/mason-lspconfig.nvim
 cmd('packadd! nvim-lspconfig') --                           https://github.com/neovim/nvim-lspconfig
-require "my-lsp"
+require "nvim.lsp"
 
 cmd('packadd! Comment.nvim') -- ########################### https://github.com/numToStr/Comment.nvim
 require "Comment".setup()
@@ -126,9 +126,6 @@ map('n', '<F8>', ':SQL<CR>', noremapSilent)
 cmd('packadd! vimwiki') -- ###################################### https://github.com/vimwiki/vimwiki
 g.vimwiki_list = {{path = '~/Documents/vimwiki/', syntax = 'markdown', ext = 'md'}}
 g.vimwiki_global_ext = 0
-
-cmd('packadd! mru') -- ############################################# https://github.com/yegappan/mru
-g.MRU_File = vim.fn.stdpath('data') .. '\\_vim_mru_files'
 
 -- ###################################################################################### ALL OTHERS
 cmd('packadd! markdown-preview.nvim') --             https://github.com/iamcco/markdown-preview.nvim

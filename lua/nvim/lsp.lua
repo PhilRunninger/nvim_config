@@ -72,12 +72,12 @@ lspconfig.lua_ls.setup({
 
 lspconfig.omnisharp.setup({
     on_attach = map_keys,
-    cmd = { 'dotnet', 'c:/Users/prunninger/Appdata/Local/nvim-data/lsp_servers/omnisharp/omnisharp' },
+    cmd = { 'dotnet', vim.fn.stdpath('data') .. '/lsp_servers/omnisharp/omnisharp' },
 })
 
 lspconfig.powershell_es.setup({
     on_attach = map_keys,
-    bundle_path = 'c:/ProgramData/PowerShellEditorServices'
+    bundle_path = vim.fn.stdpath('data') .. '/mason/packages/powershell-editor-services'
 })
 
 lspconfig.pyright.setup({

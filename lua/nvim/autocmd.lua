@@ -18,8 +18,5 @@ vim.api.nvim_create_autocmd({'BufEnter','CursorHold','CursorMoved'}, {command = 
 -- Restart with cursor in the location from last session.
 vim.api.nvim_create_autocmd('BufReadPost', {command = 'if &filetype != "gitcommit" && line("\'\\\"") > 1 && line("\'\\\"") <= line("$") | execute "normal! g`\\\"" | endif', group = group})
 
--- Additional nvim-qt Settings
-vim.api.nvim_create_autocmd('UIEnter', {callback = function() require('my-ginit') end, group = group})
-
 -- Turn off formatoptions=o for every file. Must be here, after ftplugin/*.vim runs.
 vim.api.nvim_create_autocmd('BufWinEnter', {callback = function() vim.opt.formatoptions:remove('o') end, group = group})
