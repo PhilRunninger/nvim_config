@@ -25,7 +25,7 @@ cmd('packadd! plenary.nvim') -- ########################### https://github.com/n
 cmd('packadd! bufselect') -- ############################ https://github.com/PhilRunninger/bufselect
 vim.fn['bufselect#settings']({
    mappings={delete="w", open="l", gopen="gl"},
-   win={config={border="rounded", title="Buffers", title_pos="center"}}})
+   win={config={border="rounded", title="Buffers", title_pos="center"}, hl='NormalFloat:Normal'}})
 map('n', '<leader>b', ':ShowBufferList<CR>', noremapSilent)
 
 cmd('packadd! csv.vim') -- ##################################### https://github.com/chrisbra/csv.vim

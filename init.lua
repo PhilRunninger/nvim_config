@@ -7,7 +7,7 @@ if vim.g.vscode then
 else
     require "nvim"
 
-    vim.cmd('colorscheme strongbox')
+    vim.cmd('colorscheme tango')
     -- Lower the priority of semantic tokens to stop the mangled highlighting.
     vim.highlight.priorities.semantic_tokens = 75
 end
