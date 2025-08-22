@@ -103,3 +103,6 @@
 [submodule "pack/bundle/opt/vimwiki"]
 	path = pack/bundle/opt/vimwiki
 	url = git@github.com:vimwiki/vimwiki.git
+[submodule "pack/bundle/opt/wiki.vim"]
+	path = pack/bundle/opt/wiki.vim
+	url = git@github.com:lervag/wiki.vim.git

@@ -123,9 +123,8 @@ g.SessionsSetup = {askOnStartup = 0, normalBuffersOnly = 1, confirmQuit = 0}
 cmd('packadd! sql.nvim') -- ############################## https://github.com/PhilRunninger/sql.nvim
 map('n', '<F8>', ':SQL<CR>', noremapSilent)
 
-cmd('packadd! vimwiki') -- ###################################### https://github.com/vimwiki/vimwiki
-g.vimwiki_list = {{path = '~/Documents/vimwiki/', syntax = 'markdown', ext = 'md'}}
-g.vimwiki_global_ext = 0
+cmd('packadd! wiki.vim') -- ######################################### git@github.com:lervag/wiki.vim
+g.wiki_root = '~/Documents/wiki'
 
 -- ###################################################################################### ALL OTHERS
 cmd('packadd! markdown-preview.nvim') --             https://github.com/iamcco/markdown-preview.nvim
