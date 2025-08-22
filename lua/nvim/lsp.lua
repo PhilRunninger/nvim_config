@@ -20,7 +20,7 @@ vim.diagnostic.config({
     update_in_insert = true,
     underline = true,
     severity_sort = true,
-    float = { focusable = false, style = "minimal", border = "rounded", source = true, header = "", prefix = "", },
+    float = { focusable = false, border = "rounded", source = true, header = "", prefix = "", },
 })
 
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded", })
@@ -38,8 +38,8 @@ local map_keys = function(_, bufnr)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
     vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
     vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, bufopts)
-    vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, bufopts)
-    vim.keymap.set('n', ']d', vim.diagnostic.goto_next, bufopts)
+    vim.keymap.set('n', '[d', function() vim.diagnostic.jump({count = -1}) end, bufopts)
+    vim.keymap.set('n', ']d', function() vim.diagnostic.jump({count = 1}) end, bufopts)
     vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, bufopts)
     vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts)
     vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
@@ -54,20 +54,28 @@ lspconfig.html.setup({ on_attach = map_keys })
 
 lspconfig.jsonls.setup({ on_attach = map_keys })
 
-lspconfig.lua_ls.setup({
-    on_attach = map_keys,
-    settings = {
-        Lua = {
-            runtime = { version = 'LuaJIT' },
-            diagnostics = { globals = { "vim" } },
-            workspace = {
-                library = {
-                    [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-                    [vim.fn.stdpath("config") .. "/lua"] = true,
-                }
-            }
+vim.lsp.config('lua_ls', {
+  on_attach = map_keys,
+  on_init = function(client)
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        version = 'LuaJIT',
+        path = {
+          'lua/?.lua',
+          'lua/?/init.lua',
+        },
+      },
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME
         }
-    }
+      }
+    })
+  end,
+  settings = {
+    Lua = {}
+  }
 })
 
 lspconfig.omnisharp.setup({
