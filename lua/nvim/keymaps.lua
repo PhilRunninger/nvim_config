@@ -66,6 +66,14 @@ map('n', '<F2>', 'i★<Esc>[s1z=/★<CR>x', noremapSilent)
 -- Remove trailing spaces.
 map('n', '<leader>d<space>', ':let [v,c,l]=[winsaveview(),&cuc,&cul]|set cuc cul|keeppatterns %s/\\s\\+$//ce|let [&cuc,&cul]=[c,l]|call winrestview(v)|unlet v l c<CR>', noremapSilent)
 
+-- Make clipboard interactions easier.
+map('n', '<leader>y', '"*y', noremapSilent)
+map('x', '<leader>y', '"*ygv', noremapSilent)
+map('n', '<leader>p', '"*p', noremapSilent)
+map('x', '<leader>p', '"*p', noremapSilent)
+map('n', '<leader>P', '"*P', noremapSilent)
+map('x', '<leader>P', '"*P', noremapSilent)
+
 -- Miscellaneous
 map('n', '#', ':buffer #<CR>', noremapSilent) -- Make # switch to the alternate buffer
 map('n', '<leader>cd', ':cd %:p:h|pwd<CR>', noremapSilent) -- Change cwd to current buffer's directory
