@@ -1,6 +1,0 @@
-require "nvim.options"
-require "nvim.keymaps"
-require "nvim.plugins"
-require "nvim.autocmd"
-require "nvim.statusline"
-require "nvim.tabline"
