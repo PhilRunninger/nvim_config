@@ -6,16 +6,8 @@
     "contributes": {
         "snippets": [
             {
-                "language": "all",
-                "path": "./global.json"
-            },
-            {
                 "language": "rest",
                 "path": "./rest.json"
-            },
-            {
-                "language": "sql",
-                "path": "./sql.json"
             }
         ]
     }
