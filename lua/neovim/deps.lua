@@ -362,8 +362,9 @@ later(function()
 end)
 
 -- SQL               - https://github.com/PhilRunninger/sql.nvim  {{{1
--- cmd('packadd! sql.nvim')
--- map('n', '<F8>', ':SQL<CR>', noremapSilent)
+later(function()
+    add({ source = 'PhilRunninger/sql.nvim' })
+end)
 
 -- Wiki              - https://github.com/lervag/wiki.vim  {{{1
 later(function()
