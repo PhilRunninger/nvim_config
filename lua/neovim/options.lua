@@ -32,6 +32,7 @@ for k,v in pairs(
         shellquote = '"',
         shellxquote = '',
         termguicolors = true,
+        completeopt = {'menuone', 'noselect', 'fuzzy', 'popup'}
     }) do
     vim.opt[k] = v
 end

@@ -79,18 +79,19 @@ later(function() require('mini.operators').setup() end)
 --   mini.completion  {{{2
 later(function()
     require('mini.completion').setup()
-    vim.keymap.set('i', '<Tab>',   [[pumvisible() ? "\<C-n>" : "\<Tab>"]], {expr = true})
+    -- See below (in the Copilot fold) for <Tab> mapping.
     vim.keymap.set('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], {expr = true})
     vim.keymap.set('i', '<CR>',    [[pumvisible() ? "\<C-y>" : "\<CR>"]], {expr = true})
 end)
 
 --   mini.snippets  {{{2
 later(function()
-    add({source = 'rafamadriz/friendly-snippets'})
+    add({ source = 'rafamadriz/friendly-snippets' })
     local gen_loader = require('mini.snippets').gen_loader
     require('mini.snippets').setup({
         snippets = {
-            gen_loader.from_file(vim.fn.glob(path_package..'**/friendly-snippets/snippets/global.json',false,true)[1]),
+            gen_loader.from_file(vim.fn.glob(path_package .. '**/friendly-snippets/snippets/global.json', false, true)
+            [1]),
             gen_loader.from_lang(),
         },
     })
@@ -295,6 +296,12 @@ later(function()
         highlight = { enable = true },
     })
 end)
+
+-- Copilot           - https://github.com/github/copilot.vim {{{1
+add({ source = 'github/copilot.vim' })
+g.copilot_no_tab_map = true
+-- Use <Tab> to navigate completion menu, accept Copilot suggestion, or insert a tab.
+vim.api.nvim_set_keymap("i", "<Tab>", [[pumvisible() ? "\<C-n>" : (exists('b:_copilot') ? copilot#Accept("\<CR>") : "\<Tab>")]], { expr = true })
 
 -- AutoTag           - https://github.com/windwp/nvim-ts-autotag   {{{1
 add({
