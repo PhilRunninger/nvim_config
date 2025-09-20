@@ -52,9 +52,10 @@ end
 
 vim.api.nvim_create_user_command("Floaterminal", toggle_terminal, {})
 
-vim.api.nvim_set_keymap('n', '<leader>t', ':Floaterminal<CR>', {noremap=true, silent=true})
+vim.api.nvim_set_keymap('n', '<F9>', '<Cmd>Floaterminal<CR>', {noremap=true, silent=true})
+vim.api.nvim_set_keymap('v', '<F9>', '<Cmd>Floaterminal<CR>', {noremap=true, silent=true})
+vim.api.nvim_set_keymap('t', '<F9>', '<Cmd>Floaterminal<CR>', {noremap=true, silent=true})
 vim.api.nvim_set_keymap('t', '<Esc><Esc>', '<C-\\><C-n>', {noremap=true, silent=true})
-vim.api.nvim_set_keymap('t', '<Esc><Esc><Esc>', '<Cmd>Floaterminal<CR>', {noremap=true, silent=true})
 
 local group = vim.api.nvim_create_augroup('Floaterminal', {clear = true})
 
