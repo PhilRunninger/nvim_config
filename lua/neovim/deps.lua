@@ -56,6 +56,7 @@ hipatterns.setup({
 --   mini.pick  {{{2
 later(function()
     require('mini.pick').setup()
+    map('n', '<leader>o', ':Pick files<CR>', noremapSilent)
     map('n', '<leader>b', ':Pick buffers<CR>', noremapSilent)
     map('n', '<F1>', ':Pick help<CR>', noremapSilent)
     map('n', '<leader>g', ':Pick grep_live<CR>', noremapSilent)
@@ -138,7 +139,7 @@ later(function()
             width_preview = 60,     -- Width of preview window
         }
     })
-    vim.api.nvim_set_keymap('n', '<leader>o', ':lua MiniFiles.open()<CR>', { noremap = true, silent = true })
+    vim.api.nvim_set_keymap('n', '<leader>O', ':lua MiniFiles.open()<CR>', { noremap = true, silent = true })
 
     local set_mark = function(id, path, desc)
         MiniFiles.set_bookmark(id, path, { desc = desc })
