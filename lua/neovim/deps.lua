@@ -41,16 +41,16 @@ require('mini.cursorword').setup()
 --   mini.hipatterns  {{{2
 local hipatterns = require('mini.hipatterns')
 hipatterns.setup({
-  highlighters = {
-    -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
-    fixme = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
-    hack  = { pattern = '%f[%w]()HACK()%f[%W]',  group = 'MiniHipatternsHack'  },
-    todo  = { pattern = '%f[%w]()TODO()%f[%W]',  group = 'MiniHipatternsTodo'  },
-    note  = { pattern = '%f[%w]()NOTE()%f[%W]',  group = 'MiniHipatternsNote'  },
+    highlighters = {
+        -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
+        fixme     = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+        hack      = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
+        todo      = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
+        note      = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
 
-    -- Highlight hex color strings (`#rrggbb`) using that color
-    hex_color = hipatterns.gen_highlighter.hex_color(),
-  },
+        -- Highlight hex color strings (`#rrggbb`) using that color
+        hex_color = hipatterns.gen_highlighter.hex_color(),
+    },
 })
 
 --   mini.pick  {{{2
@@ -106,7 +106,10 @@ later(function()
             add = 'ys',
             delete = 'ds',
             replace = 'cs',
-            find = '', find_left = '', highlight = '', update_n_lines = ''
+            find = '',
+            find_left = '',
+            highlight = '',
+            update_n_lines = ''
         }
     })
 end)
@@ -334,8 +337,8 @@ g.markdown_folding = 1
 g.markdown_fenced_languages = { 'vim', 'sql', 'cs', 'ps1', 'lua', 'json' }
 
 -- Matchup           - https://github.com/andymass/vim-matchup  {{{1
-add({ source = 'andymass/vim-matchup'})
-g.matchup_matchparen_offscreen = {method='popup'}
+add({ source = 'andymass/vim-matchup' })
+g.matchup_matchparen_offscreen = { method = 'popup' }
 
 -- REST Console      - https://github.com/Aadniz/vim-rest-console  {{{1
 later(function()
