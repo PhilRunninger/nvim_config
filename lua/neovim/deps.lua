@@ -380,8 +380,5 @@ later(function() add({ source = 'chrisbra/Recover.vim' }) end)
 -- Exchange          - https://github.com/tommcdo/vim-exchange  {{{1
 later(function() add({ source = 'tommcdo/vim-exchange' }) end)
 
--- Repeat            - https://github.com/tpope/vim-repeat  {{{1
-later(function() add({ source = 'tpope/vim-repeat' }) end)
-
 -- Signature         - https://github.com/kshenoy/vim-signature  {{{1
 later(function() add({ source = 'kshenoy/vim-signature' }) end)
