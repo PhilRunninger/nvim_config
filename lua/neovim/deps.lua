@@ -177,61 +177,17 @@ now(function()
         depends = { 'mason-org/mason.nvim', 'mason-org/mason-lspconfig.nvim' },
     })
 
-    local lspconfig = require('lspconfig')
     require('mason').setup()
     require('mason-lspconfig').setup()
 
-    -- Tweak the UI for diagnostics' signs and floating windows.
-    local signs = {
-        { name = "DiagnosticSignError", text = "" },
-        { name = "DiagnosticSignWarn", text = "" },
-        { name = "DiagnosticSignHint", text = "" },
-        { name = "DiagnosticSignInfo", text = "" },
-    }
-
-    for _, sign in ipairs(signs) do
-        vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
-    end
-
     vim.diagnostic.config({
-        virtual_text = true,
-        signs = { active = signs, },
-        update_in_insert = true,
-        underline = true,
+        virtual_lines = true,
+        underline = false,
         severity_sort = true,
-        float = { focusable = false, border = "rounded", source = true, header = "", prefix = "", },
     })
 
-    -- Map keys after language server attaches to current buffer.
-    local map_keys = function(_, bufnr)
-        local bufopts = { noremap = true, silent = true, buffer = bufnr }
-        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-        vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help, bufopts)
-        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
-        vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
-        vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, bufopts)
-        vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, bufopts)
-        vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, bufopts)
-        vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, bufopts)
-        vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts)
-        vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
-    end
-
     -- Configure each language server.
-    lspconfig.cssls.setup({ on_attach = map_keys })
-
-    lspconfig.erlangls.setup({})
-
-    lspconfig.html.setup({ on_attach = map_keys })
-
-    lspconfig.jsonls.setup({ on_attach = map_keys })
-
     vim.lsp.config('lua_ls', {
-        on_attach = map_keys,
         on_init = function(client)
             client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
                 runtime = {
@@ -254,18 +210,11 @@ now(function()
         }
     })
 
-    lspconfig.omnisharp.setup({
-        on_attach = map_keys,
-        cmd = { 'dotnet', vim.fn.stdpath('data') .. '/lsp_servers/omnisharp/omnisharp' },
-    })
-
-    lspconfig.powershell_es.setup({
-        on_attach = map_keys,
+    vim.lsp.config('powershell_es', {
         bundle_path = vim.fn.stdpath('data') .. '/mason/packages/powershell-editor-services'
     })
 
-    lspconfig.pyright.setup({
-        on_attach = map_keys,
+    vim.lsp.config('pyright', {
         settings = {
             python = {
                 analysis = {
@@ -275,9 +224,29 @@ now(function()
         },
     })
 
-    lspconfig.ts_ls.setup({ on_attach = map_keys })
+    vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(args)
+            local client = vim.lsp.get_client_by_id(args.data.client_id)
+            if client then
+                if client:supports_method('textDocument/completions') then
+                    vim.lsp.completion.enable(true, client.id, args.buf, {autotrigger = true})
+                end
+            end
+        end
+    })
 
-    lspconfig.vimls.setup({ on_attach = map_keys })
+    vim.lsp.enable({
+        'lua_ls',
+        'html',
+        'jsonls',
+        'cssls',
+        -- 'csharp_ls', -- Copilot is very slow in C# files. Too slow.
+        'powershell_es',
+        'pyright',
+        'ts_ls',
+        'vimls'
+    })
+
 end)
 
 -- Treesitter        - https://github.com/nvim-treesitter/nvim-treesitter  {{{1
