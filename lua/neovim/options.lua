@@ -27,10 +27,7 @@ for k,v in pairs(
         splitright = true,
         winminheight = 0,
         winminwidth = 0,
-        shell =        string.find(vim.o.shell,'bash') and 'bash' or 'pwsh',
-        shellcmdflag = string.find(vim.o.shell,'bash') and '-c'   or '-NoLogo -NonInteractive -ExecutionPolicy RemoteSigned -Command',
-        shellquote = '"',
-        shellxquote = '',
+        shell = string.find(vim.o.shell, 'bash') and 'bash' or vim.o.shell,
         termguicolors = true,
         completeopt = {'menuone', 'noselect', 'fuzzy', 'popup'}
     }) do
