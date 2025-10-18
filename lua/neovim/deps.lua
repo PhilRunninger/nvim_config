@@ -74,9 +74,6 @@ later(function()
     })
 end)
 
---   mini.operators  {{{2
-later(function() require('mini.operators').setup() end)
-
 --   mini.completion  {{{2
 later(function()
     require('mini.completion').setup()
@@ -306,18 +303,6 @@ add({ source = 'github/copilot.vim' })
 g.copilot_no_tab_map = true
 -- Use <Tab> to navigate completion menu, accept Copilot suggestion, or insert a tab.
 vim.api.nvim_set_keymap("i", "<Tab>", [[pumvisible() ? "\<C-n>" : (exists('b:_copilot') ? copilot#Accept("\<CR>") : "\<Tab>")]], { expr = true })
-
--- AutoTag           - https://github.com/windwp/nvim-ts-autotag   {{{1
-add({
-    source = 'windwp/nvim-ts-autotag'
-})
-require('nvim-ts-autotag').setup({
-    opts = {
-        enable_close = true,
-        enable_rename = true,
-        enable_close_on_slash = false
-    }
-})
 
 -- CSV               - https://github.com/chrisbra/csv.vim  {{{1
 later(function()
