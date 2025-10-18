@@ -1,13 +1,7 @@
-for k,v in pairs(
-    {
-        sidescroll = 1,
-        hidden = true,
+for k,v in pairs({
         confirm = true,
-        backspace = {'indent', 'eol', 'start'},
-        ttimeoutlen = 10,
         ignorecase = true,
         smartcase = true,
-        history = 1000,
         wildignorecase = true,
         wildignore = {'*.a', '*.o', '*.beam', '*.bmp', '*.gif', '*.jpg', '*.ico', '*.png', '.DS_Store', '.git'},
         smartindent = true,
