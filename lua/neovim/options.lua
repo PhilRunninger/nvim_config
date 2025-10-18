@@ -19,7 +19,7 @@ for k,v in pairs(
         showmatch = true,
         number = true,
         fillchars = {stl=' ', stlnc=' ', eob=' ', fold='⋯'},
-        foldtext = [[printf('%-.*s   %s%d ', winwidth(0)/2, trim(substitute(getline(v:foldstart),'\s*{{{\d\+','',''),'',2), strcharpart('▏▎▍▌▋▊▉█',min([v:foldlevel-1,7]),1), v:foldend-v:foldstart+1)]],
+        foldtext = [[printf('%-.*s  %s%d:%d', winwidth(0)/2, trim(substitute(getline(v:foldstart),'\s*{{{\d\+','',''),'',2), matchstr(&fillchars, 'fold:\zs[^,]*'), v:foldlevel, v:foldend-v:foldstart+1) ]],
         list = true,
         listchars = {tab='●·', extends='→', precedes='←', trail='■'},
         undofile = true,
