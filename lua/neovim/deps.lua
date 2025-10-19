@@ -36,22 +36,23 @@ later(function() require('mini.ai').setup() end)
 later(function() require('mini.comment').setup() end)
 
 --   mini.cursorword  {{{2
-require('mini.cursorword').setup()
+later(function() require('mini.cursorword').setup() end)
 
 --   mini.hipatterns  {{{2
-local hipatterns = require('mini.hipatterns')
-hipatterns.setup({
-    highlighters = {
-        -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
-        fixme     = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
-        hack      = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
-        todo      = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
-        note      = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
+later(function()
+    require('mini.hipatterns').setup({
+        highlighters = {
+            -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
+            fixme     = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+            hack      = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
+            todo      = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
+            note      = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
 
         -- Highlight hex color strings (`#rrggbb`) using that color
-        hex_color = hipatterns.gen_highlighter.hex_color(),
+        hex_color = require('mini.hipatterns').gen_highlighter.hex_color(),
     },
 })
+end)
 
 --   mini.pick  {{{2
 later(function()
@@ -88,8 +89,7 @@ later(function()
     local gen_loader = require('mini.snippets').gen_loader
     require('mini.snippets').setup({
         snippets = {
-            gen_loader.from_file(vim.fn.glob(path_package .. '**/friendly-snippets/snippets/global.json', false, true)
-            [1]),
+            gen_loader.from_file(vim.fn.glob(path_package .. '**/friendly-snippets/snippets/global.json', false, true)[1]),
             gen_loader.from_lang(),
         },
     })
@@ -98,8 +98,8 @@ end)
 
 --   mini.surround  {{{2
 later(function()
-    -- Use tpope's mappings to preserve nvim's `s` operator without delays.
     require('mini.surround').setup({
+        -- Use tpope's mappings to preserve nvim's `s` operator without delays.
         mappings = {
             add = 'ys',
             delete = 'ds',
@@ -260,7 +260,6 @@ later(function()
         hooks = { post_checkout = function() vim.cmd('TSUpdate') end },
     })
 
-    -- Possible to immediately execute code which depends on the added plugin
     require('nvim-treesitter.configs').setup({
         ensure_installed = { 'lua', 'vim', 'vimdoc', 'html', 'css', 'typescript', 'javascript', 'tsx', 'java', 'c_sharp', 'powershell', 'json', 'markdown', 'gitcommit' },
         highlight = { enable = true },
@@ -268,10 +267,12 @@ later(function()
 end)
 
 -- Copilot           - https://github.com/github/copilot.vim {{{1
-add({ source = 'github/copilot.vim' })
-g.copilot_no_tab_map = true
--- Use <Tab> to navigate completion menu, accept Copilot suggestion, or insert a tab.
-vim.api.nvim_set_keymap("i", "<Tab>", [[pumvisible() ? "\<C-n>" : (exists('b:_copilot') ? copilot#Accept("\<CR>") : "\<Tab>")]], { expr = true })
+later(function()
+    add({ source = 'github/copilot.vim' })
+    g.copilot_no_tab_map = true
+    -- Use <Tab> to navigate completion menu, accept Copilot suggestion, or insert a tab.
+    vim.api.nvim_set_keymap("i", "<Tab>", [[pumvisible() ? "\<C-n>" : (exists('b:_copilot') ? copilot#Accept("\<CR>") : "\<Tab>")]], { expr = true })
+end)
 
 -- CSV               - https://github.com/chrisbra/csv.vim  {{{1
 later(function()
@@ -280,7 +281,7 @@ later(function()
 end)
 
 -- Fugitive          - https://github.com/tpope/vim-fugitive  {{{1
-later(function()
+now(function()
     add({ source = 'tpope/vim-fugitive' })
     map('n', '<F3>', '"zyiw/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>', noremapSilent)
     map('v', '<F3>', '"zy/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>', noremapSilent)
@@ -288,12 +289,16 @@ later(function()
 end)
 
 -- Markdown          - https://github.com/tpope/vim-markdown  {{{1
-g.markdown_folding = 1
-g.markdown_fenced_languages = { 'vim', 'sql', 'cs', 'ps1', 'lua', 'json' }
+now(function()
+    g.markdown_folding = 1
+    g.markdown_fenced_languages = { 'vim', 'sql', 'cs', 'ps1', 'lua', 'json' }
+end)
 
 -- Matchup           - https://github.com/andymass/vim-matchup  {{{1
-add({ source = 'andymass/vim-matchup' })
-g.matchup_matchparen_offscreen = { method = 'popup' }
+later(function()
+    add({ source = 'andymass/vim-matchup' })
+    g.matchup_matchparen_offscreen = { method = 'popup' }
+end)
 
 -- REST Console      - https://github.com/Aadniz/vim-rest-console  {{{1
 later(function()
@@ -327,9 +332,7 @@ later(function()
 end)
 
 -- SQL               - https://github.com/PhilRunninger/sql.nvim  {{{1
-later(function()
-    add({ source = 'PhilRunninger/sql.nvim' })
-end)
+later(function() add({ source = 'PhilRunninger/sql.nvim' }) end)
 
 -- Wiki              - https://github.com/lervag/wiki.vim  {{{1
 later(function()
