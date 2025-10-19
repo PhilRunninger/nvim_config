@@ -261,7 +261,7 @@ later(function()
     })
 
     require('nvim-treesitter.configs').setup({
-        ensure_installed = { 'lua', 'vim', 'vimdoc', 'html', 'css', 'typescript', 'javascript', 'tsx', 'java', 'c_sharp', 'powershell', 'json', 'markdown', 'gitcommit' },
+        ensure_installed = { 'lua', 'vim', 'vimdoc', 'html', 'css', 'typescript', 'javascript', 'tsx', 'java', 'c_sharp', 'powershell', 'json', 'markdown', 'gitcommit', 'diff', 'git_rebase' },
         highlight = { enable = true },
     })
 end)
