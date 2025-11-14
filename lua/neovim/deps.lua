@@ -266,13 +266,13 @@ later(function()
     })
 end)
 
--- Copilot           - https://github.com/github/copilot.vim {{{1
-later(function()
-    add({ source = 'github/copilot.vim' })
-    g.copilot_no_tab_map = true
-    -- Use <Tab> to navigate completion menu, accept Copilot suggestion, or insert a tab.
-    vim.api.nvim_set_keymap("i", "<Tab>", [[pumvisible() ? "\<C-n>" : (exists('b:_copilot') ? copilot#Accept("\<CR>") : "\<Tab>")]], { expr = true })
-end)
+-- -- Copilot           - https://github.com/github/copilot.vim {{{1
+-- later(function()
+--     add({ source = 'github/copilot.vim' })
+--     g.copilot_no_tab_map = true
+--     -- Use <Tab> to navigate completion menu, accept Copilot suggestion, or insert a tab.
+--     vim.api.nvim_set_keymap("i", "<Tab>", [[pumvisible() ? "\<C-n>" : (exists('b:_copilot') ? copilot#Accept("\<CR>") : "\<Tab>")]], { expr = true })
+-- end)
 
 -- CSV               - https://github.com/chrisbra/csv.vim  {{{1
 later(function()
