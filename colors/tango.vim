@@ -59,7 +59,7 @@ call s:HiLite(#{
     \ TermCursorNC:   #{},
     \ ErrorMsg:                                    #{link: 'Error'},
     \ WinSeparator:   #{fg: s:bg2,     bg: s:bg2},
-    \ Folded:         #{fg: s:fg3},
+    \ Folded:         #{fg: s:bg3},
     \ FoldColumn:     #{fg: s:fg3},
     \ SignColumn:     #{fg: s:fg0},
     \ IncSearch:                                   #{link: 'CurSearch'},
