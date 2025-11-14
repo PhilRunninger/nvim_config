@@ -334,10 +334,19 @@ end)
 -- SQL               - https://github.com/PhilRunninger/sql.nvim  {{{1
 later(function() add({ source = 'PhilRunninger/sql.nvim' }) end)
 
--- Wiki              - https://github.com/lervag/wiki.vim  {{{1
+-- RPN               - https://github.com/PhilRunninger/cmp-rpncalc  {{{1
 later(function()
-    add({ source = 'lervag/wiki.vim' })
-    g.wiki_root = '~/Documents/wiki'
+    add({ source = 'PhilRunninger/cmp-rpncalc' })
+    vim.api.nvim_set_keymap("n", "<F12>",   ":RPN<CR>",            {noremap=true})
+    vim.api.nvim_set_keymap("n", "<S-F12>", ":RPN!<CR>",           {noremap=true})
+    vim.api.nvim_set_keymap("x", "<F12>",   ":<C-U>'<,'>RPN<CR>",  {noremap=true})
+    vim.api.nvim_set_keymap("x", "<S-F12>", ":<C-U>'<,'>RPN!<CR>", {noremap=true})
+end)
+
+-- Diary             - https://github.com/hulufei/diary.nvim  {{{1
+later(function()
+    add({ source = 'hulufei/diary.nvim' })
+    require('diary').setup({["diary-dir"] = os.getenv('DIARY') or '~/Documents/Diary'})
 end)
 
 -- Markdown Preview  - https://github.com/iamcco/markdown-preview.nvim  {{{1
