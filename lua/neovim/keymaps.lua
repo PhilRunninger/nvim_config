@@ -1,9 +1,7 @@
-local g = vim.g
-local fn = vim.fn
 local map = vim.api.nvim_set_keymap
 local noremapSilent = {noremap=true, silent=true}
 
-g.mapleader = ' '
+vim.g.mapleader = ' '
 
 -- Window Sizing
 map('n', '<leader>x', '<C-W>_<C-W>|', noremapSilent) -- Maximize current window.
@@ -14,8 +12,8 @@ map('n', '<Left>', '10<C-W><', noremapSilent)        --               10 columns
 
 -- Switch Between Windows and Tabs
 function WinTabSwitch(direction)
-    local info = fn.getwininfo(fn.win_getid())[1]
-    local wincol = fn.win_screenpos(fn.winnr())[2]
+    local info = vim.fn.getwininfo(vim.fn.win_getid())[1]
+    local wincol = vim.fn.win_screenpos(vim.fn.winnr())[2]
     if (direction == 'h' and wincol <= 1) then
         vim.cmd('tabprev|99wincmd l')
     elseif (direction == 'l' and wincol + info.width >= vim.o.columns) then
@@ -50,11 +48,6 @@ map('n', 'gk', 'k', noremapSilent)
 map('n', '<C-s>', '40zh', noremapSilent)
 map('n', '<C-d>', '40zl', noremapSilent)
 
--- Show/hide cursorline and cursorcolumn
-map('n', '+', ':set cursorline! cursorcolumn!<CR>', noremapSilent)
-map('n', '-', ':set cursorline!<CR>', noremapSilent)
-map('n', '|', ':set cursorcolumn!<CR>', noremapSilent)
-
 -- Open or close folds with l and h
 map('n', 'h', '(foldclosed(".")==-1 || foldlevel(".")>1) && col(".")==1 ? "zc" : "h"', {expr = true})
 map('n', 'l', 'foldclosed(".")!=-1 ? "zo" : "l"', {expr = true})
@@ -73,6 +66,20 @@ map('n', '<leader>p', '"*p', noremapSilent)
 map('x', '<leader>p', '"*p', noremapSilent)
 map('n', '<leader>P', '"*P', noremapSilent)
 map('x', '<leader>P', '"*P', noremapSilent)
+
+-- mappings from mini.basics. Don't want anything else from it.
+map('n', '\\b', '<Cmd>lua vim.o.bg = vim.o.bg == "dark" and "light" or "dark"<CR>', noremapSilent)
+map('n', '\\c', '<Cmd>setlocal cursorline!<CR>', noremapSilent)
+map('n', '\\C', '<Cmd>setlocal cursorcolumn!<CR>', noremapSilent)
+map('n', '\\d', '<Cmd>lua MiniBasics.toggle_diagnostic()<CR>', noremapSilent)
+map('n', '\\D', '<Cmd>if &diff | diffoff | else | diffthis | endif<CR>', noremapSilent)
+map('n', '\\h', '<Cmd>let v:hlsearch = 1 - v:hlsearch<CR>', noremapSilent)
+map('n', '\\i', '<Cmd>setlocal ignorecase!<CR>', noremapSilent)
+map('n', '\\l', '<Cmd>setlocal list!<CR>', noremapSilent)
+map('n', '\\n', '<Cmd>setlocal number!<CR>', noremapSilent)
+map('n', '\\r', '<Cmd>setlocal relativenumber!<CR>', noremapSilent)
+map('n', '\\s', '<Cmd>setlocal spell!<CR>', noremapSilent)
+map('n', '\\w', '<Cmd>setlocal wrap!<CR>', noremapSilent)
 
 -- Miscellaneous
 map('n', '#', ':buffer #<CR>', noremapSilent) -- Make # switch to the alternate buffer

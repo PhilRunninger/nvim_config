@@ -1,7 +1,7 @@
 vim.opt.statusline = "%!luaeval('SetStatusLineText()')"
 
 local colors = {
-    count = 5,
+    count = 4,
     hues = { modified = 30, unmodified = 108 , insert = 204, terminal = 312 }, -- 30=DarkOrange 108=green2 204=DeepSkyBlue 312=magenta3
     luminances = { light = { m = -0.075, b = 0.925 }, dark = { m = 0.075, b = 0.075 } },
     saturation = 1.0
@@ -13,13 +13,11 @@ function SetStatusLineText()
     return
         (useColor and '%#User1#'  or '') .. " %4l/%-4L %3v " ..
         (useColor and '%#User12#' or '') .. divider ..
-        (useColor and '%#User2#'  or '') .. "%(  %{get(b:,'gitsigns_head','')} %{get(b:,'gitsigns_status','')} %)" ..
+        (useColor and '%#User2#'  or '') .. "%(  %{get(b:,'minigit_summary_string','')} %)" ..
         (useColor and '%#User23#' or '') .. divider ..
-        (useColor and '%#User3#'  or '') .. "%( 💾 %{SessionNameStatusLineFlag()} %)" ..
+        (useColor and '%#User3#'  or '') .. " %(%{&filetype} %)%(%{&fileformat=='dos' ? '' : '🐧'} %)" ..
         (useColor and '%#User34#' or '') .. divider ..
-        (useColor and '%#User4#'  or '') .. " %(%{&filetype} %)%(%{&fileformat=='dos' ? '' : '🐧'} %)" ..
-        (useColor and '%#User45#' or '') .. divider ..
-        (useColor and '%#User5#'  or '') .."%( %{!&modifiable?'🔒':''}%{&readonly?'⚠ ':''}%) %f"
+        (useColor and '%#User4#'  or '') .."%( %{!&modifiable?'🔒':''}%{&readonly?'⚠ ':''}%) %f"
 end
 
 local HLSToRGB = function(h,l,s)
