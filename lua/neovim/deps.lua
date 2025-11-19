@@ -78,7 +78,7 @@ end)
 --   mini.completion  {{{2
 later(function()
     require('mini.completion').setup()
-    -- See below (in the Copilot fold) for <Tab> mapping.
+    vim.keymap.set('i', '<Tab>',   [[pumvisible() ? "\<C-n>" : "\<Tab>"]], {expr = true})
     vim.keymap.set('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], {expr = true})
     vim.keymap.set('i', '<CR>',    [[pumvisible() ? "\<C-y>" : "\<CR>"]], {expr = true})
 end)
