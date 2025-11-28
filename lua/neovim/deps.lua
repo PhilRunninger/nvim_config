@@ -343,10 +343,27 @@ later(function()
     vim.api.nvim_set_keymap("x", "<S-F12>", ":<C-U>'<,'>RPN!<CR>", {noremap=true})
 end)
 
--- Diary             - https://github.com/hulufei/diary.nvim  {{{1
+-- nvim-deardiary    - https://github.com/ishchow/nvim-deardiary  {{{1
 later(function()
-    add({ source = 'hulufei/diary.nvim' })
-    require('diary').setup({["diary-dir"] = os.getenv('DIARY') or '~/Documents/Diary'})
+    add({ source = 'ishchow/nvim-deardiary' })
+    require("deardiary.config").journals = {
+        {
+            path = os.getenv('DIARY') or '~/Documents/Diary',
+            frequencies = {
+                daily = {
+                    template = function(entry_date)
+                        return entry_date:fmt('# %A, %B %d, %Y') .. '\n\n' ..
+                            '## Training\n\n' ..
+                            '## Cards\n\n' ..
+                            '## Other'
+                    end
+                }
+            }
+        }
+    }
+    require('deardiary').set_current_journal(1)
+    vim.g.deardiary_use_default_mappings = 0
+    vim.api.nvim_set_keymap("n", "<leader>j", ":DearDiaryToday<CR>", {noremap=true})
 end)
 
 -- Markdown Preview  - https://github.com/iamcco/markdown-preview.nvim  {{{1
