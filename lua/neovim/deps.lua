@@ -57,10 +57,10 @@ end)
 --   mini.pick  {{{2
 later(function()
     require('mini.pick').setup()
-    map('n', '<leader>o', ':Pick files<CR>', noremapSilent)
+    map('n', '<leader>f', ':Pick files<CR>', noremapSilent)
     map('n', '<leader>b', ':Pick buffers<CR>', noremapSilent)
-    map('n', '<F1>', ':Pick help<CR>', noremapSilent)
     map('n', '<leader>g', ':Pick grep_live<CR>', noremapSilent)
+    map('n', '<F1>', ':Pick help<CR>', noremapSilent)
 end)
 
 --   mini.extra  {{{2
@@ -70,7 +70,8 @@ later(function() require('mini.extra').setup() end)
 later(function()
     require('mini.align').setup({
         mappings = {
-            start = '' -- Keeps 'ga' assigned to the Unicode plugin.
+            start = 'gl',
+            start_with_preview = 'gL'
         }
     })
 end)
@@ -136,7 +137,7 @@ later(function()
             width_preview = 60,     -- Width of preview window
         }
     })
-    vim.api.nvim_set_keymap('n', '<leader>O', ':lua MiniFiles.open()<CR>', { noremap = true, silent = true })
+    vim.api.nvim_set_keymap('n', '<leader>o', ':lua MiniFiles.open()<CR>', { noremap = true, silent = true })
 
     local set_mark = function(id, path, desc)
         MiniFiles.set_bookmark(id, path, { desc = desc })
@@ -343,7 +344,7 @@ later(function()
     vim.api.nvim_set_keymap("x", "<S-F12>", ":<C-U>'<,'>RPN!<CR>", {noremap=true})
 end)
 
--- nvim-deardiary    - https://github.com/ishchow/nvim-deardiary  {{{1
+-- Dear Diary        - https://github.com/ishchow/nvim-deardiary  {{{1
 later(function()
     add({ source = 'ishchow/nvim-deardiary' })
     require("deardiary.config").journals = {
@@ -354,7 +355,7 @@ later(function()
                     template = function(entry_date)
                         return entry_date:fmt('# %A, %B %d, %Y') .. '\n\n' ..
                             '## Training\n\n' ..
-                            '## Cards\n\n' ..
+                            '## Kanban Cards\n\n' ..
                             '## Other'
                     end
                 }
