@@ -15,7 +15,7 @@ for k,v in pairs({
         fillchars = {stl=' ', stlnc=' ', eob=' ', fold='⋯'},
         foldtext = [[printf('%s  ▌%d:%d▐', trim(substitute(getline(v:foldstart),'\('.&commentstring->substitute('\s*%s','','').'\)\?\s*{{{\d\+','',''),'',2), v:foldlevel , v:foldend-v:foldstart+1) ]],
         list = true,
-        listchars = {tab='●·', extends='→', precedes='←', trail='■'},
+        listchars = {tab='🢒⸳', extends='→', precedes='←', trail='■', nbsp='□'},
         undofile = true,
         splitbelow = true,
         splitright = true,
