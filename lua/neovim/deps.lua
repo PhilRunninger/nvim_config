@@ -87,12 +87,13 @@ end)
 --   mini.snippets  {{{2
 later(function()
     add({ source = 'rafamadriz/friendly-snippets' })
-    local gen_loader = require('mini.snippets').gen_loader
+    local snippets = require('mini.snippets')
     require('mini.snippets').setup({
         snippets = {
-            gen_loader.from_file(vim.fn.glob(path_package .. '**/friendly-snippets/snippets/global.json', false, true)[1]),
-            gen_loader.from_lang(),
+            snippets.gen_loader.from_file(vim.fn.glob(path_package .. '**/friendly-snippets/snippets/global.json', false, true)[1]),
+            snippets.gen_loader.from_lang(),
         },
+        mappings = {expand = '', jump_next = '<Tab>', jump_prev = '<S-Tab>'},
     })
     MiniSnippets.start_lsp_server({ match = false })
 end)
