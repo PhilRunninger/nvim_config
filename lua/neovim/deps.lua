@@ -161,9 +161,9 @@ later(function()
         pattern = 'MiniFilesBufferCreate',
         callback = function(args)
             local buf_id = args.data.buf_id
-            map_split(buf_id, 's', 'horizontal')
-            map_split(buf_id, 'v', 'vertical')
-            map_split(buf_id, 't', 'tab')
+            map_split(buf_id, '<C-s>', 'horizontal')
+            map_split(buf_id, '<C-v>', 'vertical')
+            map_split(buf_id, '<C-t>', 'tab')
         end,
     })
 
@@ -182,21 +182,8 @@ later(function()
     })
 end)
 
--- Disable built-in stuff I don't use.  {{{1
-g.loaded_perl_provider = 0
-g.loaded_ruby_provider = 0
-g.loaded_node_provider = 0
-g.loaded_python_provider = 0
-g.loaded_python3_provider = 0
-
-g.loaded = 1
-g.loaded_netrw = 1
-g.loaded_netrwPlugin = 1
-g.loaded_2html_plugin = 1
-g.loaded_tutor_mode_plugin = 1
-g.loaded_matchit = 1
-g.loaded_matchparen = 1
-
+-- Copilot           - https://github.com/github/copilot.vim {{{1
+later(function() add({ source = 'github/copilot.vim' }) end)
 
 -- LSP               - https://github.com/neovim/nvim-lspconfig, ... {{{1
 --                   - https://github.com/mason-org/mason.nvim, ...
@@ -295,14 +282,6 @@ later(function()
         highlight = { enable = true },
     })
 end)
-
--- -- Copilot           - https://github.com/github/copilot.vim {{{1
--- later(function()
---     add({ source = 'github/copilot.vim' })
---     g.copilot_no_tab_map = true
---     -- Use <Tab> to navigate completion menu, accept Copilot suggestion, or insert a tab.
---     vim.api.nvim_set_keymap("i", "<Tab>", [[pumvisible() ? "\<C-n>" : (exists('b:_copilot') ? copilot#Accept("\<CR>") : "\<Tab>")]], { expr = true })
--- end)
 
 -- CSV               - https://github.com/chrisbra/csv.vim  {{{1
 later(function()
@@ -407,3 +386,18 @@ later(function() add({ source = 'tommcdo/vim-exchange' }) end)
 
 -- Signature         - https://github.com/kshenoy/vim-signature  {{{1
 later(function() add({ source = 'kshenoy/vim-signature' }) end)
+
+-- Disable built-in stuff I don't use.  {{{1
+g.loaded_perl_provider = 0
+g.loaded_ruby_provider = 0
+g.loaded_node_provider = 0
+g.loaded_python_provider = 0
+g.loaded_python3_provider = 0
+
+g.loaded = 1
+g.loaded_netrw = 1
+g.loaded_netrwPlugin = 1
+g.loaded_2html_plugin = 1
+g.loaded_tutor_mode_plugin = 1
+g.loaded_matchit = 1
+g.loaded_matchparen = 1
