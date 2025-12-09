@@ -47,11 +47,10 @@ later(function()
             hack      = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
             todo      = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
             note      = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
-
-        -- Highlight hex color strings (`#rrggbb`) using that color
-        hex_color = require('mini.hipatterns').gen_highlighter.hex_color(),
-    },
-})
+            -- Highlight hex color strings (`#rrggbb`) using that color
+            hex_color = require('mini.hipatterns').gen_highlighter.hex_color(),
+        },
+    })
 end)
 
 --   mini.pick  {{{2

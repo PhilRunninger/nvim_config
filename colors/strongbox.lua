@@ -1,12 +1,16 @@
--- Name:         Tango
--- Description:  Taken from Windows Terminal's Tango Dark and Tango Light.
+-- Name:         Strong GruvBox
+-- Description:  A variation of morhetz's gruvbox, with stronger contrast; the
+--               bg[0-4] and fg[0-4] colors span the whole range fom black to white.
+-- Lineage:      [gruvbox](https://github.com/morhetz/gruvbox)
+--                 ↳ [retrobox](https://github.com/vim/colorschemes)
+--                     ↳ [strongbox](this file)
 -- Author:       Phil Runninger <philrunninger@gmail.com>
 -- Maintainer:   Phil Runninger <philrunninger@gmail.com>
--- Last Updated: 12/05/2025 00:44:08
+-- Last Updated: 12/05/2025 02:43:42
 
 -- Revert to Vim default color scheme
 vim.cmd('source $VIMRUNTIME/colors/vim.lua')
-vim.g.colors_name = 'tango'
+vim.g.colors_name = 'strongbox'
 
 --==================================================
 -- Define the palettes and a function to apply them.
@@ -15,21 +19,21 @@ local isDark = vim.o.background == 'dark'
 
 local c = {
     black  = isDark and '#000000' or '#ffffff',
-    gray13 = isDark and '#212121' or '#e0e0e0',
-    gray25 = isDark and '#404040' or '#bfbfbf',
-    gray35 = isDark and '#595959' or '#a1a1a1',
-    gray50 = isDark and '#7f7f7f' or '#7f7f7f',
-    gray63 = isDark and '#a1a1a1' or '#595959',
-    gray75 = isDark and '#bfbfbf' or '#404040',
-    gray88 = isDark and '#e0e0e0' or '#212121',
+    gray13 = isDark and '#342f2d' or '#e7dac0',
+    gray25 = isDark and '#574f49' or '#cebe9d',
+    gray35 = isDark and '#70655b' or '#b3a38b',
+    gray50 = isDark and '#918473' or '#918473',
+    gray63 = isDark and '#b3a38b' or '#70655b',
+    gray75 = isDark and '#cebe9d' or '#574f49',
+    gray88 = isDark and '#e7dac0' or '#342f2d',
     white  = isDark and '#ffffff' or '#000000',
-    red    = isDark and '#ef2929' or '#cc0000',
+    red    = isDark and '#fb4934' or '#9d0006',
     orange = isDark and '#fe8019' or '#ff5f00',
-    yellow = isDark and '#fce94f' or '#c4a000',
-    green  = isDark and '#8ae234' or '#4e9a06',
-    aqua   = isDark and '#34e2e2' or '#06989a',
-    blue   = isDark and '#729fcf' or '#3465a4',
-    purple = isDark and '#ad7fa8' or '#75507b'
+    yellow = isDark and '#fabd2f' or '#b57614',
+    green  = isDark and '#b8bb26' or '#79740e',
+    aqua   = isDark and '#8ec07c' or '#427b58',
+    blue   = isDark and '#83a598' or '#076678',
+    purple = isDark and '#d3869b' or '#8f3f71'
 }
 
 local hi = function(definitions)
