@@ -353,27 +353,27 @@ later(function()
 end)
 
 -- Dear Diary        - https://github.com/ishchow/nvim-deardiary  {{{1
-later(function()
-    add({ source = 'ishchow/nvim-deardiary' })
-    require("deardiary.config").journals = {
-        {
-            path = os.getenv('DIARY') or '~/Documents/Diary',
-            frequencies = {
-                daily = {
-                    template = function(entry_date)
-                        return entry_date:fmt('# %A, %B %d, %Y') .. '\n\n' ..
-                            '## Training\n\n' ..
-                            '## Kanban Cards\n\n' ..
-                            '## Other'
-                    end
-                }
+add({ source = 'ishchow/nvim-deardiary' })
+require("deardiary.config").journals = {
+    {
+        path = os.getenv('DIARY') or '~/Documents/Diary',
+        frequencies = {
+            weekly = {
+                template = function(entry_date)
+                    local week_start = entry_date - (entry_date:getweekday() - 1)
+                    local week_end = week_start + 6
+                    return entry_date:fmt('# Week of %B %d, %Y - %B %d, %Y', week_start, week_end) .. '\n\n' ..
+                        '## Kanban Cards\n\n' ..
+                        '## Training\n\n' ..
+                        '## Other'
+                end
             }
         }
     }
-    require('deardiary').set_current_journal(1)
-    vim.g.deardiary_use_default_mappings = 0
-    vim.api.nvim_set_keymap("n", "<leader>j", ":DearDiaryToday<CR>", {noremap=true})
-end)
+}
+require('deardiary').set_current_journal(1)
+vim.g.deardiary_use_default_mappings = 0
+vim.api.nvim_set_keymap("n", "<leader>j", ":DearDiaryThisWeek<CR>", {noremap=true})
 
 -- Markdown Preview  - https://github.com/iamcco/markdown-preview.nvim  {{{1
 later(function() add({ source = 'iamcco/markdown-preview.nvim' }) end)
