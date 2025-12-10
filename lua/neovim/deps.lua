@@ -321,10 +321,10 @@ require("deardiary.config").journals = {
         frequencies = {
             weekly = {
                 template = function(entry_date)
-                    local week_start = entry_date - (entry_date:getweekday() - 1)
-                    local week_end = week_start + 6
-                    return entry_date:fmt('# Week of %B %d, %Y - %B %d, %Y', week_start, week_end) .. '\n\n' ..
-                        '## Kanban Cards\n\n' ..
+                    local week_start = entry_date:copy():adddays(1 - entry_date:getweekday())
+                    local week_end = week_start:copy():adddays(6)
+                    return week_start:fmt('# Week of %B %d, %Y') .. week_end:fmt(' - %B %d, %Y') .. '\n\n' ..
+                        '## Cards\n\n' ..
                         '## Training\n\n' ..
                         '## Other'
                 end
