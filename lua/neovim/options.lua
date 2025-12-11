@@ -12,6 +12,7 @@ for k,v in pairs({
         showmode = false,
         showmatch = true,
         number = true,
+        relativenumber = true,
         fillchars = {stl=' ', stlnc=' ', eob=' ', fold='⋯'},
         foldtext = [[printf('%s  ▌%d:%d▐', trim(substitute(getline(v:foldstart),'\('.&commentstring->substitute('\s*%s','','').'\)\?\s*{{{\d\+','',''),'',2), v:foldlevel , v:foldend-v:foldstart+1) ]],
         list = true,
