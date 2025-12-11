@@ -322,8 +322,7 @@ require("deardiary.config").journals = {
             weekly = {
                 template = function(entry_date)
                     local week_start = entry_date:copy():adddays(1 - entry_date:getweekday())
-                    local week_end = week_start:copy():adddays(6)
-                    return week_start:fmt('# Week of %B %d, %Y') .. week_end:fmt(' - %B %d, %Y') .. '\n\n' ..
+                    return week_start:fmt('# Week of %B %d, %Y') .. '\n\n' ..
                         '## Cards\n\n' ..
                         '## Training\n\n' ..
                         '## Other'
