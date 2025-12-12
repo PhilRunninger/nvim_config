@@ -112,13 +112,16 @@ require('mini.git').setup()
 
 --   mini.files  {{{2
 require('mini.files').setup({
+    mappings = {
+        close = '<Esc'
+    },
     windows = {
         max_number = math.huge, -- Maximum number of windows to show side by side
         preview = true,         -- Whether to show preview of file/directory under cursor
         width_focus = 40,       -- Width of focused window
         width_nofocus = 15,     -- Width of non-focused window
         width_preview = 60,     -- Width of preview window
-    }
+    },
 })
 vim.api.nvim_set_keymap('n', '<leader>o', ':lua MiniFiles.open()<CR>', { noremap = true, silent = true })
 
@@ -320,6 +323,10 @@ require("deardiary.config").journals = {
         path = os.getenv('DIARY') or '~/Documents/Diary',
         frequencies = {
             weekly = {
+                formatpath = function(entry_date)
+                    local week_start = entry_date:copy():adddays(1 - entry_date:getweekday())
+                    return entry_date:getweeknumber() .. week_start:fmt(' - %B %d')
+                end,
                 template = function(entry_date)
                     local week_start = entry_date:copy():adddays(1 - entry_date:getweekday())
                     return week_start:fmt('# Week of %B %d, %Y') .. '\n\n' ..
