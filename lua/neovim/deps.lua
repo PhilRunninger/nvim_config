@@ -325,7 +325,8 @@ require("deardiary.config").journals = {
             weekly = {
                 formatpath = function(entry_date)
                     local week_start = entry_date:copy():adddays(1 - entry_date:getweekday())
-                    return entry_date:getweeknumber() .. week_start:fmt(' - %B %d') .. '.md'
+                    local filename = string.format('%02d - %s.md', entry_date:getweeknumber(), week_start:fmt('%B %d'))
+                    return require("deardiary.util").join_path({"weekly", entry_date:getyear(),  filename})
                 end,
                 template = function(entry_date)
                     local week_start = entry_date:copy():adddays(1 - entry_date:getweekday())
