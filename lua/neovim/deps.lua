@@ -113,7 +113,7 @@ require('mini.git').setup()
 --   mini.files  {{{2
 require('mini.files').setup({
     mappings = {
-        close = '<Esc'
+        close = '<Esc>'
     },
     windows = {
         max_number = math.huge, -- Maximum number of windows to show side by side
@@ -325,7 +325,7 @@ require("deardiary.config").journals = {
             weekly = {
                 formatpath = function(entry_date)
                     local week_start = entry_date:copy():adddays(1 - entry_date:getweekday())
-                    return entry_date:getweeknumber() .. week_start:fmt(' - %B %d')
+                    return entry_date:getweeknumber() .. week_start:fmt(' - %B %d') .. '.md'
                 end,
                 template = function(entry_date)
                     local week_start = entry_date:copy():adddays(1 - entry_date:getweekday())
