@@ -113,7 +113,7 @@ require('mini.git').setup()
 --   mini.files  {{{2
 require('mini.files').setup({
     mappings = {
-        close = '<Esc'
+        close = '<Esc>'
     },
     windows = {
         max_number = math.huge, -- Maximum number of windows to show side by side
@@ -153,17 +153,12 @@ vim.api.nvim_create_autocmd('User', {
     end,
 })
 
--- Create bookmarks. I wish this could be done by user, not by code.
-local set_mark = function(id, path, desc)
-    MiniFiles.set_bookmark(id, path, { desc = desc })
-end
 vim.api.nvim_create_autocmd('User', {
     pattern = 'MiniFilesExplorerOpen',
     callback = function()
-        set_mark('n', vim.fn.stdpath('config'), 'Config') -- path
-        set_mark('w', vim.fn.getcwd, 'Working directory') -- callable
-        set_mark('h', '~', 'Home directory')
-        set_mark('s', '~/source', 'My source code')
+        local bookmarksPath = vim.fn.stdpath('data') .. '/mini.files/bookmarks.lua'
+        if vim.fn.filereadable(bookmarksPath) == 0 then return end
+        dofile(bookmarksPath)
     end,
 })
 
@@ -325,7 +320,8 @@ require("deardiary.config").journals = {
             weekly = {
                 formatpath = function(entry_date)
                     local week_start = entry_date:copy():adddays(1 - entry_date:getweekday())
-                    return entry_date:getweeknumber() .. week_start:fmt(' - %B %d')
+                    local filename = string.format('%02d - %s.md', entry_date:getweeknumber(), week_start:fmt('%B %d'))
+                    return require("deardiary.util").join_path({"weekly", entry_date:getyear(),  filename})
                 end,
                 template = function(entry_date)
                     local week_start = entry_date:copy():adddays(1 - entry_date:getweekday())
