@@ -153,17 +153,12 @@ vim.api.nvim_create_autocmd('User', {
     end,
 })
 
--- Create bookmarks. I wish this could be done by user, not by code.
-local set_mark = function(id, path, desc)
-    MiniFiles.set_bookmark(id, path, { desc = desc })
-end
 vim.api.nvim_create_autocmd('User', {
     pattern = 'MiniFilesExplorerOpen',
     callback = function()
-        set_mark('n', vim.fn.stdpath('config'), 'Config') -- path
-        set_mark('w', vim.fn.getcwd, 'Working directory') -- callable
-        set_mark('h', '~', 'Home directory')
-        set_mark('s', '~/source', 'My source code')
+        local bookmarksPath = vim.fn.stdpath('data') .. '/mini.files/bookmarks.lua'
+        if vim.fn.filereadable(bookmarksPath) == 0 then return end
+        dofile(bookmarksPath)
     end,
 })
 
