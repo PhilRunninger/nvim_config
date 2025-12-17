@@ -33,8 +33,7 @@ local HLSToRGB = function(h,l,s)
     elseif h < 300 then r,g,b = x, 0, c
     else                r,g,b = c, 0, x
     end
-    r,g,b = math.floor((r+m)*255), math.floor((g+m)*255), math.floor((b+m)*255)
-    return string.format('#%06x', 256*(256*r+g)+b)
+    return string.format('#%02x%02x%02x', math.floor((r+m)*255), math.floor((g+m)*255), math.floor((b+m)*255))
 end
 
 local foregroundColor = function(h,l)
@@ -64,4 +63,4 @@ end
 local group = vim.api.nvim_create_augroup('mySLgroup', {clear = true})
 vim.api.nvim_create_autocmd('InsertEnter', {callback = function() changeColors(true) end, group = group})
 vim.api.nvim_create_autocmd({'VimEnter','ColorScheme','TermOpen','TermClose','InsertLeave','TextChanged','BufWritePost','BufEnter'}, {callback = function() changeColors() end, group = group})
-vim.api.nvim_create_autocmd('ColorScheme', {command = 'highlight! link StatusLine User5', group = group})
+vim.api.nvim_create_autocmd('ColorScheme', {command = 'highlight! link StatusLine User' .. colors.count, group = group})
