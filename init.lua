@@ -3,8 +3,6 @@ if vim.g.vscode then
     -- Example: require "code.options"
 
 else
-    vim.cmd('colorscheme tango')
-
     require "neovim.options"
     require "neovim.keymaps"
     require "neovim.deps"
@@ -13,4 +11,6 @@ else
     require "neovim.tabline"
     require "neovim.floaterminal"
     require "search"
+
+    vim.cmd('colorscheme tango')
 end
