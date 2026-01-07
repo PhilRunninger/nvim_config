@@ -254,7 +254,7 @@ add({
 })
 
 require('nvim-treesitter.configs').setup({
-    ensure_installed = { 'lua', 'vim', 'vimdoc', 'html', 'css', 'typescript', 'javascript', 'tsx', 'java', 'c_sharp', 'powershell', 'json', 'markdown', 'gitcommit', 'diff', 'git_rebase' },
+    ensure_installed = { 'lua', 'vim', 'vimdoc', 'html', 'css', 'typescript', 'javascript', 'tsx', 'java', 'c_sharp', 'powershell', 'json', 'markdown', 'mermaid', 'gitcommit', 'diff', 'git_rebase' },
     highlight = { enable = true },
 })
 
@@ -270,7 +270,10 @@ map('n', '<leader>G', ':Git<CR>', noremapSilent)
 
 -- Markdown          - https://github.com/tpope/vim-markdown  {{{1
 g.markdown_folding = 1
-g.markdown_fenced_languages = { 'vim', 'sql', 'cs', 'ps1', 'lua', 'json' }
+g.markdown_fenced_languages = { 'vim', 'sql', 'cs', 'ps1', 'lua', 'json', 'mermaid' }
+
+-- Mermaid           - https://github.com/mracos/mermaid.vim.git  {{{1
+add({ source = 'mracos/mermaid.vim' })
 
 -- Matchup           - https://github.com/andymass/vim-matchup  {{{1
 add({ source = 'andymass/vim-matchup' })
@@ -338,8 +341,12 @@ require('deardiary').set_current_journal(1)
 vim.g.deardiary_use_default_mappings = 0
 vim.api.nvim_set_keymap("n", "<leader>j", ":DearDiaryThisWeek<CR>", {noremap=true})
 
--- Markdown Preview  - https://github.com/iamcco/markdown-preview.nvim  {{{1
-add({ source = 'iamcco/markdown-preview.nvim' })
+-- Markdown Preview  - https://github.com/wardenclyffetower/markdown-preview.nvim.git  {{{1
+add({ source = 'wardenclyffetower/markdown-preview.nvim' })
+vim.g.mkdp_auto_start = 1
+vim.g.mkdp_auto_close = 0
+vim.g.mkdp_page_title = '${name}'
+vim.g.mkdp_combine_preview = 1
 
 -- Recover           - https://github.com/chrisbra/Recover.vim  {{{1
 add({ source = 'chrisbra/Recover.vim' })
