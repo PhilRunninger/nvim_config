@@ -272,6 +272,12 @@ map('n', '<leader>G', ':Git<CR>', noremapSilent)
 g.markdown_folding = 1
 g.markdown_fenced_languages = { 'vim', 'sql', 'cs', 'ps1', 'lua', 'json', 'mermaid' }
 
+-- Markdown Preview  - https://github.com/wardenclyffetower/markdown-preview.nvim.git  {{{1
+add({ source = 'wardenclyffetower/markdown-preview.nvim' })
+vim.g.mkdp_auto_close = 0
+vim.g.mkdp_page_title = '${name}'
+vim.g.mkdp_combine_preview = 1
+
 -- Mermaid           - https://github.com/mracos/mermaid.vim.git  {{{1
 add({ source = 'mracos/mermaid.vim' })
 
@@ -340,13 +346,6 @@ require("deardiary.config").journals = {
 require('deardiary').set_current_journal(1)
 vim.g.deardiary_use_default_mappings = 0
 vim.api.nvim_set_keymap("n", "<leader>j", ":DearDiaryThisWeek<CR>", {noremap=true})
-
--- Markdown Preview  - https://github.com/wardenclyffetower/markdown-preview.nvim.git  {{{1
-add({ source = 'wardenclyffetower/markdown-preview.nvim' })
-vim.g.mkdp_auto_start = 1
-vim.g.mkdp_auto_close = 0
-vim.g.mkdp_page_title = '${name}'
-vim.g.mkdp_combine_preview = 1
 
 -- Recover           - https://github.com/chrisbra/Recover.vim  {{{1
 add({ source = 'chrisbra/Recover.vim' })
