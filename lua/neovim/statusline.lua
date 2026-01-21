@@ -4,7 +4,7 @@ vim.opt.statusline = "%!v:lua.SetStatusLineText()"
 
 local colors = {
     count = 4,
-    hues = { modified = 30, unmodified = 108 , insert = 204, terminal = 312 }, -- 30=DarkOrange 108=green2 204=DeepSkyBlue 312=magenta3
+    hues = { modified = 24, unmodified = 108 , insert = 204, terminal = 312 }, -- 24=DarkOrange 108=green2 204=DeepSkyBlue 312=magenta3
     luminances = { light = { m = -0.075, b = 0.925 }, dark = { m = 0.075, b = 0.075 } },
     saturation = 1.0
 }
@@ -39,7 +39,8 @@ local HLSToRGB = function(h,l,s)
 end
 
 local foregroundColor = function(h,l)
-    local limit = 0.457781037 - 0.002553392*h + 7.13007e-5 *h^2 - 1.43305e-6*h^3 + 1.17384e-8 *h^4 - 3.8692e-11*h^5 + 4.3931e-14*h^6
+    local limit = 7.79861E-22 * h^10 - 1.37456E-18 * h^9 + 1.02256E-15 * h^8 - 4.17074E-13 * h^7 + 1.01396E-10 * h^6
+        - 1.49576E-08 * h^5 + 1.30385E-06 * h^4 - 6.21809E-05 * h^3 + 0.001380145 * h^2 - 0.010181168 * h^1 + 0.35320151
     return l < limit and 'white' or 'black'
 end
 
