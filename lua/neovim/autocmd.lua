@@ -1,3 +1,5 @@
+-- vim:foldmethod=marker
+
 local group = vim.api.nvim_create_augroup('myAuGroup', {clear = true})
 
 -- Remove trailing whitespace when saving, if approved.

@@ -1,3 +1,5 @@
+-- vim:foldmethod=marker
+
 for k,v in pairs({
         confirm = true,
         ignorecase = true,

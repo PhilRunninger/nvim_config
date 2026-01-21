@@ -1,4 +1,6 @@
 vim.opt.tabline = "%!luaeval('SetTabLine()')"
+-- vim:foldmethod=marker
+
 
 function SetTabLine()
     local tabline = '%#TablineFill#'

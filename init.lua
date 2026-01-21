@@ -1,3 +1,5 @@
+-- vim:foldmethod=marker
+
 if vim.g.vscode then
     -- Use the lua/code directory for VSCode specific settings.
     -- Example: require "code.options"

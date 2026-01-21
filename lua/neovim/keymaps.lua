@@ -1,3 +1,5 @@
+-- vim:foldmethod=marker
+
 local map = vim.api.nvim_set_keymap
 local noremapSilent = {noremap=true, silent=true}
 
