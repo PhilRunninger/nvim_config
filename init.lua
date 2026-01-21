@@ -11,7 +11,7 @@ else
     require "neovim.autocmd"
     require "neovim.statusline"
     require "neovim.tabline"
-    require "neovim.floaterminal"
+    require "neovim.floatterminal"
     require "search"
 
     vim.cmd('colorscheme tango')

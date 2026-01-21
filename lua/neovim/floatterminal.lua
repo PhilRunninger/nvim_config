@@ -1,3 +1,5 @@
+-- vim:foldmethod=marker
+
 local state = {
     floating = {
         buf = -1,
@@ -50,14 +52,14 @@ local toggle_terminal = function()
     end
 end
 
-vim.api.nvim_create_user_command("Floaterminal", toggle_terminal, {})
+vim.api.nvim_create_user_command("FloatTerminal", toggle_terminal, {})
 
-vim.api.nvim_set_keymap('n', '<F9>', '<Cmd>Floaterminal<CR>', {noremap=true, silent=true})
-vim.api.nvim_set_keymap('v', '<F9>', '<Cmd>Floaterminal<CR>', {noremap=true, silent=true})
-vim.api.nvim_set_keymap('t', '<F9>', '<Cmd>Floaterminal<CR>', {noremap=true, silent=true})
+vim.api.nvim_set_keymap('n', '<F9>', '<Cmd>FloatTerminal<CR>', {noremap=true, silent=true})
+vim.api.nvim_set_keymap('v', '<F9>', '<Cmd>FloatTerminal<CR>', {noremap=true, silent=true})
+vim.api.nvim_set_keymap('t', '<F9>', '<Cmd>FloatTerminal<CR>', {noremap=true, silent=true})
 vim.api.nvim_set_keymap('t', '<Esc><Esc>', '<C-\\><C-n>', {noremap=true, silent=true})
 
-local group = vim.api.nvim_create_augroup('Floaterminal', {clear = true})
+local group = vim.api.nvim_create_augroup('FloatTerminal', {clear = true})
 
 -- Turn off line numbers in Terminal windows.
 vim.api.nvim_create_autocmd('TermOpen', {command = 'setlocal nonumber norelativenumber | startinsert', group = group})
