@@ -1,6 +1,6 @@
-vim.opt.statusline = "%!luaeval('SetStatusLineText()')"
 -- vim:foldmethod=marker
 
+vim.opt.statusline = "%!v:lua.SetStatusLineText()"
 
 local colors = {
     count = 4,
