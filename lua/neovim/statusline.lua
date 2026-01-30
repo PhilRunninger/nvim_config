@@ -15,7 +15,7 @@ function SetStatusLineText()
     return
         (useColor and '%#User1#'  or '') .. " %4l/%-4L %3v " ..
         (useColor and '%#User12#' or '') .. divider ..
-        (useColor and '%#User2#'  or '') .. "%(  %{get(b:,'minigit_summary_string','')} %)" ..
+        (useColor and '%#User2#'  or '') .. "%(  %{FugitiveStatusline()[5:-3]} %)" ..
         (useColor and '%#User23#' or '') .. divider ..
         (useColor and '%#User3#'  or '') .. " %(%{&filetype} %)%(%{&fileformat=='dos' ? '' : '🐧'} %)" ..
         (useColor and '%#User34#' or '') .. divider ..

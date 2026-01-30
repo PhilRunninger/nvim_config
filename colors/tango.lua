@@ -52,7 +52,7 @@ hi({
     CursorLine =                                      {link = 'CursorColumn'},
     Directory =      {fg = c.green,                    bold = 1},
     DiffAdd =        {fg = c.green,   bg = c.gray25,   bold = 1, italic = 1},
-    DiffChange =     {fg = c.aqua,    bg = c.gray25,   bold = 1, italic = 1},
+    DiffChange =     {fg = c.blue,    bg = c.gray25,   bold = 1, italic = 1},
     DiffDelete =     {fg = c.red,     bg = c.gray25,   bold = 1, italic = 1},
     DiffText =       {fg = c.yellow,  bg = c.gray25,   bold = 1, italic = 1},
     EndOfBuffer =    {},
@@ -154,6 +154,6 @@ hi({
     Error =          {fg = c.red,     bg = c.black,     bold = 1, reverse = 1},
     Todo =           {fg = c.white,   bg = c.black,     bold = 1, italic = 1},
     Added =          {fg = c.green,   bg = c.black,     bold = 1, italic = 1},
-    Changed =        {fg = c.aqua,    bg = c.black,     bold = 1, italic = 1},
+    Changed =        {fg = c.blue,    bg = c.black,     bold = 1, italic = 1},
     Removed =        {fg = c.red,     bg = c.black,     bold = 1, italic = 1}
 })

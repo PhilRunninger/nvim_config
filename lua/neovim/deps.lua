@@ -116,13 +116,10 @@ later(function()
     require('mini.diff').setup({
         view = {
             style = 'sign',
-            signs = { add = '+', change = '↻', delete = '-' }
+            signs = { add = '▌', change = '█', delete = '▐' }
         }
     })
 end)
-
---   mini.git  {{{2
-later(function() require('mini.git').setup() end)
 
 --   mini.files  {{{2
 later(function()
