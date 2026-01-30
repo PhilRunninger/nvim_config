@@ -317,18 +317,20 @@ later(function()
     g.vrc_trigger = '<F5>'
 end)
 
--- Undo Tree         - https://github.com/mbbill/undotree  {{{1
+-- Atone (undotree)   - https://github.com/XXiaoA/atone.nvim  {{{1
 later(function()
-    add({ source = 'mbbill/undotree' })
-    map('n', '<leader>u', ':UndotreeToggle<CR>', noremapSilent)
-    g.undotree_WindowLayout = 2
-    g.undotree_HelpLine = 0
-    g.undotree_ShortIndicators = 1
-    g.undotree_TreeNodeShape = '●'
-    g.undotree_TreeVertShape = '│'
-    g.undotree_TreeSplitShape = '╱'
-    g.undotree_TreeReturnShape = '╲'
-    g.undotree_SetFocusWhenToggle = 1
+    add({ source = 'XXiaoA/atone.nvim' })
+    require("atone").setup({
+        layout = {
+            width = 'adaptive'
+        },
+        ui = {
+            border = 'rounded',
+            compact = true,
+            cursorline = true
+        }
+    })
+    map('n', '<leader>u', ':Atone open<CR>', noremapSilent)
 end)
 
 -- Unicode           - https://github.com/chrisbra/unicode.vim  {{{1
