@@ -71,8 +71,6 @@ map('x', '<leader>P', '"*P', noremapSilent)
 
 -- mappings from mini.basics. Don't want anything else from it.
 map('n', '\\b', '<Cmd>lua vim.o.bg = vim.o.bg == "dark" and "light" or "dark"<CR>', noremapSilent)
-map('n', '\\c', '<Cmd>setlocal cursorline!<CR>', noremapSilent)
-map('n', '\\C', '<Cmd>setlocal cursorcolumn!<CR>', noremapSilent)
 map('n', '\\d', '<Cmd>lua MiniBasics.toggle_diagnostic()<CR>', noremapSilent)
 map('n', '\\D', '<Cmd>if &diff | diffoff | else | diffthis | endif<CR>', noremapSilent)
 map('n', '\\h', '<Cmd>let v:hlsearch = 1 - v:hlsearch<CR>', noremapSilent)
@@ -88,3 +86,6 @@ map('n', '#', ':buffer #<CR>', noremapSilent) -- Make # switch to the alternate 
 map('n', '<leader>cd', ':cd %:p:h|pwd<CR>', noremapSilent) -- Change cwd to current buffer's directory
 map('n', '<leader>z', 'zMzvzz', noremapSilent) -- Focus on the current fold, opening it and closing all others.
 map('n', 'U', '<C-R>', noremapSilent) -- Make an easier redo mapping. Who uses the default U anyway?
+map('n', '-', '<Cmd>setlocal cursorline!<CR>')
+map('n', '|', '<Cmd>setlocal cursorcolumn!<CR>')
+map('n', '+', '<Cmd>setlocal cursorline! cursorcolumn!<CR>')
