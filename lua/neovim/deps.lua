@@ -406,3 +406,6 @@ g.loaded_2html_plugin = 1
 g.loaded_tutor_mode_plugin = 1
 g.loaded_matchit = 1
 g.loaded_matchparen = 1
+
+-- Let me know when I can start using the lazy-loaded plugins. {{{1
+later(function() vim.notify('Dependencies are ready.') end)
