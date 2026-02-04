@@ -1,5 +1,9 @@
 -- vim:foldmethod=marker
 
+local map = function(mode, lhs, rhs, opts)
+    vim.api.nvim_set_keymap(mode, lhs, rhs, opts or {noremap=true, silent=true})
+end
+
 local state = {
     floating = {
         buf = -1,
@@ -54,10 +58,10 @@ end
 
 vim.api.nvim_create_user_command("FloatTerminal", toggle_terminal, {})
 
-vim.api.nvim_set_keymap('n', '<F9>', '<Cmd>FloatTerminal<CR>', {noremap=true, silent=true})
-vim.api.nvim_set_keymap('v', '<F9>', '<Cmd>FloatTerminal<CR>', {noremap=true, silent=true})
-vim.api.nvim_set_keymap('t', '<F9>', '<Cmd>FloatTerminal<CR>', {noremap=true, silent=true})
-vim.api.nvim_set_keymap('t', '<Esc><Esc>', '<C-\\><C-n>', {noremap=true, silent=true})
+map('n', '<F9>', '<Cmd>FloatTerminal<CR>')
+map('v', '<F9>', '<Cmd>FloatTerminal<CR>')
+map('t', '<F9>', '<Cmd>FloatTerminal<CR>')
+map('t', '<Esc><Esc>', '<C-\\><C-n>')
 
 local group = vim.api.nvim_create_augroup('FloatTerminal', {clear = true})
 

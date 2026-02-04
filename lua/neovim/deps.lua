@@ -2,9 +2,10 @@
 
 -- Module Shortcuts  {{{1
 local g = vim.g
-local map = vim.api.nvim_set_keymap
-local noremapSilent = { noremap = true, silent = true }
-local noremap = { noremap = true }
+
+local map = function(mode, lhs, rhs, opts)
+    vim.api.nvim_set_keymap(mode, lhs, rhs, opts or {noremap=true, silent=true})
+end
 
 -- mini.nvim         - https://github.com/nvim-mini/mini.nvim  {{{1
 local path_package = vim.fn.stdpath('data') .. '/site/'
@@ -54,10 +55,10 @@ end)
 --   mini.pick  {{{2
 later(function()
     require('mini.pick').setup()
-    map('n', '<leader>f', ':Pick files<CR>', noremapSilent)
-    map('n', '<leader>b', ':Pick buffers<CR>', noremapSilent)
-    map('n', '<leader>g', ':Pick grep_live<CR>', noremapSilent)
-    map('n', '<F1>', ':Pick help<CR>', noremapSilent)
+    map('n', '<leader>f', ':Pick files<CR>')
+    map('n', '<leader>b', ':Pick buffers<CR>')
+    map('n', '<leader>g', ':Pick grep_live<CR>')
+    map('n', '<F1>', ':Pick help<CR>')
 end)
 
 --   mini.extra  {{{2
@@ -135,7 +136,7 @@ later(function()
             width_preview = 60,     -- Width of preview window
         },
     })
-    vim.api.nvim_set_keymap('n', '<leader>o', ':lua MiniFiles.open()<CR>', { noremap = true, silent = true })
+    map('n', '<leader>o', ':lua MiniFiles.open()<CR>')
 
     -- Setup mappings to open files in split windows/tabs.
     local map_split = function(buf_id, lhs, direction)
@@ -283,9 +284,9 @@ end)
 
 -- Fugitive          - https://github.com/tpope/vim-fugitive  {{{1
 add({ source = 'tpope/vim-fugitive' })
-map('n', '<F3>', '"zyiw/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>', noremapSilent)
-map('v', '<F3>', '"zy/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>', noremapSilent)
-map('n', '<leader>G', ':Git<CR>', noremapSilent)
+map('n', '<F3>', '"zyiw/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>')
+map('v', '<F3>', '"zy/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>')
+map('n', '<leader>G', ':Git<CR>')
 
 -- Markdown          - https://github.com/tpope/vim-markdown  {{{1
 g.markdown_folding = 1
@@ -330,14 +331,14 @@ later(function()
             cursorline = true
         }
     })
-    map('n', '<leader>u', ':Atone open<CR>', noremapSilent)
+    map('n', '<leader>u', ':Atone open<CR>')
 end)
 
 -- Unicode           - https://github.com/chrisbra/unicode.vim  {{{1
 later(function()
     add({ source = 'chrisbra/unicode.vim' })
-    map('n', 'ga', ':UnicodeName<CR>', noremapSilent)
-    map('n', '<leader>ga', ':UnicodeSearch!<space>', noremap)
+    map('n', 'ga', ':UnicodeName<CR>')
+    map('n', '<leader>ga', ':UnicodeSearch!<space>', {noremap = true})
     g.Unicode_no_default_mappings = 1
 end)
 
@@ -347,10 +348,10 @@ add({ source = 'PhilRunninger/sql.nvim' })
 -- RPN               - https://github.com/PhilRunninger/cmp-rpncalc  {{{1
 later(function()
     add({ source = 'PhilRunninger/cmp-rpncalc' })
-    vim.api.nvim_set_keymap("n", "<F12>",   ":RPN<CR>",            {noremap=true})
-    vim.api.nvim_set_keymap("n", "<S-F12>", ":RPN!<CR>",           {noremap=true})
-    vim.api.nvim_set_keymap("x", "<F12>",   ":<C-U>'<,'>RPN<CR>",  {noremap=true})
-    vim.api.nvim_set_keymap("x", "<S-F12>", ":<C-U>'<,'>RPN!<CR>", {noremap=true})
+    map("n", "<F12>",   ":RPN<CR>",            {noremap=true})
+    map("n", "<S-F12>", ":RPN!<CR>",           {noremap=true})
+    map("x", "<F12>",   ":<C-U>'<,'>RPN<CR>",  {noremap=true})
+    map("x", "<S-F12>", ":<C-U>'<,'>RPN!<CR>", {noremap=true})
 end)
 
 -- Dear Diary        - https://github.com/ishchow/nvim-deardiary  {{{1
@@ -379,7 +380,7 @@ later(function()
     }
     require('deardiary').set_current_journal(1)
     vim.g.deardiary_use_default_mappings = 0
-    vim.api.nvim_set_keymap("n", "<leader>j", ":DearDiaryThisWeek<CR>", {noremap=true})
+    map("n", "<leader>j", ":DearDiaryThisWeek<CR>", {noremap=true})
 end)
 
 -- Recover           - https://github.com/chrisbra/Recover.vim  {{{1
