@@ -34,7 +34,10 @@ map('t', '<C-j>', '<C-\\><C-n>:lua WinTabSwitch("j")<CR>')
 map('t', '<C-k>', '<C-\\><C-n>:lua WinTabSwitch("k")<CR>')
 map('t', '<C-l>', '<C-\\><C-n>:lua WinTabSwitch("l")<CR>')
 
- -- Open a URL in the browser
+-- A shortcut for <C-W>
+map('n', '<leader>w', '<C-W>')
+
+-- Open a URL in the browser
 if jit.os == 'Windows' then
     map('n', 'gx', ':!start <C-R><C-A><CR>')
 elseif jit.os == 'OSX' then
@@ -62,7 +65,7 @@ map('n', '<F2>', 'i★<Esc>[s1z=/★<CR>x')
 -- Remove trailing spaces.
 map('n', '<leader>d<space>', ':let [v,c,l]=[winsaveview(),&cuc,&cul]|set cuc cul|keeppatterns %s/\\s\\+$//ce|let [&cuc,&cul]=[c,l]|call winrestview(v)|unlet v l c<CR>')
 
--- mappings from mini.basics. Don't want anything else from it.
+-- Grab some mappings from mini.basics. Don't want anything else from it.
 map('n', '\\b', '<Cmd>lua vim.o.bg = vim.o.bg == "dark" and "light" or "dark"<CR>')
 map('n', '\\d', '<Cmd>lua MiniBasics.toggle_diagnostic()<CR>')
 map('n', '\\D', '<Cmd>if &diff | diffoff | else | diffthis | endif<CR>')
