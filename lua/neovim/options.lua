@@ -1,6 +1,7 @@
 -- vim:foldmethod=marker
 
 for k,v in pairs({
+        clipboard = 'unnamed',
         confirm = true,
         ignorecase = true,
         smartcase = true,

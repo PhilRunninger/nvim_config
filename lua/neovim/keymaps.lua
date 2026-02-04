@@ -61,14 +61,6 @@ map('n', '<F2>', 'i★<Esc>[s1z=/★<CR>x', noremapSilent)
 -- Remove trailing spaces.
 map('n', '<leader>d<space>', ':let [v,c,l]=[winsaveview(),&cuc,&cul]|set cuc cul|keeppatterns %s/\\s\\+$//ce|let [&cuc,&cul]=[c,l]|call winrestview(v)|unlet v l c<CR>', noremapSilent)
 
--- Make clipboard interactions easier.
-map('n', '<leader>y', '"*y', noremapSilent)
-map('x', '<leader>y', '"*ygv', noremapSilent)
-map('n', '<leader>p', '"*p', noremapSilent)
-map('x', '<leader>p', '"*p', noremapSilent)
-map('n', '<leader>P', '"*P', noremapSilent)
-map('x', '<leader>P', '"*P', noremapSilent)
-
 -- mappings from mini.basics. Don't want anything else from it.
 map('n', '\\b', '<Cmd>lua vim.o.bg = vim.o.bg == "dark" and "light" or "dark"<CR>', noremapSilent)
 map('n', '\\d', '<Cmd>lua MiniBasics.toggle_diagnostic()<CR>', noremapSilent)
