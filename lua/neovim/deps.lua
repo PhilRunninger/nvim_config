@@ -181,15 +181,13 @@ later(function() add({ source = 'github/copilot.vim' }) end)
 
 -- LSP               - https://github.com/neovim/nvim-lspconfig, ... {{{1
 --                   - https://github.com/mason-org/mason.nvim, ...
---                   - https://github.com/mason-org/mason-lspconfig.nvim
 later(function()
     add({
         source = 'neovim/nvim-lspconfig',
-        depends = { 'mason-org/mason.nvim', 'mason-org/mason-lspconfig.nvim' },
+        depends = { 'mason-org/mason.nvim' }
     })
 
     require('mason').setup()
-    require('mason-lspconfig').setup()
 
     vim.diagnostic.config({
         virtual_lines = true,
@@ -200,6 +198,15 @@ later(function()
     -- Configure each language server.
     vim.lsp.config('lua_ls', {
         on_init = function(client)
+            if client.workspace_folders then
+                local path = client.workspace_folders[1].name
+                if path ~= vim.fn.stdpath('config')
+                    and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+                then
+                    return
+                end
+            end
+
             client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
                 runtime = {
                     version = 'LuaJIT',
@@ -235,17 +242,6 @@ later(function()
         },
     })
 
-    vim.api.nvim_create_autocmd('LspAttach', {
-        callback = function(args)
-            local client = vim.lsp.get_client_by_id(args.data.client_id)
-            if client then
-                if client:supports_method('textDocument/completions') then
-                    vim.lsp.completion.enable(true, client.id, args.buf, {autotrigger = true})
-                end
-            end
-        end
-    })
-
     vim.lsp.enable({
         'lua_ls',
         'html',
@@ -256,6 +252,17 @@ later(function()
         'pyright',
         'ts_ls',
         'vimls'
+    })
+
+    vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(args)
+            local client = vim.lsp.get_client_by_id(args.data.client_id)
+            if client then
+                if client:supports_method('textDocument/completions') then
+                    vim.lsp.completion.enable(true, client.id, args.buf, {autotrigger = true})
+                end
+            end
+        end
     })
 end)
 
