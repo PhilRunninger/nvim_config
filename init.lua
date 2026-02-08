@@ -14,5 +14,8 @@ else
     require "neovim.floatterminal"
     require "search"
 
-    vim.cmd('colorscheme tango')
+    MiniDeps.later(function()
+        vim.cmd('colorscheme tango')
+        vim.notify('You\'re ready to go.')
+    end)
 end
