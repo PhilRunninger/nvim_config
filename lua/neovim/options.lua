@@ -16,7 +16,7 @@ for k,v in pairs({
         showmatch = true,
         number = true,
         relativenumber = true,
-        fillchars = {stl=' ', stlnc=' ', eob=' ', fold='⋯'},
+        fillchars = {stl=' ', stlnc=' ', eob=' ', fold='⠶'},
         foldtext = 'v:lua.MyFoldText()',
         list = true,
         listchars = {tab='🢒⸳', extends='→', precedes='←', trail='■', nbsp='□'},
@@ -37,13 +37,13 @@ vim.opt.diffopt:append('iwhite')
 vim.opt.sessionoptions:remove('help')
 vim.opt.sessionoptions:remove('blank')
 
-function MyFoldText()
+function MyFoldText()   -- {{{1
     local line = vim.fn.getline(vim.v.foldstart)
     local commentString = vim.fn.substitute(vim.bo.commentstring, '\\s*%s\\s*', '', '') -- Remove %s placeholder from &commentstring, e.g. from "-- %s" to "--".
     line = vim.fn.substitute(line, commentString, '', '')                               -- Remove comment markers from the line.
     local foldMarker = vim.fn.substitute(vim.wo.foldmarker, ',', '\\\\|', '')           -- Replace the comma in &foldmarker for use in a pattern.
     line = vim.fn.substitute(line, '\\s*\\('..foldMarker..'\\)\\d*', '', '')            -- Remove fold markers from the line.
-    local symbols = {'❶  ','❷  ','❸  ','❹  ','❺  ','❻  ','❼  ','❽  ','❾  ','❾ ⁺'}       -- Symbols to indicate 9+ fold levels
+    local symbols = {'❶ ','❷ ','❸ ','❹ ','❺ ','❻ ','❼ ','❽ ','❾ ','❾ +'}       -- Symbols to indicate 9+ fold levels
     local nLines = vim.v.foldend - vim.v.foldstart + 1
-    return string.format('%s   %s%d', line, symbols[math.min(10, vim.v.foldlevel)], nLines)
+    return string.format('%s     %s %s ', line, symbols[math.min(10, vim.v.foldlevel)], vim.fn.tr(vim.fn.printf('%b',nLines),'01','○●'))
 end
