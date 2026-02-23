@@ -64,7 +64,7 @@ end)
 --   mini.extra  {{{2
 later(function() require('mini.extra').setup() end)
 
---   mini.align  {{{2 end)
+--   mini.align  {{{2
 later(function()
     require('mini.align').setup({
         mappings = {
@@ -73,6 +73,7 @@ later(function()
         }
     })
 end)
+
 
 --   mini.completion  {{{2
 later(function()
@@ -287,6 +288,7 @@ end)
 later(function()
     add({ source = 'chrisbra/csv.vim' })
     g.no_csv_maps = 1
+    g.csv_default_delim = ','
 end)
 
 -- Fugitive          - https://github.com/tpope/vim-fugitive  {{{1
@@ -325,20 +327,18 @@ later(function()
     g.vrc_trigger = '<F5>'
 end)
 
--- Atone (undotree)   - https://github.com/XXiaoA/atone.nvim  {{{1
+-- Undo Tree         - https://github.com/mbbill/undotree  {{{1
 later(function()
-    add({ source = 'XXiaoA/atone.nvim' })
-    require("atone").setup({
-        layout = {
-            width = 'adaptive'
-        },
-        ui = {
-            border = 'rounded',
-            compact = true,
-            cursorline = true
-        }
-    })
-    map('n', '<leader>u', ':Atone open<CR>')
+    add({ source = 'mbbill/undotree' })
+    g.undotree_WindowLayout = 2
+    g.undotree_HelpLine = 0
+    g.undotree_ShortIndicators = 1
+    g.undotree_TreeNodeShape = '●'
+    g.undotree_TreeVertShape = '│'
+    g.undotree_TreeSplitShape = '╱'
+    g.undotree_TreeReturnShape = '╲'
+    g.undotree_SetFocusWhenToggle = 1
+    map('n', '<leader>u', ':UndotreeToggle<CR>')
 end)
 
 -- Unicode           - https://github.com/chrisbra/unicode.vim  {{{1
