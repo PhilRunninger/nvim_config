@@ -177,113 +177,6 @@ later(function()
     })
 end)
 
--- Copilot           - https://github.com/github/copilot.vim {{{1
-later(function() add({ source = 'github/copilot.vim' }) end)
-
--- LSP               - https://github.com/neovim/nvim-lspconfig, ... {{{1
---                   - https://github.com/mason-org/mason.nvim, ...
-later(function()
-    add({
-        source = 'neovim/nvim-lspconfig',
-        depends = { 'mason-org/mason.nvim' }
-    })
-
-    require('mason').setup()
-
-    vim.diagnostic.config({
-        virtual_lines = true,
-        underline = false,
-        severity_sort = true,
-    })
-
-    -- Configure each language server.
-    vim.lsp.config('lua_ls', {
-        on_init = function(client)
-            if client.workspace_folders then
-                local path = client.workspace_folders[1].name
-                if path ~= vim.fn.stdpath('config')
-                    and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
-                then
-                    return
-                end
-            end
-
-            client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-                runtime = {
-                    version = 'LuaJIT',
-                    path = {
-                        'lua/?.lua',
-                        'lua/?/init.lua',
-                    },
-                },
-                workspace = {
-                    checkThirdParty = false,
-                    library = {
-                        vim.env.VIMRUNTIME
-                    }
-                }
-            })
-        end,
-        settings = {
-            Lua = {}
-        }
-    })
-
-    vim.lsp.config('powershell_es', {
-        bundle_path = vim.fn.stdpath('data') .. '/mason/packages/powershell-editor-services'
-    })
-
-    vim.lsp.config('pyright', {
-        settings = {
-            python = {
-                analysis = {
-                    typeCheckingMode = "off"
-                }
-            }
-        },
-    })
-
-    vim.lsp.enable({
-        'lua_ls',
-        'html',
-        'jsonls',
-        'cssls',
-        -- 'csharp_ls', -- Copilot is very slow in C# files. Too slow.
-        'powershell_es',
-        'pyright',
-        'ts_ls',
-        'vimls'
-    })
-
-    vim.api.nvim_create_autocmd('LspAttach', {
-        callback = function(args)
-            local client = vim.lsp.get_client_by_id(args.data.client_id)
-            if client then
-                if client:supports_method('textDocument/completions') then
-                    vim.lsp.completion.enable(true, client.id, args.buf, {autotrigger = true})
-                end
-            end
-        end
-    })
-end)
-
--- Treesitter        - https://github.com/nvim-treesitter/nvim-treesitter  {{{1
-later(function()
-    add({
-        source = 'nvim-treesitter/nvim-treesitter',
-        -- Use 'master' while monitoring updates in 'main'
-        checkout = 'master',
-        monitor = 'main',
-        -- Perform action after every checkout
-        hooks = { post_checkout = function() vim.cmd('TSUpdate') end },
-    })
-
-    require('nvim-treesitter.configs').setup({
-        ensure_installed = { 'lua', 'vim', 'vimdoc', 'html', 'css', 'typescript', 'javascript', 'tsx', 'java', 'c_sharp', 'powershell', 'json', 'markdown', 'mermaid', 'gitcommit', 'diff', 'git_rebase' },
-        highlight = { enable = true },
-    })
-end)
-
 -- CSV               - https://github.com/chrisbra/csv.vim  {{{1
 later(function()
     add({ source = 'chrisbra/csv.vim' })
@@ -398,6 +291,113 @@ later(function() add({ source = 'tommcdo/vim-exchange' }) end)
 
 -- Signature         - https://github.com/kshenoy/vim-signature  {{{1
 later(function() add({ source = 'kshenoy/vim-signature' }) end)
+
+-- Copilot           - https://github.com/github/copilot.vim {{{1
+later(function() add({ source = 'github/copilot.vim' }) end)
+
+-- LSP               - https://github.com/neovim/nvim-lspconfig, ... {{{1
+--                   - https://github.com/mason-org/mason.nvim, ...
+later(function()
+    add({
+        source = 'neovim/nvim-lspconfig',
+        depends = { 'mason-org/mason.nvim' }
+    })
+
+    require('mason').setup()
+
+    vim.diagnostic.config({
+        virtual_lines = true,
+        underline = false,
+        severity_sort = true,
+    })
+
+    -- Configure each language server.
+    vim.lsp.config('lua_ls', {
+        on_init = function(client)
+            if client.workspace_folders then
+                local path = client.workspace_folders[1].name
+                if path ~= vim.fn.stdpath('config')
+                    and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+                then
+                    return
+                end
+            end
+
+            client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+                runtime = {
+                    version = 'LuaJIT',
+                    path = {
+                        'lua/?.lua',
+                        'lua/?/init.lua',
+                    },
+                },
+                workspace = {
+                    checkThirdParty = false,
+                    library = {
+                        vim.env.VIMRUNTIME
+                    }
+                }
+            })
+        end,
+        settings = {
+            Lua = {}
+        }
+    })
+
+    vim.lsp.config('powershell_es', {
+        bundle_path = vim.fn.stdpath('data') .. '/mason/packages/powershell-editor-services'
+    })
+
+    vim.lsp.config('pyright', {
+        settings = {
+            python = {
+                analysis = {
+                    typeCheckingMode = "off"
+                }
+            }
+        },
+    })
+
+    vim.lsp.enable({
+        'lua_ls',
+        'html',
+        'jsonls',
+        'cssls',
+        -- 'csharp_ls', -- Copilot is very slow in C# files. Too slow.
+        'powershell_es',
+        'pyright',
+        'ts_ls',
+        'vimls'
+    })
+
+    vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(args)
+            local client = vim.lsp.get_client_by_id(args.data.client_id)
+            if client then
+                if client:supports_method('textDocument/completions') then
+                    vim.lsp.completion.enable(true, client.id, args.buf, {autotrigger = true})
+                end
+            end
+        end
+    })
+end)
+
+-- Treesitter        - https://github.com/nvim-treesitter/nvim-treesitter  {{{1
+later(function()
+    add({
+        source = 'nvim-treesitter/nvim-treesitter',
+        -- Use 'master' while monitoring updates in 'main'
+        checkout = 'master',
+        monitor = 'main',
+        -- Perform action after every checkout
+        hooks = { post_checkout = function() vim.cmd('TSUpdate') end },
+    })
+
+    require('nvim-treesitter.configs').setup({
+        ensure_installed = { 'lua', 'vim', 'vimdoc', 'html', 'css', 'typescript', 'javascript', 'tsx', 'java', 'c_sharp', 'powershell', 'json', 'markdown', 'mermaid', 'gitcommit', 'diff', 'git_rebase' },
+        highlight = { enable = true },
+    })
+end)
 
 -- Disable built-in stuff I don't use.  {{{1
 g.loaded_perl_provider = 0

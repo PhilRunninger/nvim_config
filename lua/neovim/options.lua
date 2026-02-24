@@ -43,7 +43,7 @@ function MyFoldText()   -- {{{1
     line = vim.fn.substitute(line, commentString, '', '')                               -- Remove comment markers from the line.
     local foldMarker = vim.fn.substitute(vim.wo.foldmarker, ',', '\\\\|', '')           -- Replace the comma in &foldmarker for use in a pattern.
     line = vim.fn.substitute(line, '\\s*\\('..foldMarker..'\\)\\d*', '', '')            -- Remove fold markers from the line.
-    local symbols = {'❶ ','❷ ','❸ ','❹ ','❺ ','❻ ','❼ ','❽ ','❾ ','❾ +'}       -- Symbols to indicate 9+ fold levels
+    local symbols = {'❶ ','❷ ','❸ ','❹ ','❺ ','❻ ','❼ ','❽ ','❾ ','❿ +'}                -- Symbols to indicate 9 or more fold levels
     local nLines = vim.v.foldend - vim.v.foldstart + 1
-    return string.format('%s     %s %s ', line, symbols[math.min(10, vim.v.foldlevel)], vim.fn.tr(vim.fn.printf('%b',nLines),'01','○●'))
+    return string.format('%s        %s·%d ', line, symbols[math.min(10, vim.v.foldlevel)], nLines)
 end
