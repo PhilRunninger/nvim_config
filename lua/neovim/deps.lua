@@ -204,13 +204,17 @@ later(function()
             -- Highlight hex color strings (`#rrggbb`) using that color
             hex_color = hipatterns.gen_highlighter.hex_color(),
 
---   mini.pick  {{{2
-later(function()
-    require('mini.pick').setup()
-    map('n', '<leader>f', ':Pick files<CR>')
-    map('n', '<leader>b', ':Pick buffers<CR>')
-    map('n', '<leader>g', ':Pick grep_live<CR>')
-    map('n', '<F1>', ':Pick help<CR>')
+            -- Highlight color names using corresponding color.
+            word_color = { pattern = '%S+', group = function(_, match)
+                local hex = colorNames[match]
+                if hex == nil then
+                    return nil
+                end
+                return hipatterns.compute_hex_color_group(hex, 'bg')
+            end
+        },
+    },
+})
 end)
 
 --   mini.extra  {{{2
@@ -275,58 +279,22 @@ later(function()
     })
 end)
 
---   mini.files  {{{2
 later(function()
-    require('mini.files').setup({
-        mappings = {
-            close = '<Esc>'
-        },
-        windows = {
-            max_number = math.huge, -- Maximum number of windows to show side by side
-            preview = true,         -- Whether to show preview of file/directory under cursor
-            width_focus = 40,       -- Width of focused window
-            width_nofocus = 15,     -- Width of non-focused window
-            width_preview = 60,     -- Width of preview window
-        },
-    })
-    map('n', '<leader>o', ':lua MiniFiles.open()<CR>')
 
-    -- Setup mappings to open files in split windows/tabs.
-    local map_split = function(buf_id, lhs, direction)
-        local rhs = function()
-            -- Make new window and set it as target
-            local cur_target = MiniFiles.get_explorer_state().target_window
-            local new_target = vim.api.nvim_win_call(cur_target, function()
-                vim.cmd(direction .. ' split')
-                return vim.api.nvim_get_current_win()
-            end)
+-- BufSelect         - https://github.com/PhilRunninger/bufselect  {{{1
+later(function()
+    add({ source = 'PhilRunninger/bufselect' })
+    vim.fn['bufselect#settings']({
+        mappings={delete='w', open='l', gopen='gl'},
+        win={config={border='rounded', title='Buffers', title_pos='center'}, hl='NormalFloat:Normal'}})
+    map('n', '<leader>b', ':ShowBufferList<CR>')
+end)
 
-            MiniFiles.set_target_window(new_target)
-            MiniFiles.go_in()
-        end
-
-        local desc = 'Split ' .. direction
-        vim.keymap.set('n', lhs, rhs, { buffer = buf_id, desc = desc })
-    end
-
-    vim.api.nvim_create_autocmd('User', {
-        pattern = 'MiniFilesBufferCreate',
-        callback = function(args)
-            local buf_id = args.data.buf_id
-            map_split(buf_id, '<C-s>', 'horizontal')
-            map_split(buf_id, '<C-v>', 'vertical')
-            map_split(buf_id, '<C-t>', 'tab')
-        end,
-    })
-
-    vim.api.nvim_create_autocmd('User', {
-        pattern = 'MiniFilesExplorerOpen',
-        callback = function()
-            local bookmarksPath = vim.fn.stdpath('data') .. '/mini.files/bookmarks.lua'
-            if vim.fn.filereadable(bookmarksPath) == 0 then return end
-            dofile(bookmarksPath)
-        end,
-    })
+-- Vifm              - https://github.com/vifm/vifm.vim  {{{1
+later(function()
+    add({ source = 'vifm/vifm.vim' })
+    g.vifm_exec_args = '-c "source ' .. vim.fn.escape(vim.fn.stdpath('config') .. '/vifm.vim.rc', '\\') .. '"'
+    map('n', '<leader>o', ':Vifm<CR>')
 end)
 
 -- CSV               - https://github.com/chrisbra/csv.vim  {{{1
