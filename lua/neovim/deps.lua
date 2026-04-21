@@ -307,7 +307,6 @@ end)
 add({ source = 'tpope/vim-fugitive' })
 map('n', '<F3>', '"zyiw/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>')
 map('v', '<F3>', '"zy/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>')
-map('n', '<leader>G', ':Git<CR>')
 
 -- Markdown          - https://github.com/tpope/vim-markdown  {{{1
 g.markdown_folding = 1
@@ -412,7 +411,15 @@ later(function() add({ source = 'tommcdo/vim-exchange' }) end)
 later(function() add({ source = 'kshenoy/vim-signature' }) end)
 
 -- Copilot           - https://github.com/github/copilot.vim {{{1
-later(function() add({ source = 'github/copilot.vim' }) end)
+--                   - https://github.com/CopilotC-Nvim/CopilotChat.nvim
+--                   - https://github.com/nvim-lua/plenary.nvim
+later(function()
+    add({ source = 'github/copilot.vim' })
+    add({ source = 'CopilotC-Nvim/CopilotChat.nvim',
+        depends = {'nvim-lua/plenary.nvim' }
+    })
+end)
+
 
 -- LSP               - https://github.com/neovim/nvim-lspconfig, ... {{{1
 --                   - https://github.com/mason-org/mason.nvim, ...
