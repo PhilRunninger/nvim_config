@@ -1,0 +1,9 @@
+{
+    "item":{
+        "prefix": "item",
+        "description": "Template for New Work Item in Journal",
+        "body": [
+            "## ${1:ID} [${0:Title}](https://something/${1})"
+        ]
+    }
+}

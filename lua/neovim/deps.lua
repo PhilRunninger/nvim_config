@@ -230,29 +230,6 @@ later(function()
     })
 end)
 
-
---   mini.completion  {{{2
-later(function()
-    require('mini.completion').setup()
-    vim.keymap.set('i', '<Tab>',   [[pumvisible() ? "\<C-n>" : "\<Tab>"]], {expr = true})
-    vim.keymap.set('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], {expr = true})
-    vim.keymap.set('i', '<CR>',    [[pumvisible() ? "\<C-y>" : "\<CR>"]], {expr = true})
-end)
-
---   mini.snippets  {{{2
-later(function()
-    add({ source = 'rafamadriz/friendly-snippets' })
-    local snippets = require('mini.snippets')
-    require('mini.snippets').setup({
-        snippets = {
-            snippets.gen_loader.from_file(vim.fn.glob(path_package .. '**/friendly-snippets/snippets/global.json', false, true)[1]),
-            snippets.gen_loader.from_lang(),
-        },
-        mappings = {expand = '', jump_next = '<Tab>', jump_prev = '<S-Tab>'},
-    })
-    MiniSnippets.start_lsp_server({ match = false })
-end)
-
 --   mini.surround  {{{2
 later(function()
     require('mini.surround').setup({
@@ -279,7 +256,29 @@ later(function()
     })
 end)
 
+-- Completion        - https://github.com/hrsh7th/nvim-cmp   {{{1
+--                     - https://github.com/L3MON4D3/LuaSnip
+--                     - https://github.com/rafamadriz/friendly-snippets
+--                     - https://github.com/saadparwaiz1/cmp_luasnip
+--                     - https://github.com/hrsh7th/cmp-path
+--                     - https://github.com/hrsh7th/cmp-buffer
+--                     - https://github.com/hrsh7th/cmp-nvim-lsp
+--                     - https://github.com/hrsh7th/cmp-nvim-lua
+--                     - https://github.com/PhilRunninger/cmp-rpncalc
 later(function()
+    add({
+        source = 'hrsh7th/nvim-cmp',
+        depends = {
+            'L3MON4D3/LuaSnip',
+            'rafamadriz/friendly-snippets',
+            'saadparwaiz1/cmp_luasnip',
+            'hrsh7th/cmp-path',
+            'hrsh7th/cmp-buffer',
+            'hrsh7th/cmp-nvim-lsp',
+            'hrsh7th/cmp-nvim-lua',
+            'PhilRunninger/cmp-rpncalc' }})
+    require('neovim.cmp')
+end)
 
 -- BufSelect         - https://github.com/PhilRunninger/bufselect  {{{1
 later(function()
