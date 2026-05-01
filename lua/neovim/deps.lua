@@ -19,7 +19,11 @@ end
 
 require('mini.deps').setup({ path = { package = path_package } })
 
-local add, later = MiniDeps.add, MiniDeps.later
+local later = MiniDeps.later
+local add = function(spec, opts)
+    vim.notify(string.format('Adding %s...', spec.source))
+    MiniDeps.add(spec, opts)
+end
 
 --   mini.notify  {{{2
 require('mini.notify').setup()
