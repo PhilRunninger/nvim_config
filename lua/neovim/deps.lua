@@ -7,7 +7,8 @@ local map = function(mode, lhs, rhs, opts)
     vim.api.nvim_set_keymap(mode, lhs, rhs, opts or {noremap=true, silent=true})
 end
 
--- mini.nvim         - https://github.com/nvim-mini/mini.nvim  {{{1
+-- mini.nvim parts   {{{1
+--   bootstraps   {{{2
 local path_package = vim.fn.stdpath('data') .. '/site/'
 local mini_path = path_package .. 'pack/deps/start/mini.nvim'
 if not vim.fn.isdirectory(mini_path) then
@@ -17,6 +18,7 @@ if not vim.fn.isdirectory(mini_path) then
     vim.cmd('echo "Installed `mini.nvim`" | redraw')
 end
 
+--   mini.deps   {{{2
 require('mini.deps').setup({ path = { package = path_package } })
 
 local later = MiniDeps.later
@@ -80,97 +82,92 @@ later(function()
     })
 end)
 
--- Completion        - https://github.com/hrsh7th/nvim-cmp   {{{1
---                     - https://github.com/L3MON4D3/LuaSnip
---                     - https://github.com/rafamadriz/friendly-snippets
---                     - https://github.com/saadparwaiz1/cmp_luasnip
---                     - https://github.com/hrsh7th/cmp-path
---                     - https://github.com/hrsh7th/cmp-buffer
---                     - https://github.com/hrsh7th/cmp-nvim-lsp
---                     - https://github.com/hrsh7th/cmp-nvim-lua
---                     - https://github.com/PhilRunninger/cmp-rpncalc
+-- Completion   {{{1
 later(function()
     add({
-        source = 'hrsh7th/nvim-cmp',
+        source = 'https://github.com/hrsh7th/nvim-cmp',
         depends = {
-            'L3MON4D3/LuaSnip',
-            'rafamadriz/friendly-snippets',
-            'saadparwaiz1/cmp_luasnip',
-            'hrsh7th/cmp-path',
-            'hrsh7th/cmp-buffer',
-            'hrsh7th/cmp-nvim-lsp',
-            'hrsh7th/cmp-nvim-lua',
-            'PhilRunninger/cmp-rpncalc' }})
+            'https://github.com/L3MON4D3/LuaSnip',
+            'https://github.com/rafamadriz/friendly-snippets',
+            'https://github.com/saadparwaiz1/cmp_luasnip',
+            'https://github.com/hrsh7th/cmp-path',
+            'https://github.com/hrsh7th/cmp-buffer',
+            'https://github.com/hrsh7th/cmp-nvim-lsp',
+            'https://github.com/hrsh7th/cmp-nvim-lua',
+            'https://github.com/zbirenbaum/copilot-cmp',
+            'https://github.com/PhilRunninger/cmp-rpncalc',
+        }
+    })
     require('neovim.cmp')
 end)
 
--- BufSelect         - https://github.com/PhilRunninger/bufselect  {{{1
+-- BufSelect   {{{1
 later(function()
-    add({ source = 'PhilRunninger/bufselect' })
+    add({ source = 'https://github.com/PhilRunninger/bufselect' })
     vim.fn['bufselect#settings']({
         mappings={delete='w', open='l', gopen='gl'},
         win={config={border='rounded', title='Buffers', title_pos='center'}, hl='NormalFloat:Normal'}})
     map('n', '<leader>b', ':ShowBufferList<CR>')
 end)
 
--- Vifm              - https://github.com/vifm/vifm.vim  {{{1
+-- Vifm   {{{1
 later(function()
-    add({ source = 'vifm/vifm.vim' })
+    add({ source = 'https://github.com/vifm/vifm.vim' })
     g.vifm_exec_args = '-c "source ' .. vim.fn.escape(vim.fn.stdpath('config') .. '/vifm.vim.rc', '\\') .. '"'
     map('n', '<leader>o', ':Vifm<CR>')
 end)
 
--- CSV               - https://github.com/chrisbra/csv.vim  {{{1
+-- CSV   {{{1
 later(function()
-    add({ source = 'chrisbra/csv.vim' })
+    add({ source = 'https://github.com/chrisbra/csv.vim' })
     g.no_csv_maps = 1
     g.csv_default_delim = ','
 end)
 
--- Fugitive          - https://github.com/tpope/vim-fugitive  {{{1
-add({ source = 'tpope/vim-fugitive' })
+-- Fugitive   {{{1
+add({ source = 'https://github.com/tpope/vim-fugitive' })
 map('n', '<F3>', '"zyiw/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>')
 map('v', '<F3>', '"zy/<C-R>z<CR>:Ggrep -i -e \'<C-R>z\'<CR><CR>:copen<CR>:redraw!<CR>')
 
--- Markdown          - https://github.com/tpope/vim-markdown  {{{1
+-- Markdown   {{{1
 g.markdown_folding = 1
 g.markdown_fenced_languages = { 'vim', 'sql', 'cs', 'ps1', 'lua', 'json', 'mermaid' }
 
--- Markdown Preview  - https://github.com/wardenclyffetower/markdown-preview.nvim.git  {{{1
+-- Markdown Preview   {{{1
 later(function()
-    add({ source = 'wardenclyffetower/markdown-preview.nvim' })
+    add({ source = 'https://github.com/wardenclyffetower/markdown-preview.nvim' })
     vim.g.mkdp_auto_close = 0
     vim.g.mkdp_page_title = '${name}'
     vim.g.mkdp_combine_preview = 1
 end)
 
--- Colorizer         - https://github.com/NvChad/nvim-colorizer.lua   {{{1
+-- Colorizer   {{{1
 later(function()
-    add({ source = 'NvChad/nvim-colorizer.lua' })
+    add({ source = 'https://github.com/NvChad/nvim-colorizer.lua' })
     require('colorizer').setup()
 end)
 
--- Mermaid           - https://github.com/mracos/mermaid.vim.git  {{{1
-later(function() add({ source = 'mracos/mermaid.vim' }) end)
+-- Mermaid   {{{1
+later(function() add({ source = 'https://github.com/mracos/mermaid.vim' }) end)
 
--- Matchup           - https://github.com/andymass/vim-matchup  {{{1
+-- Matchup   {{{1
 later(function()
-    add({ source = 'andymass/vim-matchup' })
+    add({ source = 'https://github.com/andymass/vim-matchup' })
     g.matchup_matchparen_offscreen = { method = 'popup' }
 end)
 
--- REST Console      - https://github.com/Aadniz/vim-rest-console  {{{1
+-- REST Console   {{{1
 later(function()
-    add({ source = 'Aadniz/vim-rest-console' })
+    add({ source = 'https://github.com/Aadniz/vim-rest-console' })
     g.vrc_curl_timeout = '0'
     g.vrc_response_default_content_type = 'application/json'
     g.vrc_show_command = 1
     g.vrc_trigger = '<F5>'
 end)
 
--- Undo Tree         - https://github.com/mbbill/undotree  {{{1
+-- Undo Tree   {{{1
 later(function()
-    add({ source = 'mbbill/undotree' })
+    add({ source = 'https://github.com/mbbill/undotree' })
     g.undotree_WindowLayout = 2
     g.undotree_HelpLine = 0
     g.undotree_ShortIndicators = 1
@@ -182,29 +179,20 @@ later(function()
     map('n', '<leader>u', ':UndotreeToggle<CR>')
 end)
 
--- Unicode           - https://github.com/chrisbra/unicode.vim  {{{1
+-- Unicode   {{{1
 later(function()
-    add({ source = 'chrisbra/unicode.vim' })
+    add({ source = 'https://github.com/chrisbra/unicode.vim' })
     map('n', 'ga', ':UnicodeName<CR>')
     map('n', '<leader>ga', ':UnicodeSearch!<space>', {noremap = true})
     g.Unicode_no_default_mappings = 1
 end)
 
--- SQL               - https://github.com/PhilRunninger/sql.nvim  {{{1
-add({ source = 'PhilRunninger/sql.nvim' })
+-- SQL   {{{1
+add({ source = 'https://github.com/PhilRunninger/sql.nvim' })
 
--- RPN               - https://github.com/PhilRunninger/cmp-rpncalc  {{{1
+-- Dear Diary   {{{1
 later(function()
-    add({ source = 'PhilRunninger/cmp-rpncalc' })
-    map("n", "<F12>",   ":RPN<CR>",            {noremap=true})
-    map("n", "<S-F12>", ":RPN!<CR>",           {noremap=true})
-    map("x", "<F12>",   ":<C-U>'<,'>RPN<CR>",  {noremap=true})
-    map("x", "<S-F12>", ":<C-U>'<,'>RPN!<CR>", {noremap=true})
-end)
-
--- Dear Diary        - https://github.com/ishchow/nvim-deardiary  {{{1
-later(function()
-    add({ source = 'ishchow/nvim-deardiary' })
+    add({ source = 'https://github.com/ishchow/nvim-deardiary' })
     require("deardiary.config").journals = {
         {
             path = os.getenv('DIARY') or '~/Documents/Diary',
@@ -231,35 +219,33 @@ later(function()
     map("n", "<leader>j", ":DearDiaryThisWeek<CR>", {noremap=true})
 end)
 
--- Recover           - https://github.com/chrisbra/Recover.vim  {{{1
-add({ source = 'chrisbra/Recover.vim' })
+-- Recover   {{{1
+add({ source = 'https://github.com/chrisbra/Recover.vim' })
 
--- Exchange          - https://github.com/tommcdo/vim-exchange  {{{1
-later(function() add({ source = 'tommcdo/vim-exchange' }) end)
+-- Exchange   {{{1
+later(function() add({ source = 'https://github.com/tommcdo/vim-exchange' }) end)
 
--- Signature         - https://github.com/kshenoy/vim-signature  {{{1
-later(function() add({ source = 'kshenoy/vim-signature' }) end)
+-- Signature   {{{1
+later(function() add({ source = 'https://github.com/kshenoy/vim-signature' }) end)
 
--- Copilot           - https://github.com/github/copilot.vim {{{1
---                   - https://github.com/CopilotC-Nvim/CopilotChat.nvim
---                   - https://github.com/nvim-lua/plenary.nvim
+-- Copilot   {{{1
 later(function()
-    add({ source = 'github/copilot.vim' })
-    add({ source = 'CopilotC-Nvim/CopilotChat.nvim',
-        depends = {'nvim-lua/plenary.nvim' }
+    add({ source = 'https://github.com/zbirenbaum/copilot.lua' })
+    add({ source = 'https://github.com/CopilotC-Nvim/CopilotChat.nvim',
+        depends = {'https://github.com/nvim-lua/plenary.nvim' }
     })
-    vim.g.copilot_filetypes = {
-        markdown = true,
-    }
+    require("copilot").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+    })
+    require("copilot_cmp").setup()
 end)
 
-
--- LSP               - https://github.com/neovim/nvim-lspconfig, ... {{{1
---                   - https://github.com/mason-org/mason.nvim, ...
+-- LSP   {{{1
 later(function()
     add({
-        source = 'neovim/nvim-lspconfig',
-        depends = { 'mason-org/mason.nvim' }
+        source = 'https://github.com/neovim/nvim-lspconfig',
+        depends = { 'https://github.com/mason-org/mason.nvim' }
     })
 
     require('mason').setup()
@@ -330,10 +316,10 @@ later(function()
     })
 end)
 
--- Treesitter        - https://github.com/nvim-treesitter/nvim-treesitter  {{{1
+-- Treesitter   {{{1
 later(function()
     add({
-        source = 'nvim-treesitter/nvim-treesitter',
+        source = 'https://github.com/nvim-treesitter/nvim-treesitter',
         -- Use 'master' while monitoring updates in 'main'
         checkout = 'master',
         monitor = 'main',
