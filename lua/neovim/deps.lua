@@ -23,8 +23,9 @@ require('mini.deps').setup({ path = { package = path_package } })
 
 local later = MiniDeps.later
 local add = function(spec, opts)
-    vim.notify(string.format('Adding %s...', spec.source))
+    -- local starTime = os.clock()
     MiniDeps.add(spec, opts)
+    -- vim.notify(string.format('%.3fs - %s', os.clock() - starTime, spec.source))
 end
 
 --   mini.notify  {{{2

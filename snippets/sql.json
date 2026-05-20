@@ -1,0 +1,17 @@
+{
+    "transaction": {
+        "prefix": "transaction",
+        "body": [
+            "BEGIN TRANSACTION",
+            "BEGIN TRY",
+            "\t${0:sql statements}",
+            "\tCOMMIT",
+            "END TRY",
+            "BEGIN CATCH",
+            "\tROLLBACK",
+            "\tSELECT ERROR_NUMBER() AS ErrorNumber, ERROR_MESSAGE() AS ErrorMessage",
+            "END CATCH"
+        ],
+        "description": "Transaction with error handling"
+    }
+}
