@@ -21,6 +21,5 @@ else
 
     MiniDeps.later(function()
         vim.cmd('colorscheme tango')
-        vim.notify('Ready.',vim.log.levels.WARN)
     end)
 end
