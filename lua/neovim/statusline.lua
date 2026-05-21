@@ -9,7 +9,7 @@ local colors = {
     saturation = 1.0
 }
 
-function SetStatusLineText()
+function SetStatusLineText()   -- {{{1
     local useColor = vim.api.nvim_get_current_win() == vim.g.statusline_winid
     local divider = useColor and '' or ''  -- Other candidates:     ┃  
     return
@@ -22,7 +22,7 @@ function SetStatusLineText()
         (useColor and '%#User4#'  or '') .."%( %{!&modifiable?'🔒':''}%{&readonly?'⚠ ':''}%) %f"
 end
 
-local HLSToRGB = function(h,l,s)
+local HLSToRGB = function(h,l,s)   -- {{{1
     -- Credit: https://www.rapidtables.com/convert/color/hsl-to-rgb.html
     local c = (1 - math.abs(2*l - 1)) * s
     local x = c * (1 - math.abs(((h/60) % 2) - 1))
@@ -38,7 +38,7 @@ local HLSToRGB = function(h,l,s)
     return string.format('#%02x%02x%02x', math.floor((r+m)*255), math.floor((g+m)*255), math.floor((b+m)*255))
 end
 
-local foregroundColor = function(h,l)
+local foregroundColor = function(h,l)   -- {{{1
     local limit =
         6.23383E-22  * h^10 +
         -1.09526E-18 * h^9 +
@@ -54,7 +54,7 @@ local foregroundColor = function(h,l)
     return l < limit and 'white' or 'black'
 end
 
-local changeColors = function(insertMode)
+local changeColors = function(insertMode)   -- {{{1
     local mode = vim.o.buftype == 'terminal' and 'terminal' or (insertMode and 'insert' or (vim.o.modified and 'modified' or 'unmodified'))
     for i = 1,colors.count,1 do
         vim.api.nvim_set_hl(0, 'User'..i, {fg=colors[mode][vim.o.background].fg[i], bg=colors[mode][vim.o.background].bg[i], bold=true})
@@ -77,3 +77,4 @@ local group = vim.api.nvim_create_augroup('mySLgroup', {clear = true})
 vim.api.nvim_create_autocmd('InsertEnter', {callback = function() changeColors(true) end, group = group})
 vim.api.nvim_create_autocmd({'VimEnter','ColorScheme','TermOpen','TermClose','InsertLeave','TextChanged','BufWritePost','BufEnter'}, {callback = function() changeColors() end, group = group})
 vim.api.nvim_create_autocmd('ColorScheme', {command = 'highlight! link StatusLine User' .. colors.count, group = group})
+vim.api.nvim_create_autocmd('TermClose', {callback = function() vim.schedule(function () changeColors(false) end) end, group = group})
