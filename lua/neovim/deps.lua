@@ -145,7 +145,13 @@ end)
 -- Colorizer   {{{1
 later(function()
     add({ source = 'https://github.com/NvChad/nvim-colorizer.lua' })
-    require('colorizer').setup()
+    require('colorizer').setup({
+        options = {
+            parsers = {
+                xterm = { enable = true }
+            }
+        }
+    })
 end)
 
 -- Mermaid   {{{1
@@ -190,6 +196,7 @@ end)
 
 -- SQL   {{{1
 add({ source = 'https://github.com/PhilRunninger/sql.nvim' })
+map("n", "<F8>", ":SQL new<CR>", {noremap=true})
 
 -- Dear Diary   {{{1
 later(function()
@@ -217,7 +224,7 @@ later(function()
     }
     require('deardiary').set_current_journal(1)
     vim.g.deardiary_use_default_mappings = 0
-    map("n", "<leader>j", ":DearDiaryThisWeek<CR>", {noremap=true})
+    map("n", "<leader>J", ":DearDiaryThisWeek<CR>", {noremap=true})
 end)
 
 -- Recover   {{{1
