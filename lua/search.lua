@@ -54,7 +54,8 @@ function M.matches(pattern) -- {{{1
     end
     vim.fn.winrestview(pos)
 
-    vim.fn.setqflist(lines, 'r', {title = pattern})
+    vim.fn.setqflist(lines, 'r')
+    vim.fn.setqflist({}, 'a', {title = pattern})
     vim.cmd("copen")
 end
 
