@@ -1,5 +1,7 @@
 -- vim:foldmethod=marker
 
+if vim.g.vscode then return end
+
 vim.opt.statusline = "%!v:lua.SetStatusLineText()"
 
 local colors = {

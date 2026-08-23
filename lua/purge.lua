@@ -1,3 +1,5 @@
+if vim.g.vscode then return end
+
 local uv = vim.loop
 
 local function list_files(folder)

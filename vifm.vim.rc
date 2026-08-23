@@ -1,21 +1,17 @@
 " vim: filetype=vifm :
 " ------------------------------------------------------------------------------
-" This rc file will be used when calling vifm from the vifm.vim plugin. It
-" defines shortcuts to the longer commands. These mappings are ones I'm used
-" to from NERDTree and MinTree. It also makes sure that the file viewer is
-" turned on initially. This file is called from vim by setting this variable:
-" :let g:vifm_exec_args='-c "source $VIFM\vifm.vim.rc"'
+" See how this is used in ./lua/plugins/vifm.lua.
 
-" colorscheme papercolor-light Default-256 default
-
-nnoremap s :SplitVim<cr>
-vnoremap s :SplitVim<cr>
-nnoremap v :VsplitVim<cr>
-vnoremap v :VsplitVim<cr>
+" Set up mappings to open files in Neovim.
+nnoremap S :SplitVim<cr>
+vnoremap S :SplitVim<cr>
+nnoremap V :VsplitVim<cr>
+vnoremap V :VsplitVim<cr>
 nnoremap T :TabVim<cr>
 vnoremap T :TabVim<cr>
-nnoremap q :qall!<cr>
+nnoremap Q :qall!<cr>
 
+" Show file viewer, or not, based on the total width.
 if &columns > 100
     vsplit
     view!

@@ -1,43 +1,66 @@
 -- vim:foldmethod=marker
 
+-- Fixed-value settings {{{1
 for k,v in pairs({
         clipboard = 'unnamed',
+        completeopt = {'menuone', 'noselect', 'fuzzy', 'popup'},
         confirm = true,
-        ignorecase = true,
-        smartcase = true,
-        wildignorecase = true,
-        wildignore = {'*.a', '*.o', '*.beam', '*.bmp', '*.gif', '*.jpg', '*.ico', '*.png', '.DS_Store', '.git'},
-        smartindent = true,
-        softtabstop = 4,
-        tabstop = 4,
-        shiftwidth = 4,
         expandtab = true,
-        showmode = false,
-        showmatch = true,
-        number = true,
-        relativenumber = true,
         fillchars = {stl=' ', stlnc=' ', eob=' ', fold='⠶'},
         foldtext = 'v:lua.MyFoldText()',
+        ignorecase = true,
         list = true,
         listchars = {tab='🢒⸳', extends='→', precedes='←', trail='■', nbsp='□'},
-        undofile = true,
+        number = true,
+        relativenumber = true,
+        shell = string.find(vim.o.shell, 'bash') and 'bash' or vim.o.shell,
+        shiftwidth = 4,
+        showmatch = true,
+        showmode = false,
+        smartcase = true,
+        smartindent = true,
+        softtabstop = 4,
         splitbelow = true,
         splitright = true,
+        tabstop = 4,
+        termguicolors = true,
+        undofile = true,
+        wildignore = {'*.a', '*.o', '*.beam', '*.bmp', '*.gif', '*.jpg', '*.ico', '*.png', '.DS_Store', '.git'},
+        wildignorecase = true,
+        winborder = 'bold',
         winminheight = 0,
         winminwidth = 0,
-        shell = string.find(vim.o.shell, 'bash') and 'bash' or vim.o.shell,
-        termguicolors = true,
-        completeopt = {'menuone', 'noselect', 'fuzzy', 'popup'}
     }) do
     vim.opt[k] = v
 end
 
+-- Modifications of existing options {{{1
 vim.opt.path:append('**')
 vim.opt.diffopt:append('iwhite')
 vim.opt.sessionoptions:remove('help')
 vim.opt.sessionoptions:remove('blank')
 
-function MyFoldText()   -- {{{1
+-- Markdown settings. I put it here because it's a built-in plugin. {{{1
+vim.g.markdown_folding = 1
+vim.g.markdown_fenced_languages = { 'vim', 'sql', 'cs', 'ps1', 'lua', 'json', 'mermaid' }
+
+-- Disable built-in stuff I don't use.  {{{1
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_python_provider = 0
+vim.g.loaded_python3_provider = 0
+
+vim.g.loaded = 1
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_2html_plugin = 1
+vim.g.loaded_tutor_mode_plugin = 1
+vim.g.loaded_matchit = 1
+vim.g.loaded_matchparen = 1
+
+-- My custom foldtext function {{{1
+function MyFoldText()
     local line = vim.fn.getline(vim.v.foldstart)
     local commentString = vim.fn.substitute(vim.bo.commentstring, '\\s*%s\\s*', '', '') -- Remove %s placeholder from &commentstring, e.g. from "-- %s" to "--".
     line = vim.fn.substitute(line, commentString, '', '')                               -- Remove comment markers from the line.
