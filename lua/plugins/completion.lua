@@ -59,44 +59,54 @@ return {
                 documentation = cmp.config.window.bordered(),
             },
             mapping = {
-                ['<CR>'] = cmp.mapping(
-                    function(fallback)
-                        if cmp.visible() then
-                            if ls.expandable() then
-                                ls.expand()
-                            else
-                                cmp.confirm({ select = false, })
-                            end
-                        else
-                            fallback()
-                        end
-                    end, { "i" }
-                ),
-                ["<Down>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
+                ["<Up>"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
+                ["<Down>"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
                 ["<Tab>"] = cmp.mapping(
                     function(fallback)
-                        if ls.locally_jumpable(1) then
-                            ls.jump(1)
-                        elseif cmp.visible() then
+                        if cmp.visible() then
                             cmp.select_next_item()
+                        elseif ls.locally_jumpable(1) then
+                            ls.jump(1)
                         else
                             fallback()
                         end
                     end, { "i", "s", }
                 ),
-                ["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
                 ["<S-Tab>"] = cmp.mapping(
                     function(fallback)
                         if cmp.visible() then
                             cmp.select_prev_item()
                         elseif ls.locally_jumpable(1) then
-                            ls.jump(1)
-                        elseif ls.jumpable(-1) then
                             ls.jump(-1)
                         else
                             fallback()
                         end
                     end, { "i", "s", }
+                ),
+                ["<CR>"] = cmp.mapping(
+                    function(fallback)
+                        if cmp.visible() then
+                            if ls.expandable() then
+                                ls.expand()
+                            elseif cmp.get_active_entry() then
+                                cmp.confirm({ select = false, })
+                            else
+                                fallback()
+                            end
+                        else
+                            fallback()
+                        end
+                    end, { "i", "c" }
+                ),
+                ["<Space>"] = cmp.mapping(
+                    function(fallback)
+                        if cmp.visible() and cmp.get_active_entry() then
+                            cmp.confirm({ select = false, })
+                            vim.fn.feedkeys(" ")
+                        else
+                            fallback()
+                        end
+                    end, { "i", "c" }
                 ),
             },
             sources = cmp.config.sources({
