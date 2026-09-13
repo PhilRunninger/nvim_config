@@ -13,6 +13,7 @@ require "statusline"
 require "tabline"
 require "floatterminal"
 require "search"
+require "purge"
 
 if not vim.g.vscode then
     vim.cmd.colorscheme('tango')
