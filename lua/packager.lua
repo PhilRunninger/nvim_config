@@ -18,5 +18,6 @@ vim.opt.rtp:prepend(lazypath)
 -- Setup lazy.nvim
 require("lazy").setup({
     spec = { import = 'plugins' },
-    rocks = { enabled = false }
+    rocks = { enabled = false },
+    performance = { rtp = { reset = false } }
 })
