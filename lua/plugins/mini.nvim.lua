@@ -2,18 +2,11 @@ return {
 	'nvim-mini/mini.nvim',
     version = false,
 	config = function()
-		require('mini.notify').setup()
-		vim.notify = require('mini.notify').make_notify()
-
 		require('mini.icons').setup()
 
 		require('mini.ai').setup()
 
 		require('mini.comment').setup()
-
-		require('mini.cursorword').setup()
-
-		-- require('mini.extra').setup()
 
 		require('mini.align').setup({
 			mappings = {
