@@ -8,6 +8,7 @@ return {
         'hrsh7th/cmp-path',
         'hrsh7th/cmp-buffer',
         'hrsh7th/cmp-nvim-lua',
+        'zbirenbaum/copilot-cmp',
         'PhilRunninger/cmp-rpncalc',
     },
     config = function()

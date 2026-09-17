@@ -48,7 +48,7 @@ end
 -- See `:h highlight-groups` for the groups in this section.
 --==========================================================
 setHighlight({
-    ColorColumn =                    {bg = '#333'},
+    ColorColumn =                    {bg = '#111'},
     Conceal =        {fg = '#444'},
     CurSearch =      {fg = 'orange',  bg = '#000',   reverse = 1},
     Cursor =         {fg = '#fff',    bg = '#000',   reverse = 1},

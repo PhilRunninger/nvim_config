@@ -25,7 +25,7 @@ return {
                         checkThirdParty = false,
                         library = { vim.env.VIMRUNTIME },
                     },
-                    telemtry = {
+                    telemetry = {
                         enable = false,
                     }
                 }
