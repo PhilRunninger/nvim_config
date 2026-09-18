@@ -1,5 +1,6 @@
 return {
     'Aadniz/vim-rest-console',
+    event = { 'VeryLazy' },
     init = function()
         vim.g.vrc_curl_timeout = '0'
         vim.g.vrc_response_default_content_type = 'application/json'
