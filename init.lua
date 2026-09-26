@@ -14,6 +14,8 @@ require "tabline"
 require "floatterminal"
 require "search"
 require "purge"
+require("binary_nav").setup()
+
 
 if not vim.g.vscode then
     vim.cmd.colorscheme('tango')
