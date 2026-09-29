@@ -79,17 +79,21 @@ local function update_highlights()
 
     vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
 
-    vim.api.nvim_buf_set_extmark(buf, ns, vim.fn.line("w0") - 1, 0, {
-        end_row = state.low,
-        hl_group = "Visual",
-        hl_eol = true,
-    })
+    pcall(function()
+        vim.api.nvim_buf_set_extmark(buf, ns, vim.fn.line("w0") - 1, 0, {
+            end_row = state.low,
+            hl_group = "Visual",
+            hl_eol = true,
+        })
+    end)
 
-    vim.api.nvim_buf_set_extmark(buf, ns, state.high - 1, 0, {
-        end_row = vim.fn.line("w$"),
-        hl_group = "Visual",
-        hl_eol = true,
-    })
+    pcall(function()
+        vim.api.nvim_buf_set_extmark(buf, ns, state.high - 1, 0, {
+            end_row = vim.fn.line("w$"),
+            hl_group = "Visual",
+            hl_eol = true,
+        })
+    end)
 end
 
 -- Exit. Leave binary_nave mode. {{{1
@@ -111,28 +115,27 @@ end
 -- Movement. {{{1
 local function move_to_midpoint()
     local target = math.floor((state.low + state.high) / 2)
-    vim.print(state.low..' '..target..' '..state.high)
     vim.api.nvim_win_set_cursor(0, { target, 0 })
 
     update_highlights()
     restart_timeout()
 end
 
-function M.start_down()
+function M.start_down(mode)
     install_temp_maps()
 
     state.active = true
     state.low = vim.api.nvim_win_get_cursor(0)[1]
-    state.high = vim.fn.line("w$")
+    state.high = vim.fn.line(mode == 'file' and '$' or 'w$') + 1
 
     move_to_midpoint()
 end
 
-function M.start_up()
+function M.start_up(mode)
     install_temp_maps()
 
     state.active = true
-    state.low = vim.fn.line("w0")
+    state.low = mode == 'file' and 1 or (vim.fn.line('w0') - 1)
     state.high = vim.api.nvim_win_get_cursor(0)[1]
 
     move_to_midpoint()
@@ -157,8 +160,10 @@ end
 
 -- Setup {{{1
 function M.setup()
-    vim.keymap.set("n", "<leader>j", M.start_down)
-    vim.keymap.set("n", "<leader>k", M.start_up)
+    vim.keymap.set("n", "<leader>j", function() M.start_down('window') end)
+    vim.keymap.set("n", "<leader>k", function() M.start_up('window') end)
+    vim.keymap.set("n", "<leader>J", function() M.start_down('file') end)
+    vim.keymap.set("n", "<leader>K", function() M.start_up('file') end)
 end
 
 return M
